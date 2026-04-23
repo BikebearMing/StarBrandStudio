@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install *)",
+      "Bash(cp /Users/karminglaw/Downloads/StarBrand/Footer/Images/* /Users/karminglaw/Desktop/StarBrandStudio/public/footer/)",
+      "Bash(cp \"/Users/karminglaw/Downloads/StarBrand/Logo Carousel/Images/\"* /Users/karminglaw/Desktop/StarBrandStudio/public/logos/)"
+    ]
+  }
+}
