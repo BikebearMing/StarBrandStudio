@@ -142,13 +142,9 @@ export default function Services() {
                   </div>
                 </div>
                 <span className="service__toggle" aria-hidden="true">
-                  <svg className="service__toggle-icon service__toggle-icon--plus" viewBox="0 0 24 24">
-                    <line x1="12" y1="5" x2="12" y2="19" stroke="currentColor" strokeWidth="2" strokeLinecap="square" />
-                    <line x1="5" y1="12" x2="19" y2="12" stroke="currentColor" strokeWidth="2" strokeLinecap="square" />
-                  </svg>
-                  <svg className="service__toggle-icon service__toggle-icon--arrow" viewBox="0 0 24 24">
-                    <path d="M7 17L17 7" stroke="currentColor" strokeWidth="2" strokeLinecap="square" />
-                    <path d="M9 7H17V15" stroke="currentColor" strokeWidth="2" strokeLinecap="square" fill="none" />
+                  <svg className="service__toggle-icon" viewBox="0 0 24 24" fill="none">
+                    <path className="service__toggle-line service__toggle-line--1" stroke="currentColor" strokeWidth="2" strokeLinecap="square" />
+                    <path className="service__toggle-line service__toggle-line--2" stroke="currentColor" strokeWidth="2" strokeLinecap="square" />
                   </svg>
                 </span>
               </button>

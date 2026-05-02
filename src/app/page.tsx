@@ -5,6 +5,8 @@ import LogoCarousel from '@/components/LogoCarousel/LogoCarousel'
 import Pillars from '@/components/Pillars/Pillars'
 import Services from '@/components/Services/Services'
 import Projects from '@/components/Projects/Project'
+import VideoPopup from '@/components/VideoPopup/VideoPopup'
+import ImpactCTA from '@/components/ImpactCTA/ImpactCTA'
 
 export default function Home() {
   return (
@@ -25,18 +27,7 @@ export default function Home() {
               </div>
 
               <div className="right">
-                <div className="video-popup-wrapper">
-                  <img src="./carousel/test-image.png" alt="" className="thumbnail" />
-                  <button type="button" className="custom-button">
-                    <svg className="custom-button-icon" viewBox="0 0 24 24" aria-hidden="true">
-                      <circle className="ring ring--outer" cx="12" cy="12" r="11" />
-                      <circle className="ring ring--middle" cx="12" cy="12" r="7" />
-                      <circle className="ring ring--inner" cx="12" cy="12" r="3" />
-                    </svg>
-                    <span>WATCH SHOWREEL</span>
-                  </button>
-                </div>
-
+                <VideoPopup />
               </div>
 
             </div>
@@ -55,6 +46,7 @@ export default function Home() {
       </div>
       <Projects />
       {/* <LogoCarousel /> */}
+      <ImpactCTA />
       <Footer />
     </main>
   )

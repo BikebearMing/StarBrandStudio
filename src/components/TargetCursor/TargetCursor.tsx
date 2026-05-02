@@ -58,6 +58,7 @@ const TargetCursor = ({
             y,
             duration: 0.1,
             ease: "power3.out",
+            overwrite: true,
         })
     }, [])
 
@@ -142,28 +143,37 @@ const TargetCursor = ({
         window.addEventListener("mousemove", moveHandler)
 
         const scrollHandler = () => {
-            if (!activeTarget || !cursorRef.current) return
-
-            const rect = activeTarget.getBoundingClientRect()
-            const { borderWidth, cornerSize } = constants
-            targetCornerPositionsRef.current = [
-                { x: rect.left - borderWidth, y: rect.top - borderWidth },
-                { x: rect.right + borderWidth - cornerSize, y: rect.top - borderWidth },
-                { x: rect.right + borderWidth - cornerSize, y: rect.bottom + borderWidth - cornerSize },
-                { x: rect.left - borderWidth, y: rect.bottom + borderWidth - cornerSize },
-            ]
+            if (!cursorRef.current) return
 
             const mouseX = gsap.getProperty(cursorRef.current, "x") as number
             const mouseY = gsap.getProperty(cursorRef.current, "y") as number
-            const elementUnderMouse = document.elementFromPoint(mouseX, mouseY)
-            const isStillOverTarget =
-                elementUnderMouse &&
-                (elementUnderMouse === activeTarget ||
-                    elementUnderMouse.closest(targetSelector) === activeTarget)
-            if (!isStillOverTarget) {
-                if (currentLeaveHandler) {
+            const elementUnderMouse = document.elementFromPoint(mouseX, mouseY) as HTMLElement | null
+            const targetUnderMouse =
+                (elementUnderMouse?.closest(targetSelector) as HTMLElement | null) ?? null
+
+            if (activeTarget) {
+                const rect = activeTarget.getBoundingClientRect()
+                const { borderWidth, cornerSize } = constants
+                targetCornerPositionsRef.current = [
+                    { x: rect.left - borderWidth, y: rect.top - borderWidth },
+                    { x: rect.right + borderWidth - cornerSize, y: rect.top - borderWidth },
+                    { x: rect.right + borderWidth - cornerSize, y: rect.bottom + borderWidth - cornerSize },
+                    { x: rect.left - borderWidth, y: rect.bottom + borderWidth - cornerSize },
+                ]
+
+                if (targetUnderMouse !== activeTarget && currentLeaveHandler) {
                     currentLeaveHandler()
                 }
+            }
+
+            if (targetUnderMouse && targetUnderMouse !== activeTarget && elementUnderMouse) {
+                elementUnderMouse.dispatchEvent(
+                    new MouseEvent("mouseover", {
+                        bubbles: true,
+                        clientX: mouseX,
+                        clientY: mouseY,
+                    })
+                )
             }
         }
         window.addEventListener("scroll", scrollHandler, { passive: true })
@@ -221,8 +231,6 @@ const TargetCursor = ({
 
             const rect = target.getBoundingClientRect()
             const { borderWidth, cornerSize } = constants
-            const cursorX = gsap.getProperty(cursorRef.current, "x") as number
-            const cursorY = gsap.getProperty(cursorRef.current, "y") as number
 
             targetCornerPositionsRef.current = [
                 { x: rect.left - borderWidth, y: rect.top - borderWidth },
@@ -231,23 +239,16 @@ const TargetCursor = ({
                 { x: rect.left - borderWidth, y: rect.bottom + borderWidth - cornerSize },
             ]
 
-            isActiveRef.current = true
-            gsap.ticker.add(tickerFnRef.current!)
-
-            gsap.to(activeStrengthRef.current, {
-                current: 1,
-                duration: hoverDuration,
-                ease: "power2.out",
-            })
-
-            corners.forEach((corner, i) => {
-                gsap.to(corner, {
-                    x: targetCornerPositionsRef.current![i].x - cursorX,
-                    y: targetCornerPositionsRef.current![i].y - cursorY,
-                    duration: 0.2,
+            if (!isActiveRef.current) {
+                gsap.ticker.add(tickerFnRef.current!)
+                gsap.to(activeStrengthRef.current, {
+                    current: 1,
+                    duration: hoverDuration,
                     ease: "power2.out",
+                    overwrite: true,
                 })
-            })
+            }
+            isActiveRef.current = true
 
             const leaveHandler = () => {
                 if (tickerFnRef.current) gsap.ticker.remove(tickerFnRef.current)

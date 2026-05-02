@@ -6,6 +6,7 @@ import { useTexture } from '@react-three/drei'
 import * as THREE from 'three'
 import gsap from 'gsap'
 import { scrollState } from '@/lib/scroll'
+import { PRELOADER_DONE_EVENT } from '@/components/Preloader/Preloader'
 
 // ─── CONTROLS ────────────────────────────────────────────────────────────────
 const IMAGES = Array(8).fill('/carousel/test-image.png')
@@ -113,14 +114,21 @@ function Carousel({ onHoverChange }: CarouselProps) {
   const scrollBoost = useRef(0)
 
   useEffect(() => {
-    const tween = gsap.to(intro.current, {
-      scale: 1,
-      spinMult: 1,
-      arcMult: 1,
-      duration: INTRO_DURATION,
-      ease: 'power3.out',
-    })
-    return () => { tween.kill() }
+    let tween: gsap.core.Tween | null = null
+    const start = () => {
+      tween = gsap.to(intro.current, {
+        scale: 1,
+        spinMult: 1,
+        arcMult: 1,
+        duration: INTRO_DURATION,
+        ease: 'power3.out',
+      })
+    }
+    window.addEventListener(PRELOADER_DONE_EVENT, start, { once: true })
+    return () => {
+      window.removeEventListener(PRELOADER_DONE_EVENT, start)
+      tween?.kill()
+    }
   }, [])
 
   useEffect(() => {

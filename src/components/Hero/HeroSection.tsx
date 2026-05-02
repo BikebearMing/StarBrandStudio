@@ -3,6 +3,7 @@
 import dynamic from 'next/dynamic'
 import { useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
+import { PRELOADER_DONE_EVENT } from '@/components/Preloader/Preloader'
 
 const CylinderCarousel = dynamic(
   () => import('./CylinderCarousel'),
@@ -36,77 +37,74 @@ export default function HeroSection() {
     const h2LineInners = Array.from(section.querySelectorAll<HTMLElement>('h2 .line-inner'))
     const typewriter = section.querySelector<HTMLElement>('.typewriter')
 
-    const h1Tween = gsap.fromTo(
-      h1LineInners,
-      { yPercent: 110 },
-      {
+    // Hide everything immediately so it doesn't flash before the preloader hands off
+    gsap.set([...h1LineInners, ...h2LineInners], { yPercent: 110 })
+    if (typewriter) gsap.set(typewriter, { clipPath: 'inset(0 100% 0 0)' })
+
+    const tweens: gsap.core.Tween[] = []
+    const timelines: gsap.core.Timeline[] = []
+
+    const start = () => {
+      const h1Tween = gsap.to(h1LineInners, {
         yPercent: 0,
         delay: TEXT_DELAY,
         duration: LINE_DURATION,
         stagger: LINE_STAGGER,
         ease: 'power3.out',
-      }
-    )
+      })
+      tweens.push(h1Tween)
 
-    const h2Tween = gsap.fromTo(
-      h2LineInners,
-      { yPercent: 110 },
-      {
+      const h2Tween = gsap.to(h2LineInners, {
         yPercent: 0,
         delay: H2_DELAY,
         duration: LINE_DURATION,
         ease: 'power3.out',
-      }
-    )
+      })
+      tweens.push(h2Tween)
 
-    const typeTween = typewriter
-      ? gsap.fromTo(
-          typewriter,
-          { clipPath: 'inset(0 100% 0 0)' },
-          {
-            clipPath: 'inset(0 0% 0 0)',
-            delay: TYPE_DELAY,
-            duration: TYPE_DURATION,
-            ease: 'steps(5)',
-          }
-        )
-      : null
+      if (typewriter) {
+        const typeTween = gsap.to(typewriter, {
+          clipPath: 'inset(0 0% 0 0)',
+          delay: TYPE_DELAY,
+          duration: TYPE_DURATION,
+          ease: 'steps(5)',
+        })
+        tweens.push(typeTween)
 
-    // Word cycle: LEAD → INSPIRE → SELL → GROW → LEAD …
-    let idx = 0
-    const loopTl = typewriter
-      ? gsap.timeline({
+        // Word cycle: LEAD → INSPIRE → SELL → GROW → LEAD …
+        let idx = 0
+        const loopTl = gsap.timeline({
           delay: TYPE_DELAY + TYPE_DURATION + WORD_HOLD,
           repeat: -1,
         })
-      : null
-
-    if (loopTl && typewriter) {
-      WORDS.forEach(() => {
-        loopTl
-          .to(typewriter, {
-            clipPath: 'inset(0 100% 0 0)',
-            duration: WORD_ERASE_DUR,
-            ease: 'steps(4)',
-          })
-          .call(() => {
-            idx = (idx + 1) % WORDS.length
-            typewriter.textContent = WORDS[idx]
-          })
-          .to(typewriter, {
-            clipPath: 'inset(0 0% 0 0)',
-            duration: WORD_REVEAL_DUR,
-            ease: 'steps(5)',
-          })
-          .to({}, { duration: WORD_HOLD })
-      })
+        WORDS.forEach(() => {
+          loopTl
+            .to(typewriter, {
+              clipPath: 'inset(0 100% 0 0)',
+              duration: WORD_ERASE_DUR,
+              ease: 'steps(4)',
+            })
+            .call(() => {
+              idx = (idx + 1) % WORDS.length
+              typewriter.textContent = WORDS[idx]
+            })
+            .to(typewriter, {
+              clipPath: 'inset(0 0% 0 0)',
+              duration: WORD_REVEAL_DUR,
+              ease: 'steps(5)',
+            })
+            .to({}, { duration: WORD_HOLD })
+        })
+        timelines.push(loopTl)
+      }
     }
 
+    window.addEventListener(PRELOADER_DONE_EVENT, start, { once: true })
+
     return () => {
-      h1Tween.kill()
-      h2Tween.kill()
-      typeTween?.kill()
-      loopTl?.kill()
+      window.removeEventListener(PRELOADER_DONE_EVENT, start)
+      tweens.forEach((t) => t.kill())
+      timelines.forEach((t) => t.kill())
     }
   }, [])
 

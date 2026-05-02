@@ -2,6 +2,7 @@ import './globals.css'
 import type { Metadata } from 'next'
 import { Instrument_Serif, Inter_Tight } from 'next/font/google'
 import SmoothScroll from '@/components/SmoothScroll'
+import Preloader from '@/components/Preloader/Preloader'
 
 const instrumentSerif = Instrument_Serif({
   subsets: ['latin'],
@@ -28,6 +29,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${instrumentSerif.variable} ${interTight.variable}`}>
       <body>
+        <Preloader />
         <SmoothScroll />
         {children}
       </body>
