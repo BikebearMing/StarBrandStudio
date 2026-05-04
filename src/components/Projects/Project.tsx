@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react"
 import TargetCursor from "@/components/TargetCursor/TargetCursor"
+import ParallaxImage from "@/components/ParallaxImage/ParallaxImage"
 
 export default function Projects() {
     const sectionRef = useRef<HTMLElement>(null)
@@ -181,7 +182,7 @@ export default function Projects() {
                         </div>
 
                         <div className="project-image cursor-target">
-                            <img src="/carousel/test-image.png" alt="" style={imgStyle("gucci")} />
+                            <ParallaxImage src="/gucci.png" alt="" style={imgStyle("gucci")} />
                         </div>
                     </div>
 
@@ -199,7 +200,7 @@ export default function Projects() {
                         </div>
 
                         <div className="project-image cursor-target">
-                            <img src="/carousel/test-image.png" alt="" style={imgStyle("nike")} />
+                            <ParallaxImage src="/nikethumb.png" alt="" style={imgStyle("nike")} />
                         </div>
                     </div>
 
@@ -215,7 +216,7 @@ export default function Projects() {
                         </div>
 
                         <div className="project-image cursor-target">
-                            <img src="/carousel/test-image.png" alt="" style={imgStyle("snickers")} />
+                            <ParallaxImage src="/snickers.png" alt="" style={imgStyle("snickers")} />
                         </div>
                     </div>
 
@@ -231,7 +232,7 @@ export default function Projects() {
                         </div>
 
                         <div className="project-image cursor-target">
-                            <img src="/carousel/test-image.png" alt="" style={imgStyle("mcdonalds")} />
+                            <ParallaxImage src="/mcdonalds.png" alt="" style={imgStyle("mcdonalds")} />
                         </div>
                     </div>
 

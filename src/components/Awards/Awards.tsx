@@ -1,4 +1,10 @@
-const PLACEHOLDER_COUNT = 5
+const AWARDS = [
+  '/award1.png',
+  '/award2.png',
+  '/award3.png',
+  '/award4.png',
+  '/award5.png',
+]
 
 export default function Awards() {
   return (
@@ -29,9 +35,9 @@ export default function Awards() {
         </div>
 
         <ul className="awards__grid">
-          {Array.from({ length: PLACEHOLDER_COUNT }).map((_, i) => (
+          {AWARDS.map((src, i) => (
             <li key={i} className="awards__item">
-              <div className="awards__placeholder" aria-hidden="true" />
+              <img className="awards__img" src={src} alt={`Award ${i + 1}`} />
             </li>
           ))}
         </ul>

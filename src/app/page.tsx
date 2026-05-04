@@ -32,12 +32,18 @@ export default function Home() {
               </div>
 
             </div>
-
-            <div className="bottom">
-              <Pillars />
-            </div>
           </div>
         </section>
+
+        <section className="pillars-section">
+          <div className="wrapper">
+            <Pillars />
+          </div>
+        </section>
+
+        <LogoCarousel />
+        <Awards />
+        <Projects />
 
         <section className="services">
           <div className="wrapper">
@@ -45,9 +51,6 @@ export default function Home() {
           </div>
         </section>
       </div>
-      <Projects />
-      {/* <LogoCarousel /> */}
-      <Awards />
       <ImpactCTA />
       <Footer />
     </main>

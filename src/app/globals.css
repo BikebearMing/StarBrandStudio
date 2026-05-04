@@ -267,11 +267,11 @@ button {
   top: 0;
   left: 0;
   z-index: 25;
+  max-width: 18vw;
   pointer-events: none;
   color: #000;
   font-family: var(--inter);
   text-transform: uppercase;
-  white-space: nowrap;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -292,6 +292,9 @@ button {
   font-weight: 400;
   overflow: hidden;
   display: block;
+  max-width: 100%;
+  white-space: normal;
+  overflow-wrap: break-word;
 }
 
 .cylinder-hover-label__brand > span,
@@ -309,6 +312,19 @@ button {
 .cylinder-hover-label.is-visible .cylinder-hover-label__copy > span {
   transform: translateY(0);
   transition-delay: 0.08s;
+}
+
+.parallax-img,
+.project-image img.parallax-img,
+.video-popup-wrapper img.parallax-img {
+  position: absolute;
+  inset: auto 0 auto 0;
+  width: 100%;
+  height: 130%;
+  top: -15%;
+  object-fit: cover;
+  display: block;
+  will-change: transform;
 }
 
 .line {
@@ -533,11 +549,12 @@ section.what-we-do {
           position: relative;
           width: 26.319vw;
           height: 16.111vw;
+          overflow: hidden;
 
           & img {
             position: absolute;
-            width: 100%;
-            height: 100%;
+            width: 120%;
+            height: 120%;
             object-fit: cover;
 
 
@@ -552,67 +569,113 @@ section.what-we-do {
       }
     }
 
-    & .bottom {
-
-      & .pillars {
-        list-style: none;
-        display: flex;
-        flex-direction: column;
-      }
-
-      & .pillar {
-        display: flex;
-        align-items: center;
-        gap: 2.083vw;
-        opacity: 0.35;
-        transition: opacity 0.35s ease;
-        cursor: pointer;
-
-        & .pillar__label {
-          flex-shrink: 0;
-        }
-
-        & .pillar__line {
-          flex: 1;
-          height: 1px;
-          background: currentColor;
-          transform: scaleX(0);
-          transform-origin: left center;
-          transition: transform 0.65s cubic-bezier(0.6, 0, 0.3, 1);
-        }
-
-        & .pillar__copy {
-          width: 18.75vw;
-          flex-shrink: 0;
-          text-transform: uppercase;
-        }
-
-        & .pillar__copy-inner {
-          display: block;
-        }
-
-        & .pillar__copy .line {
-          display: block;
-          overflow: hidden;
-          line-height: 1.28;
-        }
-
-        &.is-active {
-          opacity: 1;
-
-          & .pillar__line {
-            transform: scaleX(1);
-          }
-        }
-      }
-    }
   }
+}
+
+section.pillars-section {
+  position: relative;
+  z-index: 2;
+  background: var(--red);
+  color: white;
+  padding-inline: var(--sidepadding-xs);
+  padding-block: 5.556vw;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+section.pillars-section::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  opacity: 0.08;
+  pointer-events: none;
+  background-image: url('/tv-static.gif');
+  background-position: 0 0;
+  background-size: auto;
+}
+
+section.pillars-section .wrapper {
+  position: relative;
+  z-index: 2;
+}
+
+.pillars {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.pillar {
+  display: flex;
+  align-items: center;
+  gap: 2.083vw;
+  opacity: 0.35;
+  transition: opacity 0.35s ease;
+  cursor: pointer;
+}
+
+.pillar .pillar__label {
+  flex-shrink: 0;
+}
+
+.pillar .pillar__line {
+  flex: 1;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.65s cubic-bezier(0.6, 0, 0.3, 1);
+}
+
+.pillar .pillar__copy {
+  width: 18.75vw;
+  flex-shrink: 0;
+  text-transform: uppercase;
+}
+
+.pillar .pillar__copy-inner {
+  display: block;
+}
+
+.pillar .pillar__copy .line {
+  display: block;
+  overflow: hidden;
+  line-height: 1.28;
+}
+
+.pillar.is-active {
+  opacity: 1;
+}
+
+.pillar.is-active .pillar__line {
+  transform: scaleX(1);
 }
 
 /* Logo Carousel */
 .logo-carousel {
-  background-color: #000;
-  padding: 7.78vw var(--sidepadding-xs) 0.5vw var(--sidepadding-xs);
+  position: relative;
+  isolation: isolate;
+  background: #000;
+  padding: 7.78vw var(--sidepadding-xs) 4vw var(--sidepadding-xs);
+  overflow: hidden;
+}
+
+.logo-carousel::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  opacity: 0.08;
+  pointer-events: none;
+  background-image: url('/tv-static.gif');
+  background-position: 0 0;
+  background-size: auto;
+}
+
+.logo-carousel-wrapper {
+  position: relative;
+  z-index: 2;
 }
 
 .logo-carousel .carousel-header .logo-carousel__h4 {
@@ -635,17 +698,24 @@ section.what-we-do {
 .logo-carousel .carousel-track {
   display: flex;
   gap: 2.5vw;
-  overflow: hidden;
   will-change: transform;
 }
 
 .logo-carousel .carousel-item {
   flex-shrink: 0;
+  width: 14.127vw;
+  height: 14.127vw;
+  border-radius: 50%;
+  background: #ffffff;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
 }
 
 .logo-carousel .carousel-item img {
-  height: 5vw;
-  width: auto;
+  width: 70%;
+  height: 70%;
+  object-fit: contain;
   display: block;
 }
 
@@ -766,7 +836,11 @@ section.projects {
   height: 100%;
   min-height: 100lvh;
   position: relative;
+  z-index: 2;
+  background: #000;
+  color: white;
   overflow: hidden;
+  isolation: isolate;
 
   &::after {
         content: '';
@@ -836,6 +910,7 @@ section.projects {
 
 
         & .project-image {
+          position: relative;
           width: 100%;
           height: 13.056vw;
           border: 0.5px solid rgba(255, 255, 255, 0.35);
@@ -843,8 +918,8 @@ section.projects {
         }
 
         & .project-image img {
-          width: 100%;
-          height: 100%;
+          width: 120%;
+          height: 120%;
           object-fit: cover;
           display: block;
         }
@@ -996,6 +1071,13 @@ section.awards::after {
   background:
     linear-gradient(135deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
   border: 1px dashed rgba(255, 255, 255, 0.18);
+}
+
+.awards__img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
 }
 
 /* ── Impact CTA section ──────────────────────────────────────────── */

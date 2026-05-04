@@ -9,17 +9,26 @@ import { scrollState } from '@/lib/scroll'
 import { PRELOADER_DONE_EVENT } from '@/components/Preloader/Preloader'
 
 // ─── CONTROLS ────────────────────────────────────────────────────────────────
-const IMAGES = Array(8).fill('/carousel/test-image.png')
+const IMAGES = [
+  '/carousel/01-busan.jpg',
+  '/carousel/02-eq.png',
+  '/carousel/03-mpoc.jpg',
+  '/carousel/04-patek.jpg',
+  '/carousel/05-auchentoshan.jpg',
+  '/carousel/06-jomsapot.jpg',
+  '/carousel/07-elmina.jpg',
+  '/carousel/08-gamuda.png',
+]
 
-const LABELS: { brand: string; copy: string }[] = [
-  { brand: 'NIKE',        copy: 'EVERYTHING IS POSSIBLE' },
-  { brand: 'STARBUCKS',   copy: 'A MOMENT, EVERY MORNING' },
-  { brand: "MCDONALD'S",  copy: "I'M LOVIN' IT" },
-  { brand: 'KITKAT',      copy: 'HAVE A BREAK' },
-  { brand: 'ADIDAS',      copy: 'IMPOSSIBLE IS NOTHING' },
-  { brand: 'APPLE',       copy: 'THINK DIFFERENT' },
-  { brand: 'COCA-COLA',   copy: 'TASTE THE FEELING' },
-  { brand: 'NETFLIX',     copy: 'STORIES THAT MATTER' },
+const LABELS: { brand: string; copy?: string }[] = [
+  { brand: 'Train To Busan',                      copy: 'Resorts World Genting' },
+  { brand: 'The Launch of EQ',                    copy: 'Mercedes-Benz' },
+  { brand: 'The Sustainable Palm Oil Revolution', copy: 'Malaysian Palm Oil Council' },
+  { brand: 'Timepiece of tradition',              copy: "The origins of Patek Philippe's Calatrava wristwatch" },
+  { brand: 'Auchentoshan',                        copy: 'The single malt whisky with a love for three' },
+  { brand: '#JomSapot BeliLokal Integrated Marketing Campaign' },
+  { brand: 'Elmina Rainforest Knowledge Centre Sustainability Campaign' },
+  { brand: 'Gamuda Technology Website' },
 ]
 
 const LABEL_OFFSET_X = 18
@@ -276,7 +285,9 @@ export default function CylinderCarousel({ onHoverChange }: { onHoverChange?: (h
         className={`cylinder-hover-label${hoveredIndex !== null ? ' is-visible' : ''}`}
       >
         <span className="body cylinder-hover-label__brand"><span>{stickyLabel.brand}</span></span>
-        <span className="body cylinder-hover-label__copy"><span>{stickyLabel.copy}</span></span>
+        {stickyLabel.copy && (
+          <span className="body cylinder-hover-label__copy"><span>{stickyLabel.copy}</span></span>
+        )}
       </div>
     </div>
   )
