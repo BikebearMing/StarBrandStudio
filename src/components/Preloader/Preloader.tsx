@@ -83,6 +83,19 @@ export default function Preloader() {
           aspectRatio: '1 / 1',
         }}
       />
+      <div
+        aria-hidden
+        style={{
+          position: 'absolute',
+          inset: 0,
+          zIndex: 1,
+          opacity: 0.111,
+          pointerEvents: 'none',
+          backgroundImage: 'url(/tv-static.gif)',
+          backgroundPosition: '0 0',
+          backgroundSize: 'auto',
+        }}
+      />
     </div>
   )
 }

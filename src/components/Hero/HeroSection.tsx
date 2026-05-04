@@ -11,7 +11,7 @@ const CylinderCarousel = dynamic(
 )
 
 // Text intro timings — start as carousel intro settles (carousel is 3.5s)
-const TEXT_DELAY      = 4.0   // when the h1 animation kicks in
+const TEXT_DELAY      = 2.4   // when the h1 animation kicks in
 const LINE_DURATION   = 0.9
 const LINE_STAGGER    = 0.12
 const H2_GAP          = 0.3   // extra delay between h1 lines finishing and h2 line starting

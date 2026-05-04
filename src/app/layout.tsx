@@ -28,6 +28,9 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${instrumentSerif.variable} ${interTight.variable}`}>
+      <head>
+        <link rel="stylesheet" href="https://use.typekit.net/bpi7jxx.css" />
+      </head>
       <body>
         <Preloader />
         <SmoothScroll />

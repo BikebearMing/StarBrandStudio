@@ -83,7 +83,7 @@ export default function Pillars() {
         >
           <span className="h1 pillar__label">{p.label}</span>
           <span className="pillar__line" aria-hidden="true"></span>
-          <p className="subhead pillar__copy">
+          <p className="body pillar__copy">
             <span className="pillar__copy-inner">{p.copy}</span>
           </p>
         </li>

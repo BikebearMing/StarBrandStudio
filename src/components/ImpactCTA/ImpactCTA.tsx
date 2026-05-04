@@ -1,4 +1,5 @@
 import ImageTrail from './ImageTrail'
+import ImpactCursor from './ImpactCursor'
 
 // Swap these out for your own assets later — e.g. ['/impact/01.jpg', '/impact/02.jpg', ...]
 const TRAIL_IMAGES = [
@@ -15,10 +16,11 @@ const TRAIL_IMAGES = [
 export default function ImpactCTA() {
   return (
     <section className="impact-cta">
+      <ImpactCursor />
       <ImageTrail items={TRAIL_IMAGES} variant={1} threshold={80} />
       <div className="impact-cta__inner">
         <div className="impact-cta__top">
-          <h2 className="impact-cta__heading">LET&rsquo;S MAKE AN</h2>
+          <h2 className="h1-v2 impact-cta__heading">LET&rsquo;S MAKE AN</h2>
           <a href="/contact" className="custom-button">
             <svg className="custom-button-icon" viewBox="0 0 24 24" aria-hidden="true">
               <circle className="ring ring--outer" cx="12" cy="12" r="11" />
@@ -29,10 +31,10 @@ export default function ImpactCTA() {
           </a>
         </div>
         <div className="impact-cta__bottom">
-          <p className="impact-cta__sub">
+          <p className="body">
             TOGETHER, WE&rsquo;LL BUILD SOMETHING<br />WORTH TALKING ABOUT.
           </p>
-          <span className="impact-cta__impact">IMPACT</span>
+          <span className="h1-v2 impact-cta__impact">IMPACT</span>
         </div>
       </div>
     </section>

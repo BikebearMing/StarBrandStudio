@@ -11,6 +11,21 @@ import { PRELOADER_DONE_EVENT } from '@/components/Preloader/Preloader'
 // ─── CONTROLS ────────────────────────────────────────────────────────────────
 const IMAGES = Array(8).fill('/carousel/test-image.png')
 
+const LABELS: { brand: string; copy: string }[] = [
+  { brand: 'NIKE',        copy: 'EVERYTHING IS POSSIBLE' },
+  { brand: 'STARBUCKS',   copy: 'A MOMENT, EVERY MORNING' },
+  { brand: "MCDONALD'S",  copy: "I'M LOVIN' IT" },
+  { brand: 'KITKAT',      copy: 'HAVE A BREAK' },
+  { brand: 'ADIDAS',      copy: 'IMPOSSIBLE IS NOTHING' },
+  { brand: 'APPLE',       copy: 'THINK DIFFERENT' },
+  { brand: 'COCA-COLA',   copy: 'TASTE THE FEELING' },
+  { brand: 'NETFLIX',     copy: 'STORIES THAT MATTER' },
+]
+
+const LABEL_OFFSET_X = 18
+const LABEL_OFFSET_Y = 18
+const LABEL_FOLLOW_EASE = 0.18
+
 const RADIUS        = 4   // cylinder size — smaller = tighter curve
 const IMG_WIDTH     = 2.9   // arc length per image (~333px wide at 1440 viewport)
 const IMG_HEIGHT    = 1.34   // image height (~253px tall at 1440 viewport)
@@ -101,9 +116,12 @@ function CarouselImage({ texture, angle, isHovered, isGreyed, intro, onPointerOv
   )
 }
 
-type CarouselProps = { onHoverChange?: (hovered: boolean) => void }
+type CarouselProps = {
+  onHoverChange?: (hovered: boolean) => void
+  onHoverIndexChange?: (index: number | null) => void
+}
 
-function Carousel({ onHoverChange }: CarouselProps) {
+function Carousel({ onHoverChange, onHoverIndexChange }: CarouselProps) {
   const groupRef = useRef<THREE.Group>(null)
   const outerRef = useRef<THREE.Group>(null)
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
@@ -133,7 +151,8 @@ function Carousel({ onHoverChange }: CarouselProps) {
 
   useEffect(() => {
     onHoverChange?.(hoveredIndex !== null)
-  }, [hoveredIndex, onHoverChange])
+    onHoverIndexChange?.(hoveredIndex)
+  }, [hoveredIndex, onHoverChange, onHoverIndexChange])
 
   const handleOver = (i: number) => {
     if (unhoverTimer.current) clearTimeout(unhoverTimer.current)
@@ -193,16 +212,72 @@ function Carousel({ onHoverChange }: CarouselProps) {
 }
 
 export default function CylinderCarousel({ onHoverChange }: { onHoverChange?: (hovered: boolean) => void }) {
+  const wrapperRef = useRef<HTMLDivElement>(null)
+  const labelRef = useRef<HTMLDivElement>(null)
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
+  const [stickyLabel, setStickyLabel] = useState(LABELS[0])
+
+  useEffect(() => {
+    if (hoveredIndex !== null && LABELS[hoveredIndex]) {
+      setStickyLabel(LABELS[hoveredIndex])
+    }
+  }, [hoveredIndex])
+
+  useEffect(() => {
+    const wrapper = wrapperRef.current
+    const label = labelRef.current
+    if (!wrapper || !label) return
+
+    let targetX = 0
+    let targetY = 0
+    let currentX = 0
+    let currentY = 0
+    let primed = false
+    let rafId = 0
+
+    const handleMove = (e: MouseEvent) => {
+      const rect = wrapper.getBoundingClientRect()
+      targetX = e.clientX - rect.left + LABEL_OFFSET_X
+      targetY = e.clientY - rect.top + LABEL_OFFSET_Y
+      if (!primed) {
+        currentX = targetX
+        currentY = targetY
+        primed = true
+      }
+    }
+
+    const tick = () => {
+      currentX += (targetX - currentX) * LABEL_FOLLOW_EASE
+      currentY += (targetY - currentY) * LABEL_FOLLOW_EASE
+      label.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`
+      rafId = requestAnimationFrame(tick)
+    }
+
+    window.addEventListener('mousemove', handleMove)
+    rafId = requestAnimationFrame(tick)
+    return () => {
+      window.removeEventListener('mousemove', handleMove)
+      cancelAnimationFrame(rafId)
+    }
+  }, [])
+
   return (
-    <div style={{ position: 'relative', width: '100%', height: '100vh', zIndex: 10 }}>
+    <div ref={wrapperRef} style={{ position: 'relative', width: '100%', height: '100vh', zIndex: 10 }}>
       <Canvas
         camera={{ position: [CAMERA_X, CAMERA_Y, CAMERA_Z], fov: CAMERA_FOV }}
         style={{ background: 'transparent' }}
         gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
         dpr={[1, 1.5]}
       >
-        <Carousel onHoverChange={onHoverChange} />
+        <Carousel onHoverChange={onHoverChange} onHoverIndexChange={setHoveredIndex} />
       </Canvas>
+      <div
+        ref={labelRef}
+        className={`cylinder-hover-label${hoveredIndex !== null ? ' is-visible' : ''}`}
+      >
+        <span className="body cylinder-hover-label__brand"><span>{stickyLabel.brand}</span></span>
+        <span className="body cylinder-hover-label__copy"><span>{stickyLabel.copy}</span></span>
+      </div>
     </div>
   )
 }

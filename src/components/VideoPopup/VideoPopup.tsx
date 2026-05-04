@@ -1,14 +1,20 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import gsap from 'gsap'
 
 const VIDEO_SRC = 'https://streamable.com/l/odu4b7/mp4.mp4'
 
 export default function VideoPopup() {
   const [open, setOpen] = useState(false)
+  const [mounted, setMounted] = useState(false)
   const overlayRef = useRef<HTMLDivElement>(null)
   const videoRef = useRef<HTMLVideoElement>(null)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   useEffect(() => {
     if (!open) return
@@ -58,7 +64,7 @@ export default function VideoPopup() {
         </button>
       </div>
 
-      {open && (
+      {open && mounted && createPortal(
         <div
           ref={overlayRef}
           className="video-popup-overlay"
@@ -87,7 +93,8 @@ export default function VideoPopup() {
             controls
             playsInline
           />
-        </div>
+        </div>,
+        document.body
       )}
     </>
   )

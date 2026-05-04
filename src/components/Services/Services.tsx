@@ -132,11 +132,11 @@ export default function Services() {
           return (
             <li key={s.title} className={`service${isOpen ? ' is-open' : ''}`}>
               <button className="service__row" type="button" onClick={() => toggle(i)} aria-expanded={isOpen}>
-                <span className="service__index">{indexLabel}</span>
-                <h3 className="service__title">{s.title}</h3>
+                <span className="body service__index">{indexLabel}</span>
+                <h3 className="h3 service__title">{s.title}</h3>
                 <div className="service__copy-slot">
                   <div className="service__copy-content">
-                    <p className="subhead service__copy">
+                    <p className="body service__copy">
                       <span className="service__copy-inner">{s.copy}</span>
                     </p>
                   </div>
