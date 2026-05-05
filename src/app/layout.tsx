@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 import { Instrument_Serif, Inter_Tight } from 'next/font/google'
 import SmoothScroll from '@/components/SmoothScroll'
 import Preloader from '@/components/Preloader/Preloader'
+import MaskUpHeadings from '@/components/MaskUpHeadings/MaskUpHeadings'
 
 const instrumentSerif = Instrument_Serif({
   subsets: ['latin'],
@@ -34,6 +35,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <Preloader />
         <SmoothScroll />
+        <MaskUpHeadings />
         {children}
       </body>
     </html>

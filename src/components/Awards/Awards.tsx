@@ -30,7 +30,7 @@ export default function Awards() {
               GROUNDED IN THE CRAFT<br />
               OF STORYTELLING.
             </p>
-            <h3 className="h1 amplitude awards__rec">&amp; RECOGNITIONS</h3>
+            <h3 className="h1 amplitude amp-mask awards__rec">&amp; RECOGNITIONS</h3>
           </div>
         </div>
 

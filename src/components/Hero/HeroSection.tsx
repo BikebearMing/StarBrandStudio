@@ -119,13 +119,13 @@ export default function HeroSection() {
         overflow: 'hidden',
       }}
     >
-      <h1 className="h1 dark">
+      <h1 className="h1 amplitude dark">
         <span className="line"><span className="line-inner">A FULL SUITE OF</span></span>
         <br />
         <span className="line"><span className="line-inner">SERVICES</span></span>
       </h1>
       <CylinderCarousel onHoverChange={setIsHovering} />
-      <h2 className="h1 dark">
+      <h2 className="h1 amplitude dark">
         <span className="line"><span className="line-inner">BUILT FOR BRANDS THAT WANT TO&nbsp;</span></span>
         <span className='black typewriter'>LEAD</span>
       </h2>

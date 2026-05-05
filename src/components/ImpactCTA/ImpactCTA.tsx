@@ -20,7 +20,7 @@ export default function ImpactCTA() {
       <ImageTrail items={TRAIL_IMAGES} variant={1} threshold={80} />
       <div className="impact-cta__inner">
         <div className="impact-cta__top">
-          <h2 className="h1-v2 impact-cta__heading">LET&rsquo;S MAKE AN</h2>
+          <h2 className="h1-v2 amp-mask impact-cta__heading">LET&rsquo;S MAKE AN</h2>
           <a href="/contact" className="custom-button">
             <svg className="custom-button-icon" viewBox="0 0 24 24" aria-hidden="true">
               <circle className="ring ring--outer" cx="12" cy="12" r="11" />

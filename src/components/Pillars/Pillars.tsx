@@ -13,15 +13,11 @@ const PILLARS = [
   },
   {
     label: 'TRUSTED IMPACT',
-    copy: 'We measure success by resonance. Every campaign is designed to move audiences, shift perception and deliver outcomes clients can point to with confidence.',
+    copy: 'Where credibility meets creativity. We don’t just tell stories—we deliver content that informs, engages, and moves audiences to action.',
   },
   {
-    label: 'AUDIENCE-CENTRIC',
-    copy: 'We start with people, not platforms. Deep audience insight informs every creative decision, ensuring the work lands where it matters most.',
-  },
-  {
-    label: 'CREATIVITY',
-    copy: 'We craft ideas that feel inevitable in hindsight — distinct, culturally aware and strategically sharp, built to earn attention rather than demand it.',
+    label: 'AUDIENCE-CENTRIC\nCREATIVITY',
+    copy: 'Creativity grounded in data, culture, and human insight. We combine audience understanding with multimedia storytelling to produce content that captures attention and builds trust.',
   },
 ]
 

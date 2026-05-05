@@ -30,8 +30,13 @@ export default function ImpactCursor() {
         currentY = targetY
         primed = true
       }
+      const overInteractive = !!(e.target as HTMLElement)?.closest('a, button')
+      setActive(!overInteractive)
     }
-    const handleEnter = () => setActive(true)
+    const handleEnter = (e: MouseEvent) => {
+      const overInteractive = !!(e.target as HTMLElement)?.closest('a, button')
+      setActive(!overInteractive)
+    }
     const handleLeave = () => setActive(false)
 
     const tick = () => {

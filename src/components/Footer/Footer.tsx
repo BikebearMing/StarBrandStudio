@@ -43,7 +43,7 @@ export default function Footer() {
           <p className="body">Copyrights &reg; of Star Media Group 2026</p>
         </div>
         <div className="footer-bottom-bottom">
-          <p className="h1-v2">SMGBRANDSTUDIO@THESTAR.COM.MY</p>
+          <p className="h1-v2 amp-mask">SMGBRANDSTUDIO@THESTAR.COM.MY</p>
         </div>
       </div>
     </footer>

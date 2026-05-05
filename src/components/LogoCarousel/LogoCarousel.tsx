@@ -82,7 +82,7 @@ export default function LogoCarousel() {
     <section className="logo-carousel">
       <div className="logo-carousel-wrapper">
         <div className="carousel-header">
-          <h2 className="h4 logo-carousel__h4">
+          <h2 className="h4 amp-mask logo-carousel__h4">
             Reaching Over 18.1 million Malaysians across diverse segments
           </h2>
         </div>

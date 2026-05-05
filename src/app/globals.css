@@ -288,7 +288,7 @@ button {
 .cylinder-hover-label__copy {
   background: #ffffff;
   padding: 0.1vw 0.3vw;
-  font-family: var(--amplitude-condensed);
+  font-family: var(--inter);
   font-weight: 400;
   overflow: hidden;
   display: block;
@@ -343,6 +343,7 @@ button {
   display: inline-block;
   vertical-align: bottom;
   clip-path: inset(0 100% 0 0);
+  font-family: var(--serif);
 }
 
 section.services {
@@ -528,13 +529,16 @@ section.what-we-do {
 
           & span {
             display: inline-block;
-            margin-inline: 0.5em;
+            margin-inline: 0.3em;
+            vertical-align: middle;
+            line-height: 0;
 
             & img {
-              width: 12.472vw;
-              height: 5.056vw;
+              width: 2em;
+              height: 0.81em;
               object-fit: contain;
-
+              display: inline-block;
+              vertical-align: middle;
             }
 
           }
@@ -617,6 +621,7 @@ section.pillars-section .wrapper {
 
 .pillar .pillar__label {
   flex-shrink: 0;
+  white-space: pre-line;
 }
 
 .pillar .pillar__line {
@@ -932,6 +937,56 @@ section.projects {
   }
 }
 
+.project-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1vw;
+  align-items: flex-start;
+  color: #ffffff;
+  opacity: 0;
+  transition: opacity 0.35s cubic-bezier(0.6, 0, 0.3, 1);
+}
+
+.project-info.is-visible {
+  opacity: 1;
+}
+
+.project-info__label {
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.project-info__copy {
+  text-transform: uppercase;
+  line-height: 1.3;
+}
+
+.project-info__tags {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5vw;
+  margin: 0.2vw 0 0;
+  padding: 0;
+}
+
+.project-info__tag {
+  font-family: var(--inter);
+  font-size: 0.83vw;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  padding: 0.45vw 1vw;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  white-space: nowrap;
+}
+
+.project-info__cta {
+  margin-top: 0.5vw;
+}
+
 .video-popup-overlay {
   position: fixed;
   inset: 0;
@@ -991,7 +1046,8 @@ section.awards {
   z-index: 1;
   background: #000;
   color: white;
-  padding-block: 5.556vw;
+  padding-top: 5.556vw;
+  padding-bottom: 11.111vw;
   overflow: hidden;
 }
 
@@ -1093,7 +1149,7 @@ section.awards::after {
 
 .impact-cta a,
 .impact-cta button {
-  cursor: none;
+  cursor: pointer;
 }
 
 .impact-cursor {

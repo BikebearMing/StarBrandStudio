@@ -70,7 +70,32 @@ export default function Services() {
 
     innersRef.current.forEach((inners) => gsap.set(inners, { yPercent: 110 }))
 
-    return () => splits.forEach((s) => s.revert())
+    const items = Array.from(list.querySelectorAll<HTMLElement>('.service'))
+    gsap.set(items, { x: '-6vw', opacity: 0 })
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return
+          const idx = items.indexOf(entry.target as HTMLElement)
+          gsap.to(entry.target, {
+            x: 0,
+            opacity: 1,
+            duration: 0.8,
+            ease: 'power3.out',
+            delay: idx * 0.06,
+          })
+          observer.unobserve(entry.target)
+        })
+      },
+      { threshold: 0.2 }
+    )
+    items.forEach((item) => observer.observe(item))
+
+    return () => {
+      observer.disconnect()
+      splits.forEach((s) => s.revert())
+    }
   }, [])
 
   useEffect(() => {
@@ -130,10 +155,14 @@ export default function Services() {
           const isOpen = active === i
           const indexLabel = String(i + 1).padStart(2, '0')
           return (
-            <li key={s.title} className={`service${isOpen ? ' is-open' : ''}`}>
+            <li
+              key={s.title}
+              className={`service${isOpen ? ' is-open' : ''}`}
+              onMouseEnter={() => setActive(i)}
+            >
               <button className="service__row" type="button" onClick={() => toggle(i)} aria-expanded={isOpen}>
                 <span className="body service__index">{indexLabel}</span>
-                <h3 className="h3 service__title">{s.title}</h3>
+                <h3 className="h3 amp-mask service__title">{s.title}</h3>
                 <div className="service__copy-slot">
                   <div className="service__copy-content">
                     <p className="body service__copy">

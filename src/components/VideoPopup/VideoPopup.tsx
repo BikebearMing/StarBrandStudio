@@ -5,7 +5,7 @@ import { createPortal } from 'react-dom'
 import gsap from 'gsap'
 import ParallaxImage from '@/components/ParallaxImage/ParallaxImage'
 
-const VIDEO_SRC = 'https://streamable.com/l/odu4b7/mp4.mp4'
+const VIDEO_SRC = 'https://streamable.com/l/q9wy22/mp4.mp4'
 
 export default function VideoPopup() {
   const [open, setOpen] = useState(false)
@@ -50,7 +50,7 @@ export default function VideoPopup() {
   return (
     <>
       <div className="video-popup-wrapper">
-        <ParallaxImage src="/carousel/test-image.png" alt="" className="thumbnail" />
+        <ParallaxImage src="/video-capture-t0000.00seg-1130.png" alt="" className="thumbnail" />
         <button
           type="button"
           className="custom-button"
