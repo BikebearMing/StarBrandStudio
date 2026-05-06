@@ -127,7 +127,7 @@ export default function HeroSection() {
       <CylinderCarousel onHoverChange={setIsHovering} />
       <h2 className="h1 amplitude dark">
         <span className="line"><span className="line-inner">BUILT FOR BRANDS THAT WANT TO&nbsp;</span></span>
-        <span className='black typewriter'>LEAD</span>
+        <span className='black typewriter text-highlight'>LEAD</span>
       </h2>
     </section>
   )

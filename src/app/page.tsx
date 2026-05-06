@@ -36,6 +36,7 @@ export default function Home() {
         </section>
 
         <section className="pillars-section">
+          <h3 className="h3">ROOTED IN AUDIENCE INSIGHTS AND <br /> CREDIBLE JOURNALISM, WE DELIVER :</h3>
           <div className="wrapper">
             <Pillars />
           </div>

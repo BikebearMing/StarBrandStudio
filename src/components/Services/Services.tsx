@@ -136,7 +136,7 @@ export default function Services() {
   return (
     <>
       <div className="services-heading">
-        <h2 className="h1 dark services-heading__title">
+        <h2 className="h1 amplitude dark services-heading__title">
           <span>FULL-FLEDGE </span>
           <span className="text-highlight">SERVICES</span>
         </h2>

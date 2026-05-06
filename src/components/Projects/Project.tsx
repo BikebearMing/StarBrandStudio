@@ -161,7 +161,7 @@ export default function Projects() {
                     initialY={cursorStartRef.current.y}
                 />
             )}
-            <h2 className="h1 dark">FEATURED <span className="text-highlight">PROJECTS</span></h2>
+            <h2 className="h1 amplitude dark">FEATURED <span className="text-highlight">PROJECTS</span></h2>
             <div className="wrapper">
                 <div className="video-bg">
                     <div className="video-wrapper">

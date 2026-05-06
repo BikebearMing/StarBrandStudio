@@ -98,11 +98,12 @@ img {
   font-weight: 500;
   line-height: 1.28;
   letter-spacing: 0;
+  text-transform: uppercase;
 
 }
 
 .subhead {
-  font-family: var(--amplitude-condensed);
+  font-family: var(--inter);
   font-size: 0.972vw;
   font-weight: 500;
   line-height: 1.28;
@@ -141,6 +142,13 @@ canvas {
   isolation: isolate;
   transition: color 0.35s ease;
   font-family: var(--inter);
+  font-size: 1rem;
+  line-height: 1;
+  text-align: left;
+  text-decoration: none;
+  vertical-align: middle;
+  -webkit-appearance: none;
+  appearance: none;
 }
 
 button {
@@ -234,6 +242,10 @@ button {
 
   & .h1 {
     transition: opacity 0.35s ease;
+
+    :not(.typewriter) {
+      font-weight: 700;
+    }
   }
 
   &.is-dim .h1 {
@@ -316,7 +328,8 @@ button {
 
 .parallax-img,
 .project-image img.parallax-img,
-.video-popup-wrapper img.parallax-img {
+.video-popup-wrapper img.parallax-img,
+.video-popup-wrapper video.parallax-img {
   position: absolute;
   inset: auto 0 auto 0;
   width: 100%;
@@ -372,6 +385,14 @@ section.services {
   }
 }
 
+.h1.amplitude {
+  font-weight: 700;
+}
+
+.h1.amplitude .text-highlight {
+  font-weight: 400;
+}
+
 .services-heading {
   display: flex;
   justify-content: space-between;
@@ -385,6 +406,7 @@ section.services {
 }
 
 .text-highlight {
+  font-family: var(--serif);
   display: inline-block;
   background: #ffffff;
   color: #000000 !important;
@@ -504,9 +526,23 @@ section.what-we-do {
   z-index: 1;
   padding-inline: var(--sidepadding-xs);
   padding-block: 5.556vw;
+  isolation: isolate;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    opacity: 0.08;
+    pointer-events: none;
+    background-image: url('/tv-static.gif');
+    background-position: 0 0;
+    background-size: auto;
+  }
 
   & .wrapper {
-
+    position: relative;
+    z-index: 2;
     display: flex;
     flex-direction: column;
     gap: 10.417vw;
@@ -555,7 +591,8 @@ section.what-we-do {
           height: 16.111vw;
           overflow: hidden;
 
-          & img {
+          & img,
+          & video {
             position: absolute;
             width: 120%;
             height: 120%;
@@ -585,6 +622,10 @@ section.pillars-section {
   padding-block: 5.556vw;
   overflow: hidden;
   isolation: isolate;
+
+  & > h3 {
+    margin-bottom: 30px;
+  }
 }
 
 section.pillars-section::after {
