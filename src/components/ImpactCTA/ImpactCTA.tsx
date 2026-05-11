@@ -15,7 +15,7 @@ const TRAIL_IMAGES = [
 
 export default function ImpactCTA() {
   return (
-    <section className="impact-cta">
+    <section className="impact-cta grain-effect">
       <ImpactCursor />
       <ImageTrail items={TRAIL_IMAGES} variant={1} threshold={80} />
       <div className="impact-cta__inner">

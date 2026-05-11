@@ -8,7 +8,7 @@ const AWARDS = [
 
 export default function Awards() {
   return (
-    <section className="awards">
+    <section className="awards grain-effect">
       <div className="awards__inner">
         <div className="awards__heading">
           <div className="awards__heading-top">
