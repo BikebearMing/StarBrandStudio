@@ -79,7 +79,7 @@ export default function LogoCarousel() {
   }, [])
 
   return (
-    <section className="logo-carousel">
+    <section className="logo-carousel grain-effect">
       <div className="logo-carousel-wrapper">
         <div className="carousel-header">
           <h2 className="h4 amp-mask logo-carousel__h4">

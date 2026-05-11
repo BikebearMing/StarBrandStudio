@@ -58,7 +58,7 @@ const TargetCursor = ({
             y,
             duration: 0.1,
             ease: "power3.out",
-            overwrite: true,
+            overwrite: "auto",
         })
     }, [])
 

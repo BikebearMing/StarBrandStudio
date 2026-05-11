@@ -15,7 +15,7 @@ export default function Home() {
       <Header />
       <div className="pin-stack">
         <HeroSection />
-        <section className="what-we-do red-section">
+        <section className="what-we-do red-section grain-effect">
           <div className="wrapper">
             <div className="top">
               <div className="left">
@@ -35,7 +35,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="pillars-section">
+        <section className="pillars-section grain-effect">
           <h3 className="h3">ROOTED IN AUDIENCE INSIGHTS AND <br /> CREDIBLE JOURNALISM, WE DELIVER :</h3>
           <div className="wrapper">
             <Pillars />
@@ -46,7 +46,7 @@ export default function Home() {
         <Awards />
         <Projects />
 
-        <section className="services">
+        <section className="services grain-effect">
           <div className="wrapper">
             <Services />
           </div>

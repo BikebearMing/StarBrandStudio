@@ -15,6 +15,18 @@
   --amplitude-condensed: 'amplitude-condensed', sans-serif;
 }
 
+.grain-effect::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  opacity: 0.055;
+  pointer-events: none;
+  background-image: url('/tv-static.gif');
+  background-position: 0 0;
+  background-size: auto;
+}
+
 html,
 body {
   height: 100%;
@@ -229,15 +241,7 @@ button {
   height: 100lvh;
 
   &::after {
-    content: '';
-    position: absolute;
-    inset: 0;
     z-index: 9999;
-    opacity: 0.111;
-    pointer-events: none;
-    background-image: url('/tv-static.gif');
-    background-position: 0 0;
-    background-size: auto;
   }
 
   & .h1 {
@@ -367,17 +371,7 @@ section.services {
   padding-inline: var(--sidepadding-xs);
   padding-block: 5.556vw;
 
-  &::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-    opacity: 0.08;
-    pointer-events: none;
-    background-image: url('/tv-static.gif');
-    background-position: 0 0;
-    background-size: auto;
-  }
+
 
   & .wrapper {
     position: relative;
@@ -528,17 +522,7 @@ section.what-we-do {
   padding-block: 5.556vw;
   isolation: isolate;
 
-  &::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-    opacity: 0.08;
-    pointer-events: none;
-    background-image: url('/tv-static.gif');
-    background-position: 0 0;
-    background-size: auto;
-  }
+
 
   & .wrapper {
     position: relative;
@@ -628,17 +612,7 @@ section.pillars-section {
   }
 }
 
-section.pillars-section::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  opacity: 0.08;
-  pointer-events: none;
-  background-image: url('/tv-static.gif');
-  background-position: 0 0;
-  background-size: auto;
-}
+
 
 section.pillars-section .wrapper {
   position: relative;
@@ -707,17 +681,7 @@ section.pillars-section .wrapper {
   overflow: hidden;
 }
 
-.logo-carousel::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  opacity: 0.08;
-  pointer-events: none;
-  background-image: url('/tv-static.gif');
-  background-position: 0 0;
-  background-size: auto;
-}
+
 
 .logo-carousel-wrapper {
   position: relative;
@@ -888,17 +852,7 @@ section.projects {
   overflow: hidden;
   isolation: isolate;
 
-  &::after {
-        content: '';
-        position: absolute;
-        inset: 0;
-        z-index: 1;
-        opacity: 0.08;
-        pointer-events: none;
-        background-image: url(/tv-static.gif);
-        background-position: 0 0;
-        background-size: auto;
-    }
+
 
   & .h1 {
     margin-inline: auto;
@@ -1092,17 +1046,7 @@ section.awards {
   overflow: hidden;
 }
 
-section.awards::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  opacity: 0.08;
-  pointer-events: none;
-  background-image: url('/tv-static.gif');
-  background-position: 0 0;
-  background-size: auto;
-}
+
 
 .awards__inner {
   position: relative;
@@ -1234,15 +1178,7 @@ section.awards::after {
 }
 
 .impact-cta::after {
-  content: '';
-  position: absolute;
-  inset: 0;
   z-index: 4;
-  opacity: 0.08;
-  pointer-events: none;
-  background-image: url('/tv-static.gif');
-  background-position: 0 0;
-  background-size: auto;
 }
 
 .impact-cta__inner {
