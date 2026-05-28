@@ -27,7 +27,8 @@ export default function Awards() {
           <div className="awards__heading-bottom">
             <p className="body awards__caption">
               AWARD-WINNING IDEAS <br />
-              GROUNDED IN GOOD STORYTELLING
+              GROUNDED IN GOOD<br />
+              STORYTELLING
             </p>
             <h3 className="h1 amplitude amp-mask awards__rec">&amp; RECOGNITIONS</h3>
           </div>

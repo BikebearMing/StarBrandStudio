@@ -1055,6 +1055,10 @@ section.awards {
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
+
+    .text-highlight {
+        padding: 0 1em;
+    }
 }
 
 .awards__title {
@@ -1072,6 +1076,7 @@ section.awards {
     text-transform: uppercase;
     white-space: nowrap;
     text-align: right;
+    margin-bottom: 1.2vw;
 }
 
 .awards__rec {
@@ -1080,6 +1085,7 @@ section.awards {
     white-space: nowrap;
     font-weight: 700;
     font-size: 8.333vw;
+    text-align: right;
 }
 
 .awards__grid {
