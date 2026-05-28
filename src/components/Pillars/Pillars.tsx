@@ -13,7 +13,7 @@ const PILLARS = [
   },
   {
     label: 'TRUSTED IMPACT',
-    copy: 'Where credibility meets creativity. We don’t just tell stories—we deliver content that informs, engages, and moves audiences to action.',
+    copy: 'Where credibility meets creativity. We don’t just tell stories—we deliver content that informs, engages, and moves audiences to action that informs, engages and inspires audiences to take action.',
   },
   {
     label: 'AUDIENCE-CENTRIC\nCREATIVITY',
