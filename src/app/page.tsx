@@ -23,7 +23,7 @@ export default function Home() {
                   WHAT WE DO
                 </h3>
                 <h4 className="h2 amp-mask">
-                  Across every platform—digital, radio, on-ground, print and social— we bring brand <span><img src="/SMG_Logo-Loop-Animation.gif" alt="" /></span> ideas to life, creating moments that spark connection and inspire action.
+                  Across every platform—digital, radio, on-ground, print and social we bring brand <span><img src="/SMG_Logo-Loop-Animation.gif" alt="" /></span> ideas to life, creating moments that spark connection and inspire action.
                 </h4>
               </div>
 

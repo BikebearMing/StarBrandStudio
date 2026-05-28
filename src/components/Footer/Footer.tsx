@@ -5,11 +5,12 @@ export default function Footer() {
         <div className="footer-column-left">
           <div className="footer-location">
             <p className="body">
-              Menara Star, 15, Jalan 16/11, Seksyen 16, 46350 Petaling Jaya, Selangor, Malaysia
+              Lot 2, Jalan Astaka U8/88 Section U8, Bukit Jelutong 40150 Shah
+              Alam, Selangor Darul Ehsan, Malaysia
             </p>
           </div>
           <div className="footer-contact-no">
-            <p className="body">+60 12-642 9027</p>
+            <p className="body">+603 7967 1388</p>
             <p className="body">+603 7845 4644</p>
           </div>
         </div>
