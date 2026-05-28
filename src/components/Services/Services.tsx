@@ -9,19 +9,19 @@ gsap.registerPlugin(SplitText)
 const SERVICES = [
   {
     title: 'INTEGRATED MARKETING & CREATIVE STRATEGY',
-    copy: 'We develop integrated marketing strategies grounded in insight, aligning brand objectives with compelling creative ideas. By connecting strategy, storytelling, and media across platforms, we create campaigns that reach the right audiences and deliver meaningful impact.',
+    copy: 'By connecting strategy, storytelling, and media across platforms, we create campaigns that reach the right audiences and deliver results for your brand.',
   },
   {
     title: 'EDITORIAL STORYTELLING',
-    copy: 'We craft narratives with the discipline of journalism and the impact of great creative. Every story is researched, structured and written to earn attention from readers who have none to spare.',
+    copy: 'We craft narratives with the discipline of journalism and the impact of great creative.',
   },
   {
     title: 'VIDEO & MULTIMEDIA PRODUCTION',
-    copy: 'From short-form social cuts to long-form documentary, we produce video content that respects the audience\u2019s time while landing the brand message with clarity and craft.',
+    copy: 'From short-form social cuts to long-form documentary, we produce video content that conveys the brand message with clarity and craft.',
   },
   {
     title: 'YOUTH & SOCIAL IMPACT PROGRAMME',
-    copy: 'We design programmes that engage young audiences around causes that matter. Authentic partnerships built on genuine participation, not performative marketing.',
+    copy: 'We design programmes that engage young audiences around causes that matter through meaningful partnerships.',
   },
   {
     title: 'RESEARCH & INSIGHTS',
@@ -137,7 +137,7 @@ export default function Services() {
     <>
       <div className="services-heading">
         <h2 className="h1 amplitude dark services-heading__title">
-          <span>FULL-FLEDGE </span>
+          <span>FULL-FLEDGED </span>
           <span className="text-highlight">SERVICES</span>
         </h2>
         <button type="button" className="custom-button">

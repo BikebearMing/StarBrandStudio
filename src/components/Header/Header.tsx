@@ -46,7 +46,7 @@ export default function Header() {
   }, [])
 
   return (
-    <header ref={headerRef} className="site-header">
+    <header ref={headerRef} className="site-header grain-effect">
       <div className="wrapper">
         <a href="/" className="site-header__logo" aria-label="Star Brand Studio">
           <img src="/Logo.svg" alt="Star Brand Studio" />
