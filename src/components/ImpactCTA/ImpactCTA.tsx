@@ -27,7 +27,7 @@ export default function ImpactCTA() {
               <circle className="ring ring--middle" cx="12" cy="12" r="7" />
               <circle className="ring ring--inner" cx="12" cy="12" r="3" />
             </svg>
-            <span>LET&rsquo;S TALK</span>
+            <span>LET&rsquo;S WORK TOGETHER</span>
           </a>
         </div>
         <div className="impact-cta__bottom">
