@@ -10,7 +10,7 @@
     --bg: #0000;
     --bg-light: #242424;
     --sidepadding-xs: 1.111vw;
-    --sidepadding-xm: 3vw;
+    --sidepadding-xm: 6.042vw;
     --red: #da2128;
     --amplitude: "amplitude", sans-serif;
     --amplitude-condensed: "amplitude-condensed", sans-serif;
@@ -261,14 +261,14 @@ button {
     & .h1:first-child {
         position: absolute;
         top: 5.764vw;
-        left: var(--sidepadding-xs);
+        left: 4.2vw;
         z-index: 20;
         pointer-events: none;
     }
 
     & .h1:last-child {
         position: absolute;
-        left: var(--sidepadding-xs);
+        left: 4.2vw;
         bottom: 2.917vw;
         white-space: nowrap;
         letter-spacing: -0.35vw;
@@ -370,7 +370,7 @@ section.services {
     z-index: 2;
     background: #000000;
     color: white;
-    padding-inline: var(--sidepadding-xs);
+    padding-inline: var(--sidepadding-xm);
     padding-block: 5.556vw;
 
     & .wrapper {
@@ -740,19 +740,12 @@ section.pillars-section .wrapper {
     align-items: flex-start;
 }
 
-.custom-footer .footer-column-left,
-.custom-footer .footer-column-middle,
-.custom-footer .footer-column-right {
-    flex: 1;
-    max-width: 33.33%;
+.custom-footer .footer-column-left {
+    width: 17.639vw;
 }
 
 .custom-footer .footer-location {
     margin-bottom: 1.94vw;
-}
-
-.custom-footer .footer-location p {
-    max-width: 50%;
 }
 
 .custom-footer .footer-directory {
@@ -774,7 +767,7 @@ section.pillars-section .wrapper {
 .custom-footer .footer-column-right {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
 }
 
 .custom-footer .footer-socmed-excerpt p {
@@ -809,6 +802,7 @@ section.pillars-section .wrapper {
 }
 
 .custom-footer .footer-bottom-top img {
+    opacity: 0;
     height: auto;
     width: 6vw;
 }
@@ -887,7 +881,7 @@ section.projects {
             inset: 0;
             z-index: 1;
             display: grid;
-            padding-inline: var(--sidepadding-xs);
+            padding-inline: var(--sidepadding-xm);
             grid-template-columns: repeat(3, 1fr);
             row-gap: 5.556vw;
             column-gap: 10vw;
@@ -1032,6 +1026,7 @@ section.awards {
     z-index: 1;
     background: #000;
     color: white;
+    padding-inline: var(--sidepadding-xm);
     padding-top: 5.556vw;
     padding-bottom: 11.111vw;
     overflow: hidden;
