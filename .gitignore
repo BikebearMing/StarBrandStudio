@@ -3,5 +3,8 @@ node_modules/
 payload.db
 payload.db-journal
 payload-types.ts
+
+# Local media uploads (on Vercel, media lives in Blob, not the repo)
+/media
 .env.local
 .env

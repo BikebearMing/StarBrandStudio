@@ -4,6 +4,7 @@ import dynamic from 'next/dynamic'
 import { useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { PRELOADER_DONE_EVENT } from '@/components/Preloader/Preloader'
+import type { CarouselSlide } from './CylinderCarousel'
 
 const CylinderCarousel = dynamic(
   () => import('./CylinderCarousel'),
@@ -20,12 +21,27 @@ const TYPE_DURATION   = 0.8
 const TYPE_DELAY      = H2_DELAY + LINE_DURATION - 0.2 // typewriter after h2 line finishes
 
 // Word loop for the typewriter — cycles after the initial LEAD reveal
-const WORDS           = ['LEAD', 'INSPIRE', 'SELL', 'GROW']
+const DEFAULT_WORDS   = ['LEAD', 'INSPIRE', 'SELL', 'GROW']
 const WORD_HOLD       = 1.5   // seconds each word stays visible before erasing
 const WORD_ERASE_DUR  = 0.35
 const WORD_REVEAL_DUR = 0.5
 
-export default function HeroSection() {
+export type HeroProps = {
+  headingLine1?: string
+  headingLine2?: string
+  subheading?: string
+  words?: string[]
+  slides?: CarouselSlide[]
+}
+
+export default function HeroSection({
+  headingLine1 = 'A FULL SUITE OF',
+  headingLine2 = 'SERVICES',
+  subheading = 'BUILT FOR BRANDS THAT WANT TO',
+  words,
+  slides,
+}: HeroProps = {}) {
+  const WORDS = words?.length ? words : DEFAULT_WORDS
   const sectionRef = useRef<HTMLElement>(null)
   const [isHovering, setIsHovering] = useState(false)
 
@@ -120,14 +136,14 @@ export default function HeroSection() {
       }}
     >
       <h1 className="h1 amplitude dark">
-        <span className="line"><span className="line-inner">A FULL SUITE OF</span></span>
+        <span className="line"><span className="line-inner">{headingLine1}</span></span>
         <br />
-        <span className="line"><span className="line-inner">SERVICES</span></span>
+        <span className="line"><span className="line-inner">{headingLine2}</span></span>
       </h1>
-      <CylinderCarousel onHoverChange={setIsHovering} />
+      <CylinderCarousel onHoverChange={setIsHovering} slides={slides} />
       <h2 className="h1 amplitude dark">
-        <span className="line"><span className="line-inner">BUILT FOR BRANDS THAT WANT TO&nbsp;</span></span>
-        <span className='black typewriter text-highlight'>LEAD</span>
+        <span className="line"><span className="line-inner">{subheading}&nbsp;</span></span>
+        <span className='black typewriter text-highlight'>{WORDS[0]}</span>
       </h2>
     </section>
   )

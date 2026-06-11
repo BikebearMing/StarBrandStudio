@@ -8,8 +8,10 @@ import gsap from 'gsap'
 import { scrollState } from '@/lib/scroll'
 import { PRELOADER_DONE_EVENT } from '@/components/Preloader/Preloader'
 
+export type CarouselSlide = { url: string; brand: string; copy?: string }
+
 // ─── CONTROLS ────────────────────────────────────────────────────────────────
-const IMAGES = [
+const DEFAULT_IMAGES = [
   '/carousel/01-busan.jpg',
   '/carousel/02-eq.png',
   '/carousel/03-mpoc.jpg',
@@ -20,7 +22,7 @@ const IMAGES = [
   '/carousel/08-gamuda.png',
 ]
 
-const LABELS: { brand: string; copy?: string }[] = [
+const DEFAULT_LABELS: { brand: string; copy?: string }[] = [
   { brand: 'Train To Busan',                      copy: 'Resorts World Genting' },
   { brand: 'The Launch of EQ',                    copy: 'Mercedes-Benz' },
   { brand: 'The Sustainable Palm Oil Revolution', copy: 'Malaysian Palm Oil Council' },
@@ -64,7 +66,6 @@ const PARALLAX_Y = 0.32 // tilt strength on Y axis (horizontal mouse movement)
 const PARALLAX_EASE = 0.05 // smoothing (lower = lazier follow)
 // ─────────────────────────────────────────────────────────────────────────────
 
-const COUNT = IMAGES.length
 const IMG_ARC = IMG_WIDTH / RADIUS   // angular span each image occupies on the cylinder
 
 type IntroState = { scale: number; spinMult: number; arcMult: number }
@@ -126,15 +127,17 @@ function CarouselImage({ texture, angle, isHovered, isGreyed, intro, onPointerOv
 }
 
 type CarouselProps = {
+  images: string[]
   onHoverChange?: (hovered: boolean) => void
   onHoverIndexChange?: (index: number | null) => void
 }
 
-function Carousel({ onHoverChange, onHoverIndexChange }: CarouselProps) {
+function Carousel({ images, onHoverChange, onHoverIndexChange }: CarouselProps) {
+  const COUNT = images.length
   const groupRef = useRef<THREE.Group>(null)
   const outerRef = useRef<THREE.Group>(null)
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
-  const textures = useTexture(IMAGES)
+  const textures = useTexture(images)
   const unhoverTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const intro = useRef<IntroState>({ scale: INTRO_START_SCALE, spinMult: INTRO_SPIN_MULT, arcMult: INTRO_ARC_MULT })
   const parallax = useRef({ x: 0, y: 0 })
@@ -199,7 +202,7 @@ function Carousel({ onHoverChange, onHoverIndexChange }: CarouselProps) {
     <group ref={outerRef} rotation={[TILT_X, 0, TILT_Z]}>
       {/* Inner group: only the spin happens here */}
       <group ref={groupRef} rotation={[0, ROTATION_Y, 0]}>
-        {IMAGES.map((_, i) => {
+        {images.map((_, i) => {
           const angle = (i / COUNT) * Math.PI * 2
           const texture = Array.isArray(textures) ? textures[i] : textures
           return (
@@ -220,17 +223,28 @@ function Carousel({ onHoverChange, onHoverIndexChange }: CarouselProps) {
   )
 }
 
-export default function CylinderCarousel({ onHoverChange }: { onHoverChange?: (hovered: boolean) => void }) {
+export default function CylinderCarousel({
+  onHoverChange,
+  slides,
+}: {
+  onHoverChange?: (hovered: boolean) => void
+  slides?: CarouselSlide[]
+}) {
+  const images = slides?.length ? slides.map((s) => s.url) : DEFAULT_IMAGES
+  const labels = slides?.length
+    ? slides.map((s) => ({ brand: s.brand, copy: s.copy }))
+    : DEFAULT_LABELS
+
   const wrapperRef = useRef<HTMLDivElement>(null)
   const labelRef = useRef<HTMLDivElement>(null)
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
-  const [stickyLabel, setStickyLabel] = useState(LABELS[0])
+  const [stickyLabel, setStickyLabel] = useState(labels[0])
 
   useEffect(() => {
-    if (hoveredIndex !== null && LABELS[hoveredIndex]) {
-      setStickyLabel(LABELS[hoveredIndex])
+    if (hoveredIndex !== null && labels[hoveredIndex]) {
+      setStickyLabel(labels[hoveredIndex])
     }
-  }, [hoveredIndex])
+  }, [hoveredIndex, labels])
 
   useEffect(() => {
     const wrapper = wrapperRef.current
@@ -278,7 +292,7 @@ export default function CylinderCarousel({ onHoverChange }: { onHoverChange?: (h
         gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
         dpr={[1, 1.5]}
       >
-        <Carousel onHoverChange={onHoverChange} onHoverIndexChange={setHoveredIndex} />
+        <Carousel images={images} onHoverChange={onHoverChange} onHoverIndexChange={setHoveredIndex} />
       </Canvas>
       <div
         ref={labelRef}

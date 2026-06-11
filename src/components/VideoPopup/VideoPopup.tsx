@@ -5,9 +5,13 @@ import { createPortal } from 'react-dom'
 import gsap from 'gsap'
 import ParallaxVideo from '@/components/ParallaxImage/ParallaxVideo'
 
-const VIDEO_SRC = 'https://streamable.com/l/q9wy22/mp4.mp4'
+const DEFAULT_VIDEO_SRC = 'https://streamable.com/l/q9wy22/mp4.mp4'
 
-export default function VideoPopup() {
+type VideoPopupProps = { showreelUrl?: string; showreelThumbnail?: string }
+
+export default function VideoPopup({ showreelUrl, showreelThumbnail }: VideoPopupProps = {}) {
+  const videoSrc = showreelUrl || DEFAULT_VIDEO_SRC
+  const thumbSrc = showreelThumbnail || videoSrc
   const [open, setOpen] = useState(false)
   const [mounted, setMounted] = useState(false)
   const overlayRef = useRef<HTMLDivElement>(null)
@@ -50,7 +54,7 @@ export default function VideoPopup() {
   return (
     <>
       <div className="video-popup-wrapper">
-        <ParallaxVideo src={VIDEO_SRC} className="thumbnail" />
+        <ParallaxVideo src={thumbSrc} className="thumbnail" />
         <button
           type="button"
           className="custom-button"
@@ -90,7 +94,7 @@ export default function VideoPopup() {
           <video
             ref={videoRef}
             className="video-popup-player"
-            src={VIDEO_SRC}
+            src={videoSrc}
             controls
             playsInline
           />

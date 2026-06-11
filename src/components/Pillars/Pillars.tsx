@@ -6,7 +6,9 @@ import { SplitText } from 'gsap/SplitText'
 
 gsap.registerPlugin(SplitText)
 
-const PILLARS = [
+export type PillarItem = { label: string; copy: string }
+
+const DEFAULT_PILLARS: PillarItem[] = [
   {
     label: 'CREDIBILITY',
     copy: 'We bring editorial authority to your brand, built on decades of trusted journalism. Our newsroom experience shapes how we research, question, and craft stories with clarity and integrity.',
@@ -25,7 +27,8 @@ const DURATION = 0.7
 const STAGGER = 0.06
 const EASE = 'power3.out'
 
-export default function Pillars() {
+export default function Pillars({ items }: { items?: PillarItem[] } = {}) {
+  const PILLARS = items?.length ? items : DEFAULT_PILLARS
   const listRef = useRef<HTMLUListElement>(null)
   const innersRef = useRef<HTMLElement[][]>([])
   const [active, setActive] = useState(0)

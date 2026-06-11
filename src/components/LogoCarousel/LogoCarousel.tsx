@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react'
 import { scrollState } from '@/lib/scroll'
 
-const LOGOS = [
+const DEFAULT_LOGOS = [
   'thestar.png',
   'mstar.png',
   'star-property.png',
@@ -11,13 +11,14 @@ const LOGOS = [
   'kuntum.png',
   'suria.png',
   '988.png',
-]
+].map((file) => `/logos/${file}`)
 
 const BASE_SPEED   = 0.6   // px per frame baseline drift
 const SCROLL_BOOST = 0.45  // scroll-velocity multiplier
 const SCROLL_DAMP  = 0.08  // ease-in/out for scroll boost
 
-export default function LogoCarousel() {
+export default function LogoCarousel({ logos }: { logos?: string[] } = {}) {
+  const LOGOS = logos?.length ? logos : DEFAULT_LOGOS
   const trackRef = useRef<HTMLDivElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
 
@@ -89,9 +90,9 @@ export default function LogoCarousel() {
 
         <div className="carousel-container" ref={containerRef}>
           <div className="carousel-track" ref={trackRef}>
-            {LOGOS.map((file) => (
-              <div className="carousel-item" key={file}>
-                <img src={`/logos/${file}`} alt="" />
+            {LOGOS.map((src, i) => (
+              <div className="carousel-item" key={`${src}-${i}`}>
+                <img src={src} alt="" />
               </div>
             ))}
           </div>

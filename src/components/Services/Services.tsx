@@ -6,7 +6,9 @@ import { SplitText } from 'gsap/SplitText'
 
 gsap.registerPlugin(SplitText)
 
-const SERVICES = [
+export type ServiceItem = { title: string; copy: string }
+
+const DEFAULT_SERVICES: ServiceItem[] = [
   {
     title: 'INTEGRATED MARKETING & CREATIVE STRATEGY',
     copy: 'By connecting strategy, storytelling, and media across platforms, we create campaigns that reach the right audiences and deliver results for your brand.',
@@ -45,7 +47,8 @@ const REVEAL_DURATION = 0.6
 const REVEAL_DELAY = 0.55
 const REVEAL_STAGGER = 0.06
 
-export default function Services() {
+export default function Services({ items }: { items?: ServiceItem[] } = {}) {
+  const SERVICES = items?.length ? items : DEFAULT_SERVICES
   const listRef = useRef<HTMLUListElement>(null)
   const innersRef = useRef<HTMLElement[][]>([])
   const [active, setActive] = useState<number | null>(null)

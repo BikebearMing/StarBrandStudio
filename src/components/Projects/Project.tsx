@@ -4,27 +4,67 @@ import { useEffect, useRef, useState } from "react"
 import TargetCursor from "@/components/TargetCursor/TargetCursor"
 import ParallaxImage from "@/components/ParallaxImage/ParallaxImage"
 
-type ProjectInfo = { copy: string; tags: string[] }
-const PROJECT_INFO: Record<string, ProjectInfo> = {
-    gucci: {
+export type ProjectItem = {
+    key: string
+    title: string
+    year: string
+    thumbnail: string
+    hoverVideoUrl?: string
+    copy: string
+    tags: string[]
+}
+
+const DEFAULT_PROJECTS: ProjectItem[] = [
+    {
+        key: "gucci",
+        title: "GUCCI WALK YOUR WAY",
+        year: "2025",
+        thumbnail: "/gucci.png",
+        hoverVideoUrl: "https://streamable.com/l/ulxzt8/mp4.mp4",
         copy: "A FASHION-FORWARD CAMPAIGN CELEBRATING SELF-EXPRESSION THROUGH WALKING, BLENDING ICONIC HOUSE CODES WITH STREET CULTURE.",
         tags: ["FASHION", "BRAND FILM"],
     },
-    nike: {
+    {
+        key: "nike",
+        title: "NIKE EVERYTHING IS POSSIBLE",
+        year: "2025",
+        thumbnail: "/nikethumb.png",
+        hoverVideoUrl: "https://streamable.com/l/xx3sll/mp4-high.mp4",
         copy: "A BOLD MANIFESTO PROVING THAT NO LIMIT IS FIXED — TURNING ATHLETES' DOUBT INTO PROOF THROUGH UNFLINCHING STORYTELLING.",
         tags: ["SPORTS", "VIDEO PRODUCTION & MEDIA"],
     },
-    snickers: {
+    {
+        key: "snickers",
+        title: "SNICKERS YOU'RE NOT YOU WHEN YOU'RE HUNGRY",
+        year: "2025",
+        thumbnail: "/snickers.png",
         copy: "A WITTY INTEGRATED CAMPAIGN LEANING INTO THE INSIGHT THAT HUNGER CHANGES WHO YOU ARE — BUILT FOR SOCIAL AND OUT-OF-HOME.",
         tags: ["FMCG", "INTEGRATED CAMPAIGN"],
     },
-    mcdonalds: {
+    {
+        key: "mcdonalds",
+        title: "MCDONALD'S I'M LOVIN' IT",
+        year: "2025",
+        thumbnail: "/mcdonalds.png",
         copy: "AN INTEGRATED BRAND CAMPAIGN DESIGNED TO SPARK AWARENESS, TURN AUDIENCES INTO ADVOCATES ACROSS DIGITAL TOUCHPOINTS.",
         tags: ["F&B", "DIGITAL & SOCIAL"],
     },
+]
+
+export type ProjectsProps = {
+    headingBefore?: string
+    headingHighlight?: string
+    items?: ProjectItem[]
 }
 
-export default function Projects() {
+export default function Projects({
+    headingBefore = "FEATURED",
+    headingHighlight = "PROJECTS",
+    items,
+}: ProjectsProps = {}) {
+    const projects = items?.length ? items : DEFAULT_PROJECTS
+    const byKey: Record<string, ProjectItem> = Object.fromEntries(projects.map((p) => [p.key, p]))
+    const get = (k: string) => byKey[k] ?? DEFAULT_PROJECTS.find((p) => p.key === k)!
     const sectionRef = useRef<HTMLElement>(null)
     const gucciRef = useRef<HTMLVideoElement>(null)
     const nikeRef = useRef<HTMLVideoElement>(null)
@@ -161,7 +201,7 @@ export default function Projects() {
                     initialY={cursorStartRef.current.y}
                 />
             )}
-            <h2 className="h1 amplitude dark">FEATURED <span className="text-highlight">PROJECTS</span></h2>
+            <h2 className="h1 amplitude dark">{headingBefore} <span className="text-highlight">{headingHighlight}</span></h2>
             <div className="wrapper">
                 <div className="video-bg">
                     <div className="video-wrapper">
@@ -173,7 +213,7 @@ export default function Projects() {
                             playsInline
                             preload="auto"
                             style={videoStyle}
-                            src="https://streamable.com/l/ulxzt8/mp4.mp4"
+                            src={get("gucci").hoverVideoUrl}
                         ></video>
 
                         <video
@@ -184,7 +224,7 @@ export default function Projects() {
                             playsInline
                             preload="auto"
                             style={videoStyle}
-                            src="https://streamable.com/l/xx3sll/mp4-high.mp4"
+                            src={get("nike").hoverVideoUrl}
                         ></video>
                     </div>
 
@@ -196,13 +236,13 @@ export default function Projects() {
                         onMouseEnter={() => showVideo("gucci")}
                     >
                         <div className="title-wrapper">
-                            <p className="body dark">GUCCI WALK YOUR WAY</p>
+                            <p className="body dark">{get("gucci").title}</p>
 
-                            <p className="body dark">2025</p>
+                            <p className="body dark">{get("gucci").year}</p>
                         </div>
 
                         <div className="project-image cursor-target">
-                            <ParallaxImage src="/gucci.png" alt="" style={imgStyle("gucci")} />
+                            <ParallaxImage src={get("gucci").thumbnail} alt="" style={imgStyle("gucci")} />
                         </div>
                     </div>
 
@@ -214,13 +254,13 @@ export default function Projects() {
                         onMouseEnter={() => showVideo("nike")}
                     >
                         <div className="title-wrapper">
-                            <p className="body dark">NIKE EVERYTHING IS POSSIBLE</p>
+                            <p className="body dark">{get("nike").title}</p>
 
-                            <p className="body dark">2025</p>
+                            <p className="body dark">{get("nike").year}</p>
                         </div>
 
                         <div className="project-image cursor-target">
-                            <ParallaxImage src="/nikethumb.png" alt="" style={imgStyle("nike")} />
+                            <ParallaxImage src={get("nike").thumbnail} alt="" style={imgStyle("nike")} />
                         </div>
                     </div>
 
@@ -230,13 +270,13 @@ export default function Projects() {
                         onMouseEnter={() => showVideo("snickers")}
                     >
                         <div className="title-wrapper">
-                            <p className="body dark">SNICKERS YOU&apos;RE NOT YOU WHEN YOU&apos;RE HUNGRY</p>
+                            <p className="body dark">{get("snickers").title}</p>
 
-                            <p className="body dark">2025</p>
+                            <p className="body dark">{get("snickers").year}</p>
                         </div>
 
                         <div className="project-image cursor-target">
-                            <ParallaxImage src="/snickers.png" alt="" style={imgStyle("snickers")} />
+                            <ParallaxImage src={get("snickers").thumbnail} alt="" style={imgStyle("snickers")} />
                         </div>
                     </div>
 
@@ -246,25 +286,25 @@ export default function Projects() {
                         onMouseEnter={() => showVideo("mcdonalds")}
                     >
                         <div className="title-wrapper">
-                            <p className="body dark">MCDONALD&apos;S I&apos;M LOVIN&apos; IT</p>
+                            <p className="body dark">{get("mcdonalds").title}</p>
 
-                            <p className="body dark">2025</p>
+                            <p className="body dark">{get("mcdonalds").year}</p>
                         </div>
 
                         <div className="project-image cursor-target">
-                            <ParallaxImage src="/mcdonalds.png" alt="" style={imgStyle("mcdonalds")} />
+                            <ParallaxImage src={get("mcdonalds").thumbnail} alt="" style={imgStyle("mcdonalds")} />
                         </div>
                     </div>
 
                     <div className={`project-info${hoveredId ? ' is-visible' : ''}`} aria-hidden="true">
-                        {hoveredId && PROJECT_INFO[hoveredId] && (
+                        {hoveredId && byKey[hoveredId] && (
                             <>
                                 <p className=" body project-info__label">PROJECT OVERVIEW</p>
                                 <p className="body project-info__copy">
-                                    {PROJECT_INFO[hoveredId].copy}
+                                    {byKey[hoveredId].copy}
                                 </p>
                                 <ul className="project-info__tags">
-                                    {PROJECT_INFO[hoveredId].tags.map((tag) => (
+                                    {byKey[hoveredId].tags.map((tag) => (
                                         <li key={tag} className="project-info__tag">{tag}</li>
                                     ))}
                                 </ul>

@@ -1,47 +1,89 @@
-export default function Footer() {
+type FooterLink = { label: string; href: string }
+type FooterSocial = { label: string; href: string; icon?: string }
+
+export type FooterProps = {
+  address?: string
+  phones?: string[]
+  directory?: FooterLink[]
+  updatesLabel?: string
+  socials?: FooterSocial[]
+  brandLogo?: string
+  copyright?: string
+  email?: string
+}
+
+const DEFAULT_ADDRESS =
+  'Menara Star, 15, Jalan 16/11, Seksyen 16, 46350 Petaling Jaya, Selangor Darul Ehsan, Malaysia'
+const DEFAULT_PHONES = ['+603 7967 1388', '+60126429027']
+const DEFAULT_DIRECTORY: FooterLink[] = [
+  { label: 'OUR STORY', href: '/about' },
+  { label: 'WORKS', href: '/works' },
+  { label: 'SERVICES', href: '/services' },
+  { label: 'AWARDS', href: '/awards' },
+  { label: 'CONTACT', href: '/contact' },
+]
+const DEFAULT_SOCIALS: FooterSocial[] = [
+  { label: 'Facebook', href: '#', icon: '/footer/facebook.svg' },
+  { label: 'Instagram', href: '#', icon: '/footer/instagram.svg' },
+]
+
+export default function Footer({
+  address = DEFAULT_ADDRESS,
+  phones,
+  directory,
+  updatesLabel = 'GET THE LATEST UPDATES',
+  socials,
+  brandLogo = '/footer/smg-brand-studio.png',
+  copyright = 'Copyrights © of Star Media Group 2026',
+  email = 'SMGBRANDSTUDIO@THESTAR.COM.MY',
+}: FooterProps = {}) {
+  const PHONES = phones?.length ? phones : DEFAULT_PHONES
+  const DIRECTORY = directory?.length ? directory : DEFAULT_DIRECTORY
+  const SOCIALS = socials?.length ? socials : DEFAULT_SOCIALS
+
   return (
     <footer className="custom-footer">
       <div className="footer-top">
         <div className="footer-column-left">
           <div className="footer-location">
-            <p className="body">
-              Menara Star, 15, Jalan 16/11, Seksyen 16, 46350 Petaling Jaya, Selangor Darul Ehsan, Malaysia
-            </p>
+            <p className="body">{address}</p>
           </div>
           <div className="footer-contact-no">
-            <p className="body">+603 7967 1388</p>
-            <p className="body">+60126429027</p>
+            {PHONES.map((num, i) => (
+              <p className="body" key={i}>{num}</p>
+            ))}
           </div>
         </div>
 
         <div className="footer-column-middle">
           <div className="footer-directory">
-            <p className="body"><a href="/about">OUR STORY</a></p>
-            <p className="body"><a href="/works">WORKS</a></p>
-            <p className="body"><a href="/services">SERVICES</a></p>
-            <p className="body"><a href="/awards">AWARDS</a></p>
-            <p className="body"><a href="/contact">CONTACT</a></p>
+            {DIRECTORY.map((link, i) => (
+              <p className="body" key={i}><a href={link.href}>{link.label}</a></p>
+            ))}
           </div>
         </div>
 
         <div className="footer-column-right">
           <div className="footer-socmed-excerpt">
-            <p className="body">GET THE LATEST UPDATES</p>
+            <p className="body">{updatesLabel}</p>
           </div>
           <div className="footer-socmed">
-            <a href="#" aria-label="Facebook"><img src="/footer/facebook.svg" alt="Facebook" /></a>
-            <a href="#" aria-label="Instagram"><img src="/footer/instagram.svg" alt="Instagram" /></a>
+            {SOCIALS.map((social, i) => (
+              <a href={social.href} aria-label={social.label} key={i}>
+                {social.icon && <img src={social.icon} alt={social.label} />}
+              </a>
+            ))}
           </div>
         </div>
       </div>
 
       <div className="footer-bottom">
         <div className="footer-bottom-top">
-          <img src="/footer/smg-brand-studio.png" alt="SMG BRAND STUDIO" />
-          <p className="body">Copyrights &reg; of Star Media Group 2026</p>
+          <img src={brandLogo} alt="SMG BRAND STUDIO" />
+          <p className="body">{copyright}</p>
         </div>
         <div className="footer-bottom-bottom">
-          <p className="h1-v2 amp-mask">SMGBRANDSTUDIO@THESTAR.COM.MY</p>
+          <p className="h1-v2 amp-mask">{email}</p>
         </div>
       </div>
     </footer>

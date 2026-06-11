@@ -1270,3 +1270,389 @@ section.awards {
     background-size: cover;
     background-position: 50% 50%;
 }
+
+/* ── Contact section ─────────────────────────────────────────────── */
+.contact-section {
+    position: relative;
+    background: #000000;
+    color: #ffffff;
+    padding-inline: 6.736vw;
+    padding-block: 6.944vw;
+    padding-top: 0;
+    overflow: hidden;
+    isolation: isolate;
+}
+
+.contact-section::after {
+    z-index: 1;
+}
+
+.contact-section__inner {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    gap: 3.5vw;
+}
+
+.contact-section__head {
+    display: flex;
+    flex-direction: column;
+    gap: 1vw;
+}
+
+.contact-section__head .subhead {
+    color: var(--red);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.contact-section__head .h2 {
+    color: #ffffff;
+}
+
+.contact-form {
+    width: 100%;
+    max-width: 56vw;
+    margin-inline: auto;
+}
+
+.contact-form__grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25vw;
+}
+
+.contact-form__field {
+    flex: 1 1 100%;
+    position: relative;
+}
+
+.contact-form__field--half {
+    flex: 1 1 calc(50% - 0.625vw);
+}
+
+.contact-form__input,
+.contact-form__textarea,
+.contact-form__select {
+    width: 100%;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    color: #ffffff;
+    font-family: var(--inter);
+    font-size: 0.833vw;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 1.15vw 1.25vw;
+    transition:
+        border-color 0.35s ease,
+        color 0.35s ease;
+}
+
+.contact-form__input::placeholder,
+.contact-form__textarea::placeholder {
+    color: #ffffff;
+}
+
+.contact-form__input:focus,
+.contact-form__textarea:focus,
+.contact-form__select:focus {
+    outline: none;
+    border-color: var(--red);
+}
+
+.contact-form__textarea {
+    min-height: 9vw;
+    resize: vertical;
+}
+
+.contact-form__select-wrap {
+    position: relative;
+}
+
+.contact-form__select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    cursor: pointer;
+    padding-right: 3vw;
+}
+
+.contact-form__select option {
+    background: #111111;
+    color: #ffffff;
+}
+
+.contact-form__chevron {
+    position: absolute;
+    right: 1.25vw;
+    top: 50%;
+    width: 1.2vw;
+    height: 1.2vw;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: #ffffff;
+}
+
+.contact-form__error {
+    margin-top: 1vw;
+    font-family: var(--inter);
+    font-size: 0.78vw;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--red);
+}
+
+/* Appearance comes from the global .custom-button; this only adds spacing + disabled state. */
+.contact-form__submit {
+    margin-top: 1.75vw;
+}
+
+.contact-form__submit:disabled {
+    opacity: 0.6;
+    cursor: default;
+}
+
+.contact-form__confirmation {
+    font-family: var(--amplitude-condensed);
+    font-size: 1.6vw;
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    color: #ffffff;
+    max-width: 40vw;
+}
+
+@media (max-width: 768px) {
+    .contact-section {
+        padding-inline: var(--sidepadding-xm);
+        padding-block: 14vw;
+    }
+
+    .contact-form {
+        max-width: 100%;
+    }
+
+    .contact-form__field--half {
+        flex: 1 1 100%;
+    }
+
+    .contact-form__input,
+    .contact-form__textarea,
+    .contact-form__select {
+        font-size: 3.6vw;
+        padding: 3.6vw 4vw;
+    }
+
+    .contact-form__chevron {
+        width: 5vw;
+        height: 5vw;
+        right: 4vw;
+    }
+
+    .contact-form__confirmation {
+        font-size: 6vw;
+        max-width: 100%;
+    }
+
+    .contact-form__error {
+        font-size: 3.2vw;
+    }
+}
+
+/* ── Awards page (/awards) ───────────────────────────────────────── */
+.awards-page {
+    position: relative;
+    background: #000000;
+    color: #ffffff;
+    padding-inline: 6.736vw;
+    padding-top: 12vw;
+    padding-bottom: 8vw;
+    overflow: hidden;
+    isolation: isolate;
+}
+
+.awards-page__head {
+    position: relative;
+    z-index: 2;
+    margin-bottom: 5vw;
+}
+
+.awards-page__eyebrow {
+    font-family: var(--inter);
+    font-size: 0.833vw;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.6);
+    margin-bottom: 1.5vw;
+}
+
+.awards-page__title {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: 4.5vw;
+    line-height: 1.05;
+    text-transform: uppercase;
+}
+
+.awards-page__list {
+    position: relative;
+    z-index: 2;
+}
+
+/* Each year group lays out as [year] [sticky image] [rows]. */
+.awards-page__group {
+    display: grid;
+    grid-template-columns: 3vw 18vw 1fr;
+    column-gap: 1.5vw;
+    align-items: start;
+    padding-block: 0.833vw;
+    border-top: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.awards-page__group:last-child {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.awards-page__year {
+    grid-column: 1;
+    font-family: var(--inter);
+    font-size: 0.833vw;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    color: rgba(255, 255, 255, 0.85);
+    padding-top: 1.55vw;
+}
+
+/* Sticky holder — the image stays at the same spot while hovering the
+   group's rows. Empty (but space-reserved) until a row is hovered. */
+.awards-page__media {
+    grid-column: 2;
+    position: sticky;
+    top: 8vw;
+    align-self: start;
+    aspect-ratio: 16 / 11;
+    overflow: hidden;
+}
+
+.awards-page__media-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    animation: awards-img-in 0.35s ease;
+}
+
+@keyframes awards-img-in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.awards-page__rows {
+    grid-column: 3;
+    list-style: none;
+}
+
+.awards-page__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1.1fr;
+    column-gap: 1.5vw;
+    align-items: start;
+    padding: 1.25vw 1.5vw;
+    margin-inline: -1.5vw;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    cursor: default;
+}
+
+.awards-page__row.is-active {
+    background: #ffffff;
+    color: #000000;
+}
+
+.awards-page__org,
+.awards-page__award,
+.awards-page__campaign {
+    font-family: var(--inter);
+    font-size: 0.833vw;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    line-height: 1.45;
+}
+
+.awards-page__campaign {
+    color: rgba(255, 255, 255, 0.4);
+    transition: color 0.3s ease;
+}
+
+.awards-page__row.is-active .awards-page__campaign {
+    color: rgba(0, 0, 0, 0.55);
+}
+
+@media (max-width: 768px) {
+    .awards-page {
+        padding-inline: 6.4vw;
+        padding-top: 24vw;
+        padding-bottom: 16vw;
+    }
+
+    .awards-page__eyebrow {
+        font-size: 3.2vw;
+        margin-bottom: 4vw;
+    }
+
+    .awards-page__title {
+        font-size: 9vw;
+    }
+
+    .awards-page__head {
+        margin-bottom: 12vw;
+    }
+
+    /* Stack: year on top, image, then rows. */
+    .awards-page__group {
+        grid-template-columns: 1fr;
+        row-gap: 4vw;
+        padding-block: 8vw;
+    }
+
+    .awards-page__year {
+        padding-top: 0;
+        font-size: 3.6vw;
+    }
+
+    .awards-page__media {
+        position: static;
+        grid-column: 1;
+        width: 60vw;
+        max-width: 280px;
+    }
+
+    .awards-page__media:empty {
+        display: none;
+    }
+
+    .awards-page__rows {
+        grid-column: 1;
+    }
+
+    .awards-page__row {
+        grid-template-columns: 1fr;
+        row-gap: 1.5vw;
+        padding: 4vw;
+        margin-inline: -4vw;
+    }
+
+    .awards-page__org,
+    .awards-page__award,
+    .awards-page__campaign {
+        font-size: 3.4vw;
+    }
+}
