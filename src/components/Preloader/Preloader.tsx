@@ -8,13 +8,55 @@ const POST_LOTTIE_HOLD = 0.15 // brief beat after the lottie completes before sl
 
 export const PRELOADER_DONE_EVENT = 'preloader:done'
 
+// The preloader only lives on the homepage and only plays on the very first
+// page view of a session. Module flags survive client-side navigations (the
+// whole JS context persists) and reset on a full reload.
+let preloaderDone = false // the intro finished and the event was dispatched
+let armed = false         // a preloader is (or was) playing this session
+let appNavigated = false  // a client-side navigation has happened
+
+/** Called by PageTransition so a later mount of the homepage skips the intro. */
+export function markAppNavigated() {
+  appNavigated = true
+}
+
+/**
+ * Run `cb` when the preloader intro finishes. If no preloader is going to
+ * play (other entry page, or returning to home mid-session), run immediately
+ * with `instant: true` so callers can skip their first-load choreography.
+ * Returns an unsubscribe function.
+ */
+export function onPreloaderDone(cb: (instant: boolean) => void): () => void {
+  if (preloaderDone || !armed) {
+    cb(true)
+    return () => {}
+  }
+  const handler = () => cb(false)
+  window.addEventListener(PRELOADER_DONE_EVENT, handler, { once: true })
+  return () => window.removeEventListener(PRELOADER_DONE_EVENT, handler)
+}
+
 export default function Preloader() {
   const rootRef = useRef<HTMLDivElement>(null)
   const lottieHostRef = useRef<HTMLDivElement>(null)
   const [removed, setRemoved] = useState(false)
 
+  // Decide once, on the client, whether this mount should play the intro.
+  // (On the server this is always true so the SSR'd homepage includes the
+  // shell — the client makes the real decision at hydration.)
+  const [shouldPlay] = useState(
+    () => typeof window === 'undefined' || (!appNavigated && !armed),
+  )
+
+  // Set synchronously on the client so sibling components that mount in the
+  // same pass (hero, headings) see an armed preloader before their effects
+  // call onPreloaderDone. Render order puts <Preloader> first on the page.
+  if (typeof window !== 'undefined' && shouldPlay) {
+    armed = true
+  }
+
   useEffect(() => {
-    if (typeof window === 'undefined') return
+    if (!shouldPlay) return
     const host = lottieHostRef.current
     const root = rootRef.current
     if (!host || !root) return
@@ -43,6 +85,7 @@ export default function Preloader() {
           delay: POST_LOTTIE_HOLD,
           ease: 'power3.inOut',
           onStart: () => {
+            preloaderDone = true
             window.dispatchEvent(new Event(PRELOADER_DONE_EVENT))
           },
           onComplete: () => {
@@ -58,9 +101,9 @@ export default function Preloader() {
       anim?.destroy()
       document.body.style.overflow = ''
     }
-  }, [])
+  }, [shouldPlay])
 
-  if (removed) return null
+  if (removed || !shouldPlay) return null
 
   return (
     <div

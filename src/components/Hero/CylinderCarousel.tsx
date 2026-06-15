@@ -1,12 +1,12 @@
 'use client'
 
-import { useRef, useState, useEffect } from 'react'
+import { useRef, useState, useEffect, useMemo } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { useTexture } from '@react-three/drei'
 import * as THREE from 'three'
 import gsap from 'gsap'
 import { scrollState } from '@/lib/scroll'
-import { PRELOADER_DONE_EVENT } from '@/components/Preloader/Preloader'
+import { onPreloaderDone } from '@/components/Preloader/Preloader'
 
 export type CarouselSlide = { url: string; brand: string; copy?: string }
 
@@ -145,7 +145,15 @@ function Carousel({ images, onHoverChange, onHoverIndexChange }: CarouselProps) 
 
   useEffect(() => {
     let tween: gsap.core.Tween | null = null
-    const start = () => {
+    const start = (instant: boolean) => {
+      if (instant) {
+        // Client-side navigation: the expanding-spin intro belongs to the
+        // first load — land already settled.
+        intro.current.scale = 1
+        intro.current.spinMult = 1
+        intro.current.arcMult = 1
+        return
+      }
       tween = gsap.to(intro.current, {
         scale: 1,
         spinMult: 1,
@@ -154,9 +162,9 @@ function Carousel({ images, onHoverChange, onHoverIndexChange }: CarouselProps) 
         ease: 'power3.out',
       })
     }
-    window.addEventListener(PRELOADER_DONE_EVENT, start, { once: true })
+    const unsubscribe = onPreloaderDone(start)
     return () => {
-      window.removeEventListener(PRELOADER_DONE_EVENT, start)
+      unsubscribe()
       tween?.kill()
     }
   }, [])
@@ -230,10 +238,14 @@ export default function CylinderCarousel({
   onHoverChange?: (hovered: boolean) => void
   slides?: CarouselSlide[]
 }) {
-  const images = slides?.length ? slides.map((s) => s.url) : DEFAULT_IMAGES
-  const labels = slides?.length
-    ? slides.map((s) => ({ brand: s.brand, copy: s.copy }))
-    : DEFAULT_LABELS
+  // Memoized so their identity is stable across renders — the stickyLabel
+  // effect below depends on `labels`, and a fresh array every render would
+  // re-trigger it (and setState) in an infinite loop.
+  const images = useMemo(() => (slides?.length ? slides.map((s) => s.url) : DEFAULT_IMAGES), [slides])
+  const labels = useMemo(
+    () => (slides?.length ? slides.map((s) => ({ brand: s.brand, copy: s.copy })) : DEFAULT_LABELS),
+    [slides],
+  )
 
   const wrapperRef = useRef<HTMLDivElement>(null)
   const labelRef = useRef<HTMLDivElement>(null)
@@ -289,7 +301,9 @@ export default function CylinderCarousel({
       <Canvas
         camera={{ position: [CAMERA_X, CAMERA_Y, CAMERA_Z], fov: CAMERA_FOV }}
         style={{ background: 'transparent' }}
-        gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
+        // preserveDrawingBuffer lets the page transition snapshot the WebGL
+        // canvas (toDataURL) when leaving the homepage.
+        gl={{ antialias: true, alpha: true, powerPreference: 'high-performance', preserveDrawingBuffer: true }}
         dpr={[1, 1.5]}
       >
         <Carousel images={images} onHoverChange={onHoverChange} onHoverIndexChange={setHoveredIndex} />

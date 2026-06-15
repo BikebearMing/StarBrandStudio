@@ -2,7 +2,7 @@ import './globals.css'
 import type { Metadata } from 'next'
 import { Instrument_Serif, Inter_Tight } from 'next/font/google'
 import SmoothScroll from '@/components/SmoothScroll'
-import Preloader from '@/components/Preloader/Preloader'
+import PageTransition from '@/components/PageTransition/PageTransition'
 import MaskUpHeadings from '@/components/MaskUpHeadings/MaskUpHeadings'
 
 const instrumentSerif = Instrument_Serif({
@@ -33,10 +33,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="stylesheet" href="https://use.typekit.net/bpi7jxx.css" />
       </head>
       <body>
-        <Preloader />
         <SmoothScroll />
         <MaskUpHeadings />
-        {children}
+        <PageTransition>{children}</PageTransition>
       </body>
     </html>
   )

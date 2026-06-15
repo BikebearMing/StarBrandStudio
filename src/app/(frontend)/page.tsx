@@ -4,6 +4,7 @@ import config from '@payload-config'
 import type { Media, Page } from '@payload-types'
 
 import Awards from '@/components/Awards/Awards'
+import Preloader from '@/components/Preloader/Preloader'
 import Footer from '@/components/Footer/Footer'
 import Header from '@/components/Header/Header'
 import HeroSection from '@/components/Hero/HeroSection'
@@ -153,6 +154,9 @@ export default async function Home() {
 
   return (
     <main>
+      {/* Must stay first: it arms itself during render so the hero/headings
+          below know to wait for the intro before animating. */}
+      <Preloader />
       <Header />
       <div className="pin-stack">
         <HeroSection

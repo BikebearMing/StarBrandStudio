@@ -1,6 +1,7 @@
 'use client'
 
 import { Fragment, useState } from 'react'
+import Link from 'next/link'
 
 export type AwardEntry = {
   organization: string
@@ -93,8 +94,10 @@ export default function AwardsPage({ eyebrow, heading, years }: Props) {
   return (
     <section className="awards-page grain-effect">
       <div className="awards-page__head">
-        <p className="awards-page__eyebrow">{eyebrow ?? DEFAULT_EYEBROW}</p>
-        <h1 className="awards-page__title">
+        <nav className="body breadcrumb" aria-label="Breadcrumb">
+          <Link href="/">HOME</Link> / <span>{eyebrow ?? DEFAULT_EYEBROW}</span>
+        </nav>
+        <h1 className="body awards-page__title">
           {headingLines.map((line, i) => (
             <Fragment key={i}>
               {line}
@@ -110,7 +113,7 @@ export default function AwardsPage({ eyebrow, heading, years }: Props) {
           const activeImage = activeEntry?.image
           return (
             <div className="awards-page__group" key={`${group.year}-${g}`}>
-              <span className="awards-page__year">{group.year}</span>
+              <p className="body">{group.year}</p>
 
               <div className="awards-page__media" aria-hidden="true">
                 {activeImage && (
@@ -128,9 +131,9 @@ export default function AwardsPage({ eyebrow, heading, years }: Props) {
                     onMouseEnter={() => setActive({ g, r })}
                     onMouseLeave={() => setActive(null)}
                   >
-                    <span className="awards-page__org">{entry.organization}</span>
-                    <span className="awards-page__award">{entry.award}</span>
-                    <span className="awards-page__campaign">{entry.campaign}</span>
+                    <p className="body awards-page__org">{entry.organization}</p>
+                    <p className="body awards-page__award">{entry.award}</p>
+                    <p className="body awards-page__campaign">{entry.campaign}</p>
                   </li>
                 ))}
               </ul>

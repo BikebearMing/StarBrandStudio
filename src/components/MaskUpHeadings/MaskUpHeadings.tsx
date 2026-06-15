@@ -1,9 +1,10 @@
 'use client'
 
 import { useEffect } from 'react'
+import { usePathname } from 'next/navigation'
 import gsap from 'gsap'
 import { SplitText } from 'gsap/SplitText'
-import { PRELOADER_DONE_EVENT } from '@/components/Preloader/Preloader'
+import { onPreloaderDone } from '@/components/Preloader/Preloader'
 
 gsap.registerPlugin(SplitText)
 
@@ -16,6 +17,10 @@ const STAGGER = 0.08
 const EASE = 'power3.out'
 
 export default function MaskUpHeadings() {
+  // Re-split on every route change — this component lives in the persistent
+  // layout, but each page brings its own headings to animate.
+  const pathname = usePathname()
+
   useEffect(() => {
     const splits: SplitText[] = []
     let observer: IntersectionObserver | null = null
@@ -59,14 +64,14 @@ export default function MaskUpHeadings() {
       elements.forEach((el) => observer!.observe(el))
     }
 
-    window.addEventListener(PRELOADER_DONE_EVENT, init, { once: true })
+    const unsubscribe = onPreloaderDone(init)
     return () => {
       cancelled = true
-      window.removeEventListener(PRELOADER_DONE_EVENT, init)
+      unsubscribe()
       observer?.disconnect()
       splits.forEach((s) => s.revert())
     }
-  }, [])
+  }, [pathname])
 
   return null
 }

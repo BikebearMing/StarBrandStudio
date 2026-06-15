@@ -36,6 +36,24 @@ Notes:
 - Label text goes in the `<span>`; keep it uppercase.
 - It works on both `<a>` and `<button>` (has `appearance: none` + `border: unset`).
 
+## Typography — never invent font styles
+
+When building a new section (or restyling an existing one), NEVER write your own font
+styling (font-family / font-size / font-weight / letter-spacing / line-height /
+text-transform). Always use the global type classes defined in
+`src/app/(frontend)/globals.css`:
+
+- `.h1` — serif display heading (`.h1.amplitude` = bold Amplitude variant)
+- `.h1-v2` — oversized condensed display heading
+- `.h2` — condensed section heading
+- `.h3` — condensed sub-heading
+- `.body` — all body/UI copy (e.g. `<p className="body">`)
+
+A section-specific class (e.g. `.awards-page__campaign`) may only add layout (grid
+placement, spacing) or color/state — never typography. If a design truly needs a new
+type style, add it as a new global class in globals.css next to the ones above, not
+inline in a section.
+
 ## Tooling
 
 - **Node 22 is required** for the Payload CLI / `tsx` (Node 24 breaks module resolution).

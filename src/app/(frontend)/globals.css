@@ -118,6 +118,21 @@ img {
     letter-spacing: 0;
 }
 
+/* Breadcrumb (e.g. HOME / AWARDS) — pair with .body for typography.
+   Links (ancestor pages) are grey; the <span> (active page) is white. */
+.breadcrumb {
+    color: rgba(255, 255, 255, 0.6);
+    margin-bottom: 1.5vw;
+}
+
+.breadcrumb a:hover {
+    color: #ffffff;
+}
+
+.breadcrumb span {
+    color: #ffffff;
+}
+
 canvas {
     pointer-events: none;
 }
@@ -1467,9 +1482,9 @@ section.awards {
     position: relative;
     background: #000000;
     color: #ffffff;
-    padding-inline: 6.736vw;
-    padding-top: 12vw;
-    padding-bottom: 8vw;
+    padding-inline: var(--sidepadding-xs);
+    padding-top: 7.778vw;
+    padding-bottom: 2.222vw;
     overflow: hidden;
     isolation: isolate;
 }
@@ -1480,23 +1495,13 @@ section.awards {
     margin-bottom: 5vw;
 }
 
-.awards-page__eyebrow {
-    font-family: var(--inter);
-    font-size: 0.833vw;
-    font-weight: 500;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.6);
-    margin-bottom: 1.5vw;
-}
-
-.awards-page__title {
+/* .awards-page__title {
     font-family: var(--serif);
     font-weight: 400;
     font-size: 4.5vw;
     line-height: 1.05;
     text-transform: uppercase;
-}
+} */
 
 .awards-page__list {
     position: relative;
@@ -1511,11 +1516,12 @@ section.awards {
     align-items: start;
     padding-block: 0.833vw;
     border-top: 1px solid rgba(255, 255, 255, 0.14);
+    margin-bottom: 5vw;
 }
 
-.awards-page__group:last-child {
+/* .awards-page__group:last-child {
     border-bottom: 1px solid rgba(255, 255, 255, 0.14);
-}
+} */
 
 .awards-page__year {
     grid-column: 1;
@@ -1531,10 +1537,12 @@ section.awards {
    group's rows. Empty (but space-reserved) until a row is hovered. */
 .awards-page__media {
     grid-column: 2;
-    position: sticky;
-    top: 8vw;
+    position: absolute;
+    top: 0.833vw;
+    left: 4.514vw;
     align-self: start;
-    aspect-ratio: 16 / 11;
+    width: 11.736vw;
+    height: 8.819vw;
     overflow: hidden;
 }
 
@@ -1565,10 +1573,13 @@ section.awards {
     grid-template-columns: 1fr 1fr 1.1fr;
     column-gap: 1.5vw;
     align-items: start;
-    padding: 1.25vw 1.5vw;
+    padding-block: 0.833vw;
+    padding-left: 0.347vw;
+    /* padding: 1.25vw 1.5vw; */
     margin-inline: -1.5vw;
     transition: background-color 0.3s ease, color 0.3s ease;
     cursor: default;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.14);
 }
 
 .awards-page__row.is-active {
@@ -1576,20 +1587,10 @@ section.awards {
     color: #000000;
 }
 
-.awards-page__org,
-.awards-page__award,
-.awards-page__campaign {
-    font-family: var(--inter);
-    font-size: 0.833vw;
-    font-weight: 500;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    line-height: 1.45;
-}
-
 .awards-page__campaign {
     color: rgba(255, 255, 255, 0.4);
     transition: color 0.3s ease;
+    max-width: 90%;
 }
 
 .awards-page__row.is-active .awards-page__campaign {
@@ -1603,7 +1604,7 @@ section.awards {
         padding-bottom: 16vw;
     }
 
-    .awards-page__eyebrow {
+    .breadcrumb {
         font-size: 3.2vw;
         margin-bottom: 4vw;
     }

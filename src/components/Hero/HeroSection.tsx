@@ -3,7 +3,7 @@
 import dynamic from 'next/dynamic'
 import { useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
-import { PRELOADER_DONE_EVENT } from '@/components/Preloader/Preloader'
+import { onPreloaderDone } from '@/components/Preloader/Preloader'
 import type { CarouselSlide } from './CylinderCarousel'
 
 const CylinderCarousel = dynamic(
@@ -60,10 +60,16 @@ export default function HeroSection({
     const tweens: gsap.core.Tween[] = []
     const timelines: gsap.core.Timeline[] = []
 
-    const start = () => {
+    const start = (instant: boolean) => {
+      // First load: long delays choreographed around the preloader handoff and
+      // the 3.5s carousel intro. Client-side navigation: quick stagger instead.
+      const textDelay = instant ? 0.15 : TEXT_DELAY
+      const h2Delay = instant ? 0.4 : H2_DELAY
+      const typeDelay = instant ? 0.7 : TYPE_DELAY
+
       const h1Tween = gsap.to(h1LineInners, {
         yPercent: 0,
-        delay: TEXT_DELAY,
+        delay: textDelay,
         duration: LINE_DURATION,
         stagger: LINE_STAGGER,
         ease: 'power3.out',
@@ -72,7 +78,7 @@ export default function HeroSection({
 
       const h2Tween = gsap.to(h2LineInners, {
         yPercent: 0,
-        delay: H2_DELAY,
+        delay: h2Delay,
         duration: LINE_DURATION,
         ease: 'power3.out',
       })
@@ -81,7 +87,7 @@ export default function HeroSection({
       if (typewriter) {
         const typeTween = gsap.to(typewriter, {
           clipPath: 'inset(0 0% 0 0)',
-          delay: TYPE_DELAY,
+          delay: typeDelay,
           duration: TYPE_DURATION,
           ease: 'steps(5)',
         })
@@ -90,7 +96,7 @@ export default function HeroSection({
         // Word cycle: LEAD → INSPIRE → SELL → GROW → LEAD …
         let idx = 0
         const loopTl = gsap.timeline({
-          delay: TYPE_DELAY + TYPE_DURATION + WORD_HOLD,
+          delay: typeDelay + TYPE_DURATION + WORD_HOLD,
           repeat: -1,
         })
         WORDS.forEach(() => {
@@ -115,10 +121,10 @@ export default function HeroSection({
       }
     }
 
-    window.addEventListener(PRELOADER_DONE_EVENT, start, { once: true })
+    const unsubscribe = onPreloaderDone(start)
 
     return () => {
-      window.removeEventListener(PRELOADER_DONE_EVENT, start)
+      unsubscribe()
       tweens.forEach((t) => t.kill())
       timelines.forEach((t) => t.kill())
     }
