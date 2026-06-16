@@ -276,14 +276,14 @@ button {
     & .h1:first-child {
         position: absolute;
         top: 5.764vw;
-        left: 4.2vw;
+        left: 3.5vw;
         z-index: 20;
         pointer-events: none;
     }
 
     & .h1:last-child {
         position: absolute;
-        left: 4.2vw;
+        left: 3.5vw;
         bottom: 2.917vw;
         white-space: nowrap;
         letter-spacing: -0.35vw;

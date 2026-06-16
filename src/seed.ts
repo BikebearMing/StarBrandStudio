@@ -50,7 +50,7 @@ async function run() {
     { rel: 'carousel/08-gamuda.png', brand: 'Gamuda Technology Website' },
   ]
   const logos = ['thestar.png', 'mstar.png', 'star-property.png', 'rage.png', 'kuntum.png', 'suria.png', '988.png']
-  const awards = ['award1.png', 'award2.png', 'award3.png', 'award4.png', 'award5.png']
+  const awards = ['award1.png', 'award2.png', 'award3.png', 'award4.png', 'award5.png', 'awards-image-1.png']
 
   const carouselBlocks = []
   for (const c of carousel) {

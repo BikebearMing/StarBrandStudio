@@ -2,7 +2,6 @@ import './globals.css'
 import type { Metadata } from 'next'
 import { Instrument_Serif, Inter_Tight } from 'next/font/google'
 import SmoothScroll from '@/components/SmoothScroll'
-import PageTransition from '@/components/PageTransition/PageTransition'
 import MaskUpHeadings from '@/components/MaskUpHeadings/MaskUpHeadings'
 
 const instrumentSerif = Instrument_Serif({
@@ -35,7 +34,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <SmoothScroll />
         <MaskUpHeadings />
-        <PageTransition>{children}</PageTransition>
+        {children}
       </body>
     </html>
   )
