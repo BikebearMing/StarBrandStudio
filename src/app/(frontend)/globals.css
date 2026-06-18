@@ -101,6 +101,15 @@ img {
     letter-spacing: -0.056vw;
 }
 
+h4,
+.h4 {
+    font-size: 1.6vw;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    text-transform: uppercase;
+    line-height: 1;
+}
+
 .body {
     font-family: var(--inter);
     font-size: 0.972vw;
@@ -417,6 +426,86 @@ section.services {
 
 .services-heading__title {
     line-height: 1;
+}
+
+.works-title {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7vw;
+    position: absolute;
+    left: 6vw;
+    bottom: 2.3vw;
+    z-index: 5;
+    line-height: 1;
+}
+
+.works-breadcrumb {
+    position: absolute;
+    left: 6vw;
+    top: 7.6vw;
+    z-index: 5;
+    margin-bottom: 0;
+}
+
+/* Black, grain-textured backdrop for the works page — mirrors .awards-page.
+   Fixed-position children (slider/title/breadcrumb) float over it. */
+.works-page {
+    position: relative;
+    background: #000000 url("/works-bg.png") center / cover no-repeat;
+    color: #ffffff;
+    min-height: 100vh;
+    overflow: hidden;
+    isolation: isolate;
+    padding-inline: 19.6vw 1vw;
+    display: grid;
+    grid-template-columns: 160fr 517fr 420fr;
+    align-items: center;
+    gap: 1.25vw;
+}
+
+.works-slider .splide__track {
+    overflow: visible;
+}
+
+.works-slider__slide {
+    cursor: pointer;
+}
+
+.works-slider__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.works-showcase__detail {
+    display: flex;
+    gap: 8.8vw;
+    align-items: center;
+}
+
+.works-showcase__detail-body {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25vw;
+}
+
+.works-showcase__detail-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55vw;
+}
+
+.works-showcase__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7vw 0.5vw;
+}
+
+.works-showcase__tag {
+    padding: 0.35vw 0.7vw;
+    border-radius: 1.4vw;
+    background: #3E3D3D;
 }
 
 .text-highlight {
