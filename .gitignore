@@ -3,6 +3,7 @@ node_modules/
 payload.db
 payload.db-journal
 payload-types.ts
+random.html
 
 # Local media uploads (on Vercel, media lives in Blob, not the repo)
 /media

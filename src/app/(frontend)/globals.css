@@ -469,6 +469,25 @@ section.services {
 
 .works-slider__slide {
     cursor: pointer;
+    position: relative;
+}
+
+.works-slider__link {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.works-slider__slide.is-active .works-slider__link {
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
 }
 
 .works-slider__img {
@@ -506,6 +525,108 @@ section.services {
     padding: 0.35vw 0.7vw;
     border-radius: 1.4vw;
     background: #3E3D3D;
+}
+
+/* Per-work inner page (route: /works/[slug]) — mirrors the dark works backdrop. */
+.work-detail {
+    position: relative;
+    background: #000000;
+    color: #ffffff;
+    min-height: 100vh;
+    overflow: hidden;
+    isolation: isolate;
+    padding: 7.6vw 1.3vw 6.4vw;
+}
+
+.work-detail__breadcrumb {
+    margin: 0 3.5vw 2vw 3.5vw;
+}
+
+.work-detail__head {
+    display: flex;
+    gap: 1.4vw;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding: 0 7.3vw 1.9vw 5.9vw;
+}
+
+.work-detail__title {
+    font-size: 6.9vw;
+    line-height: 0.9;
+    letter-spacing: -5px;
+    text-transform: uppercase;
+}
+
+.work-detail__meta {
+    display: flex;
+    flex-direction: column;
+    gap: 1vw;
+    flex-wrap: wrap;
+}
+
+.work-detail__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7vw 0.5vw;
+}
+
+.work-detail__tag {
+    padding: 0.35vw 0.7vw;
+    border-radius: 1.4vw;
+    background: #3E3D3D;
+}
+
+.work-detail__media {
+    overflow: hidden;
+}
+
+.work-detail__img {
+    width: 100%;
+    aspect-ratio: 2;
+    display: block;
+    object-fit: cover;
+}
+
+/* Optional paragraph sections (Project Brief / The Solution / Impact & Results) */
+.work-detail__section {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2vw;
+    padding: 3.6vw 19.5vw 0;
+}
+
+.work-detail__section-heading {
+    opacity: 0.5;
+}
+
+.work-detail__section-body {
+    max-width: 58vw;
+}
+
+/* The Solution copy flows across two columns */
+.work-detail__section-body--columns {
+    column-count: 2;
+    column-gap: 2.9vw;
+}
+
+/* Fixed two-image grid (each cell optional) */
+.work-detail__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.3vw;
+    padding: 4vw 1.3vw 0;
+}
+
+.work-detail__grid-img {
+    width: 100%;
+    aspect-ratio: 1;
+    display: block;
+    object-fit: cover;
+}
+
+/* Full-width image at the very bottom of the inner page */
+.work-detail__footer-media {
+    margin-top: 4vw;
 }
 
 .text-highlight {

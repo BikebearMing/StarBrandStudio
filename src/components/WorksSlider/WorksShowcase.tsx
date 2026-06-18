@@ -1,7 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import WorksSlider, { type WorksSlide } from './WorksSlider'
+import TargetCursor from '@/components/TargetCursor/TargetCursor'
 
 type Props = {
   slides?: WorksSlide[]
@@ -25,8 +26,31 @@ export default function WorksShowcase({ slides }: Props) {
   const [active, setActive] = useState(0)
   const current = SLIDES[active] ?? SLIDES[0]
 
+  // The custom target cursor only renders while the pointer is over the section, so it
+  // never lingers over the rest of the page. `cursorStart` seeds its initial position
+  // so it appears under the pointer instead of animating in from the origin.
+  const [cursorActive, setCursorActive] = useState(false)
+  const cursorStartRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 })
+
   return (
-    <section className="works-page grain-effect">
+    <section
+      className="works-page grain-effect"
+      onMouseEnter={(e) => {
+        cursorStartRef.current = { x: e.clientX, y: e.clientY }
+        setCursorActive(true)
+      }}
+      onMouseLeave={() => setCursorActive(false)}
+    >
+      {cursorActive && (
+        <TargetCursor
+          spinDuration={5}
+          hideDefaultCursor
+          parallaxOn
+          hoverDuration={0.1}
+          initialX={cursorStartRef.current.x}
+          initialY={cursorStartRef.current.y}
+        />
+      )}
       <p className="body dark works-showcase__title">{current.title}</p>
       <WorksSlider slides={SLIDES} onActiveChange={setActive} />
       <div className="works-showcase__detail">

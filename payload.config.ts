@@ -6,9 +6,9 @@ import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
 import { Users } from './src/collections/Users'
 import { Media } from './src/collections/Media'
 import { Pages } from './src/collections/Pages'
+import { Works } from './src/collections/Works'
 import { Footer } from './src/globals/Footer'
 import { AwardsPage } from './src/globals/AwardsPage'
-import { WorksPage } from './src/globals/WorksPage'
 import sharp from 'sharp'
 import path from 'path'
 import { fileURLToPath } from 'url'
@@ -23,8 +23,8 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, Pages],
-  globals: [Footer, AwardsPage, WorksPage],
+  collections: [Users, Media, Pages, Works],
+  globals: [Footer, AwardsPage],
   editor: lexicalEditor(),
   // Required by Payload for image resizing (Media imageSizes) and admin thumbnails.
   sharp,

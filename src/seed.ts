@@ -66,6 +66,9 @@ async function run() {
   const nikeThumb = await img('nikethumb.png', 'Nike')
   const snickersThumb = await img('snickers.png', 'Snickers')
   const mcdThumb = await img('mcdonalds.png', "McDonald's")
+  const eqThumb = await img('carousel/02-eq.png', 'Mercedes-Benz EQ')
+  const busanThumb = await img('carousel/01-busan.jpg', 'Train To Busan')
+  const worksBg = await img('works-bg.png', 'Works')
   const brandLogo = await img('footer/smg-brand-studio.png', 'SMG Brand Studio')
   const fbIcon = await img('footer/facebook.svg', 'Facebook')
   const igIcon = await img('footer/instagram.svg', 'Instagram')
@@ -241,6 +244,197 @@ async function run() {
       ],
     },
   })
+
+  console.log('Seeding works collection…')
+  // Each project is its own document in the `works` collection (a custom-post-type
+  // style). They render in the order created here; editors can drag to reorder in
+  // the admin (the collection is `orderable`). Idempotent — matched by slug.
+  const works = [
+    {
+      slug: 'gucci',
+      image: gucciThumb,
+      title: 'GUCCI WALK YOUR WAY',
+      year: '2025',
+      description:
+        'A FASHION-FORWARD CAMPAIGN CELEBRATING SELF-EXPRESSION THROUGH WALKING, BLENDING ICONIC HOUSE CODES WITH STREET CULTURE.',
+      tags: [{ label: 'FASHION' }, { label: 'BRAND FILM' }],
+      content: [
+        {
+          blockType: 'textSection',
+          heading: 'Project Brief',
+          body: 'Gucci wanted to reintroduce its heritage to a younger, culturally fluent audience without losing the prestige that defines the house. The brief: turn the simple act of walking into a statement of individuality that felt unmistakably Gucci.',
+        },
+        { blockType: 'twoImages', left: busanThumb, right: eqThumb },
+        {
+          blockType: 'textSection',
+          heading: 'The Solution',
+          body: 'We built an integrated brand film and social campaign around the idea that every walk tells a story. Shot across the streets of three cities, the work paired archival house motifs with contemporary street styling, then extended into a series of short, platform-native cuts for TikTok and Reels.',
+        },
+        {
+          blockType: 'textSection',
+          heading: 'Impact & Results',
+          body: 'The campaign drove a 38% lift in brand search and over 24 million organic video views in its first month, with the hero film outperforming the previous season’s launch by 2.1x on engagement.',
+        },
+        { blockType: 'oneImage', image: worksBg },
+      ],
+    },
+    {
+      slug: 'nike',
+      image: nikeThumb,
+      title: 'NIKE EVERYTHING IS POSSIBLE',
+      year: '2025',
+      description:
+        "A BOLD MANIFESTO PROVING THAT NO LIMIT IS FIXED — TURNING ATHLETES' DOUBT INTO PROOF THROUGH UNFLINCHING STORYTELLING.",
+      tags: [{ label: 'SPORTS' }, { label: 'VIDEO PRODUCTION & MEDIA' }],
+      content: [
+        {
+          blockType: 'textSection',
+          heading: 'Project Brief',
+          body: 'Nike asked us to reignite the brand’s founding belief — that limits exist only to be broken — for a generation of athletes who have heard every motivational slogan before. The work needed to feel earned, not preached.',
+        },
+        { blockType: 'twoImages', left: eqThumb, right: busanThumb },
+        {
+          blockType: 'textSection',
+          heading: 'The Solution',
+          body: 'We followed real athletes through the moments most campaigns leave out: the failed attempts, the rehab, the early mornings. The result was a documentary-style hero film and a paid media plan built to surface each athlete’s story to the audiences who shared their sport.',
+        },
+        {
+          blockType: 'textSection',
+          heading: 'Impact & Results',
+          body: 'The film reached 41 million people across paid and earned channels, lifted purchase intent by 17 points among 18–24s, and became Nike Malaysia’s most-shared piece of the year.',
+        },
+        { blockType: 'oneImage', image: worksBg },
+      ],
+    },
+    {
+      slug: 'snickers',
+      image: snickersThumb,
+      title: "SNICKERS YOU'RE NOT YOU WHEN YOU'RE HUNGRY",
+      year: '2025',
+      description:
+        'A WITTY INTEGRATED CAMPAIGN LEANING INTO THE INSIGHT THAT HUNGER CHANGES WHO YOU ARE — BUILT FOR SOCIAL AND OUT-OF-HOME.',
+      tags: [{ label: 'FMCG' }, { label: 'INTEGRATED CAMPAIGN' }],
+      content: [
+        {
+          blockType: 'textSection',
+          heading: 'Project Brief',
+          body: 'Snickers wanted to localise its globally recognised platform for a Malaysian audience while keeping the humour sharp and the message instantly readable on a billboard or a six-second pre-roll.',
+        },
+        { blockType: 'twoImages', left: busanThumb, right: eqThumb },
+        {
+          blockType: 'textSection',
+          heading: 'The Solution',
+          body: 'We cast familiar local “hangry” personas and built a flexible toolkit of out-of-home, social, and influencer content that all paid off the same punchline. Each execution worked standalone but compounded when seen in sequence across a commuter’s day.',
+        },
+        {
+          blockType: 'textSection',
+          heading: 'Impact & Results',
+          body: 'The campaign delivered a 12% sales uplift over the promotional period and a 3.4x return on media spend, with the OOH executions earning unprompted social re-shares.',
+        },
+        { blockType: 'oneImage', image: worksBg },
+      ],
+    },
+    {
+      slug: 'mcdonalds',
+      image: mcdThumb,
+      title: "MCDONALD'S I'M LOVIN' IT",
+      year: '2025',
+      description:
+        'AN INTEGRATED BRAND CAMPAIGN DESIGNED TO SPARK AWARENESS, TURN AUDIENCES INTO ADVOCATES ACROSS DIGITAL TOUCHPOINTS.',
+      tags: [{ label: 'F&B' }, { label: 'DIGITAL & SOCIAL' }],
+      content: [
+        {
+          blockType: 'textSection',
+          heading: 'Project Brief',
+          body: "McDonald's needed to keep its always-on platform feeling fresh and culturally present, turning everyday menu moments into reasons for audiences to engage and advocate.",
+        },
+        { blockType: 'twoImages', left: eqThumb, right: busanThumb },
+        {
+          blockType: 'textSection',
+          heading: 'The Solution',
+          body: 'We designed an always-on content engine that reacted to local conversations in near real time, supported by hero seasonal films and a creator programme that put the brand into authentic, everyday contexts.',
+        },
+        {
+          blockType: 'textSection',
+          heading: 'Impact & Results',
+          body: 'The programme grew social engagement by 56% year on year and generated a sustained lift in consideration among families, the campaign’s priority audience.',
+        },
+        { blockType: 'oneImage', image: worksBg },
+      ],
+    },
+    {
+      slug: 'mercedes-eq',
+      image: eqThumb,
+      title: 'THE LAUNCH OF EQ',
+      year: '2024',
+      description:
+        'A PREMIUM LAUNCH CAMPAIGN INTRODUCING MERCEDES-BENZ’S ALL-ELECTRIC EQ RANGE TO A NEW GENERATION OF DRIVERS.',
+      tags: [{ label: 'AUTOMOTIVE' }, { label: 'INTEGRATED CAMPAIGN' }],
+      content: [
+        {
+          blockType: 'textSection',
+          heading: 'Project Brief',
+          body: 'Mercedes-Benz was entering the electric category against fast-moving challengers. The launch needed to assert that going electric meant no compromise on the luxury the brand is known for.',
+        },
+        { blockType: 'twoImages', left: busanThumb, right: gucciThumb },
+        {
+          blockType: 'textSection',
+          heading: 'The Solution',
+          body: 'We framed EQ as “the future, perfected” — a multi-channel launch spanning editorial partnerships, experiential test-drive events, and a digital configurator that let prospects build their own EQ.',
+        },
+        {
+          blockType: 'textSection',
+          heading: 'Impact & Results',
+          body: 'The launch generated 9,200 qualified test-drive leads and positioned EQ as the most-considered premium EV in market within its first quarter.',
+        },
+        { blockType: 'oneImage', image: worksBg },
+      ],
+    },
+    {
+      slug: 'train-to-busan',
+      image: busanThumb,
+      title: 'TRAIN TO BUSAN',
+      year: '2024',
+      description:
+        'AN IMMERSIVE ENTERTAINMENT ACTIVATION BRINGING THE WORLD OF TRAIN TO BUSAN TO LIFE AT RESORTS WORLD GENTING.',
+      tags: [{ label: 'ENTERTAINMENT' }, { label: 'EXPERIENTIAL' }],
+      content: [
+        {
+          blockType: 'textSection',
+          heading: 'Project Brief',
+          body: 'Resorts World Genting wanted a tentpole attraction that would drive footfall and dominate social feeds by turning a beloved film franchise into a physical, shareable experience.',
+        },
+        { blockType: 'twoImages', left: gucciThumb, right: eqThumb },
+        {
+          blockType: 'textSection',
+          heading: 'The Solution',
+          body: 'We designed an end-to-end immersive walkthrough, supported by a teaser content series, influencer previews, and a ticketing-integrated social campaign that built anticipation ahead of opening.',
+        },
+        {
+          blockType: 'textSection',
+          heading: 'Impact & Results',
+          body: 'The activation sold out its opening weeks, drove a measurable spike in resort visitation, and earned widespread organic coverage across entertainment media.',
+        },
+        { blockType: 'oneImage', image: worksBg },
+      ],
+    },
+  ]
+
+  for (const work of works) {
+    const existing = await payload.find({
+      collection: 'works',
+      where: { slug: { equals: work.slug } },
+      limit: 1,
+    })
+    if (existing.docs[0]) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      await payload.update({ collection: 'works', id: existing.docs[0].id, data: work as any })
+    } else {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      await payload.create({ collection: 'works', data: work as any })
+    }
+    console.log(`  ✓ ${work.slug}`)
+  }
 
   console.log('Setting up contact form…')
 

@@ -11,6 +11,8 @@ export type WorksSlide = {
   description?: string
   tags?: string[]
   year?: string
+  /** URL of this work's inner page. */
+  href?: string
 }
 
 type Props = {
@@ -80,8 +82,20 @@ export default function WorksSlider({ slides, onActiveChange }: Props) {
       <div className="splide__track">
         <ul className="splide__list">
           {SLIDES.map((slide, i) => (
-            <li className="splide__slide works-slider__slide" key={i}>
+            <li className="splide__slide works-slider__slide cursor-target" key={i}>
               <img className="works-slider__img" src={slide.image} alt={slide.alt ?? ''} />
+              <a
+                className="custom-button works-slider__link"
+                href={slide.href ?? '#'}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <svg className="custom-button-icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <circle className="ring ring--outer" cx="12" cy="12" r="11" />
+                  <circle className="ring ring--middle" cx="12" cy="12" r="7" />
+                  <circle className="ring ring--inner" cx="12" cy="12" r="3" />
+                </svg>
+                <span>VIEW PROJECT</span>
+              </a>
             </li>
           ))}
         </ul>

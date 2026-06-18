@@ -23,24 +23,26 @@ function mediaUrl(m: number | Media | null | undefined): string | undefined {
 async function getWorks() {
   try {
     const payload = await getPayload({ config })
-    const worksPage = await payload.findGlobal({ slug: 'worksPage', depth: 1 })
-    return { worksPage }
+    // `_order` is the drag-to-reorder field on the works collection.
+    const works = await payload.find({ collection: 'works', sort: '_order', depth: 1, limit: 100 })
+    return { works: works.docs }
   } catch {
     // If Payload/DB is unavailable, the slider falls back to its defaults.
-    return { worksPage: undefined }
+    return { works: undefined }
   }
 }
 
 export default async function WorksRoute() {
-  const { worksPage } = await getWorks()
+  const { works } = await getWorks()
 
-  const slides: WorksSlide[] | undefined = worksPage?.slides
+  const slides: WorksSlide[] | undefined = works
     ?.map((s): WorksSlide | undefined => {
       const image = mediaUrl(s.image)
       if (!image) return undefined
       return {
         image,
         title: s.title ?? undefined,
+        href: `/works/${s.slug}`,
         year: s.year ?? undefined,
         description: s.description ?? undefined,
         tags: s.tags?.map((t) => t.label).filter((l): l is string => Boolean(l)),
