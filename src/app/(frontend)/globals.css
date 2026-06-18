@@ -612,9 +612,10 @@ section.services {
 /* Fixed two-image grid (each cell optional) */
 .work-detail__grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1.3vw;
-    padding: 4vw 1.3vw 0;
+    grid-template-columns: 692fr 413fr;
+    gap: 11.5vw;
+    padding: 3.6vw 4.5vw 0;
+    align-items: end;
 }
 
 .work-detail__grid-img {
@@ -622,6 +623,10 @@ section.services {
     aspect-ratio: 1;
     display: block;
     object-fit: cover;
+}
+
+.work-detail__grid .work-detail__grid-img:last-child {
+    max-height: 70%;
 }
 
 /* Full-width image at the very bottom of the inner page */
