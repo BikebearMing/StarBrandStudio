@@ -621,6 +621,10 @@ export interface Form {
         id?: string | null;
       }[]
     | null;
+  /**
+   * Email address(es) that receive a notification for each submission. Separate multiple addresses with commas, semicolons or new lines. Leave blank to disable notifications.
+   */
+  notificationEmails?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -1120,6 +1124,7 @@ export interface FormsSelect<T extends boolean = true> {
         message?: T;
         id?: T;
       };
+  notificationEmails?: T;
   updatedAt?: T;
   createdAt?: T;
 }

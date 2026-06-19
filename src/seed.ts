@@ -50,7 +50,7 @@ async function run() {
     { rel: 'carousel/08-gamuda.png', brand: 'Gamuda Technology Website' },
   ]
   const logos = ['thestar.png', 'mstar.png', 'star-property.png', 'rage.png', 'kuntum.png', 'suria.png', '988.png']
-  const awards = ['award1.png', 'award2.png', 'award3.png', 'award4.png', 'award5.png', 'awards-image-1.png']
+  const awards = ['award1.png', 'award2.png', 'award3.png', 'award4.png', 'award5.png']
 
   const carouselBlocks = []
   for (const c of carousel) {
@@ -577,8 +577,11 @@ async function run() {
     submitButtonLabel: 'Submit',
     confirmationType: 'message' as const,
     confirmationMessage: lexical("Thanks — we've got your enquiry. We'll be in touch shortly."),
-    // NOTE: email notifications are intentionally left empty until SMTP details exist.
-    // Once an email adapter is configured in payload.config.ts, add entries here.
+    // Notification emails are handled by a custom afterChange hook (see
+    // src/forms/contactNotification.ts), driven by the form's "Notification
+    // recipients" field — set that in the admin, not here. The Form Builder's
+    // own `emails` array is left empty on purpose. Re-seeding preserves any
+    // recipients already entered (partial update doesn't touch notificationEmails).
     emails: [],
     fields: [
       { blockType: 'text', name: 'fullName', label: 'Full Name', required: true, width: 100 },

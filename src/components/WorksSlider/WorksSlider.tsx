@@ -50,12 +50,18 @@ export default function WorksSlider({ slides, onActiveChange, onHoverChange }: P
 
     const splide = new Splide(ref.current, {
       type: 'loop', // infinite loop
-      direction: 'ttb',
+      // Desktop: a vertical (top-to-bottom) auto-scrolling carousel.
+      // Mobile: a horizontal slider, centered slide focused with its neighbours
+      // peeking (~30% of their width) so it reads as swipeable — see `padding`.
+      direction: isDesktop ? 'ttb' : 'ltr',
       width: '100%',
-      heightRatio: .5,
-      gap: '2.2vw',
+      heightRatio: isDesktop ? 0.5 : 0.78,
+      gap: isDesktop ? '2.2vw' : '4vw',
       perPage: 1,
       focus: 'center',
+      // Mobile peek: shrink the active slide so the prev/next slides show on
+      // either side, signalling the slider can be swiped. No effect on desktop.
+      padding: isDesktop ? 0 : '18%',
       arrows: false,
       pagination: false,
       drag: true,

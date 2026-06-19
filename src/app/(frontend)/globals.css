@@ -500,6 +500,11 @@ section.services {
     bottom: 2.3vw;
     z-index: 5;
     line-height: 1;
+
+    @media (max-width: 768px) {
+        bottom: unset;
+        top: 26vw;
+    }
 }
 
 .works-breadcrumb {
@@ -563,6 +568,7 @@ section.services {
         visibility: visible;
         opacity: 1;
         pointer-events: auto;
+        text-wrap: nowrap;
     }
 }
 
@@ -626,6 +632,57 @@ section.services {
     padding: 0.35vw 0.7vw;
     border-radius: 1.4vw;
     background: #3E3D3D;
+}
+
+/* ── Mobile: stack the works showcase as a single column ──────────────────
+   Instead of the desktop 3-column grid, the horizontal peek slider sits on
+   top (see WorksSlider.tsx) with the centered work's title + tags below it. */
+@media (max-width: 768px) {
+    .works-page {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 7vw;
+        padding-inline: 0;
+        padding-block: 26vw 22vw;
+    }
+
+    .works-slider {
+        order: 1;
+        width: 100%;
+    }
+
+    .works-showcase__title {
+        order: 2;
+        margin: 0;
+        text-align: center;
+        padding-inline: 6vw;
+    }
+
+    .works-showcase__detail {
+        order: 3;
+        flex-direction: column;
+        align-items: center;
+        gap: 0;
+        width: 100%;
+        padding-inline: 6vw;
+    }
+
+    /* Mobile shows just the centered work's title + tags — hide the rest. */
+    .works-showcase__year,
+    .works-showcase__detail-text {
+        display: none;
+    }
+
+    .works-showcase__tags {
+        justify-content: center;
+    }
+
+    .works-showcase__tag {
+        padding: 1.4vw 3vw;
+        border-radius: 6vw;
+    }
 }
 
 /* Per-work inner page (route: /works/[slug]) — mirrors the dark works backdrop. */
