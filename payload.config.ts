@@ -9,6 +9,7 @@ import { Users } from './src/collections/Users'
 import { Media } from './src/collections/Media'
 import { Pages } from './src/collections/Pages'
 import { Works } from './src/collections/Works'
+import { Awards } from './src/collections/Awards'
 import { Footer } from './src/globals/Footer'
 import { AwardsPage } from './src/globals/AwardsPage'
 import sharp from 'sharp'
@@ -25,7 +26,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, Pages, Works],
+  collections: [Users, Media, Pages, Works, Awards],
   globals: [Footer, AwardsPage],
   editor: lexicalEditor(),
   // Required by Payload for image resizing (Media imageSizes) and admin thumbnails.

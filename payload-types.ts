@@ -71,6 +71,7 @@ export interface Config {
     media: Media;
     pages: Page;
     works: Work;
+    awards: Award;
     forms: Form;
     'form-submissions': FormSubmission;
     'payload-kv': PayloadKv;
@@ -84,6 +85,7 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     pages: PagesSelect<false> | PagesSelect<true>;
     works: WorksSelect<false> | WorksSelect<true>;
+    awards: AwardsSelect<false> | AwardsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
@@ -451,6 +453,38 @@ export interface Work {
   createdAt: string;
 }
 /**
+ * Awards shown on /awards. Drag rows to reorder; the page groups them by year.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "awards".
+ */
+export interface Award {
+  id: number;
+  _order?: string | null;
+  /**
+   * Award won, e.g. “DIGITAL PUBLISHER OF THE YEAR – SILVER”.
+   */
+  award: string;
+  /**
+   * e.g. “2025”. Awards are grouped under this year on the page.
+   */
+  year: string;
+  /**
+   * Campaign / project the award was for.
+   */
+  campaign?: string | null;
+  /**
+   * Trophy / award photo. Shown on the left when this row is hovered.
+   */
+  awardImage?: (number | null) | Media;
+  /**
+   * Group / team photo. Shown below the trophy when this row is hovered.
+   */
+  groupPhoto?: (number | null) | Media;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "forms".
  */
@@ -684,6 +718,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'works';
         value: number | Work;
+      } | null)
+    | ({
+        relationTo: 'awards';
+        value: number | Award;
       } | null)
     | ({
         relationTo: 'forms';
@@ -996,6 +1034,20 @@ export interface WorksSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "awards_select".
+ */
+export interface AwardsSelect<T extends boolean = true> {
+  _order?: T;
+  award?: T;
+  year?: T;
+  campaign?: T;
+  awardImage?: T;
+  groupPhoto?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "forms_select".
  */
 export interface FormsSelect<T extends boolean = true> {
@@ -1236,39 +1288,6 @@ export interface AwardsPage {
    * Page heading. Use line breaks for stacked lines.
    */
   heading?: string | null;
-  /**
-   * One group per year, newest first.
-   */
-  years?:
-    | {
-        /**
-         * e.g. "2025"
-         */
-        year: string;
-        entries?:
-          | {
-              /**
-               * Award body, e.g. "MDA D-AWARDS 2025".
-               */
-              organization: string;
-              /**
-               * Award won, e.g. "DIGITAL PUBLISHER OF THE YEAR – SILVER".
-               */
-              award: string;
-              /**
-               * Campaign / project the award was for.
-               */
-              campaign?: string | null;
-              /**
-               * Shown on the left when this row is hovered.
-               */
-              image?: (number | null) | Media;
-              id?: string | null;
-            }[]
-          | null;
-        id?: string | null;
-      }[]
-    | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1314,21 +1333,6 @@ export interface FooterSelect<T extends boolean = true> {
 export interface AwardsPageSelect<T extends boolean = true> {
   eyebrow?: T;
   heading?: T;
-  years?:
-    | T
-    | {
-        year?: T;
-        entries?:
-          | T
-          | {
-              organization?: T;
-              award?: T;
-              campaign?: T;
-              image?: T;
-              id?: T;
-            };
-        id?: T;
-      };
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

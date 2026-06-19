@@ -193,79 +193,110 @@ async function run() {
   })
 
   console.log('Setting awards page global…')
+  // Page chrome only — the award entries live in the `awards` collection below.
   await payload.updateGlobal({
     slug: 'awardsPage',
     data: {
       eyebrow: 'AWARDS',
-      heading: 'AWARD-WINNING IDEAS\nGROUNDED IN GOOD STORYTELLING',
-      years: [
-        {
-          year: '2026',
-          entries: [
-            {
-              organization: 'WAN-IFRA DIGITAL MEDIA AWARDS ASIA 2026',
-              award: 'BEST MARKETING CAMPAIGN FOR A NEWS BRAND – SILVER',
-              campaign: 'POWERING THE FUTURE IN PARTNERSHIP WITH TENAGA NASIONAL BERHAD',
-            },
-          ],
-        },
-        {
-          year: '2025',
-          entries: [
-            {
-              organization: 'MDA D-AWARDS 2025',
-              award: 'DIGITAL PUBLISHER OF THE YEAR – SILVER',
-              campaign: 'THE STAR ESG: BRIDGING ESG KNOWLEDGE INTO ACTION',
-            },
-            {
-              organization: 'WASTE MANAGEMENT ASSOCIATION OF MALAYSIA (WMAM)',
-              award: 'GREEN JOURNALISM AWARD',
-              campaign: 'THE STAR ESG PUBLICATION',
-            },
-          ],
-        },
-        {
-          year: '2024',
-          entries: [
-            {
-              organization: 'WAN-IFRA DIGITAL MEDIA AWARDS ASIA 2024',
-              award: 'BEST USE OF AI IN REVENUE STRATEGY – SILVER',
-              campaign: '#JOMSAPOT BELILOKAL GEN AI-LED INTEGRATED MARKETING CAMPAIGN',
-            },
-            {
-              organization: 'MDA D-AWARDS 2024',
-              award: 'BEST B2B MARKETING CAMPAIGN – SILVER',
-              campaign: '#JOMSAPOT BELILOKAL GEN AI-LED INTEGRATED MARKETING CAMPAIGN',
-            },
-            {
-              organization: 'MDA D-AWARDS 2024',
-              award: 'BEST USE OF DIGITAL MARKETING INNOVATION – SILVER',
-              campaign: '#JOMSAPOT BELILOKAL GEN AI-LED INTEGRATED MARKETING CAMPAIGN',
-            },
-            {
-              organization: 'PMAA DRAGONS OF ASIA 2024',
-              award: 'BEST DIGITAL CAMPAIGN 2024 – BRONZE',
-            },
-            {
-              organization: 'PMAA DRAGONS OF MALAYSIA 2024',
-              award: 'BEST DIGITAL CAMPAIGN 2024 – GOLD',
-            },
-          ],
-        },
-        {
-          year: '2023',
-          entries: [
-            {
-              organization: 'WAN-IFRA ASIAN DIGITAL MEDIA AWARDS (ADMA) 2023',
-              award: 'BEST NATIVE ADVERTISING/SPONSORED CONTENT CAMPAIGN GOLD',
-              campaign:
-                'SIME DARBY PROPERTY – ELMINA RAINFOREST KNOWLEDGE CENTRE (ERKC) SUSTAINABILITY CAMPAIGN',
-            },
-          ],
-        },
-      ],
+      heading: 'Award-winning ideas,\ngrounded in the craft of storytelling.',
     },
   })
+
+  console.log('Seeding awards collection…')
+  // Each award win is its own document in the `awards` collection (a custom-post-
+  // type style, like `works`). They render in the order created here, grouped by
+  // year on /awards; editors can drag to reorder in the admin (the collection is
+  // `orderable`). Idempotent — matched by year + award text.
+  const awardEntries = [
+    {
+      year: '2026',
+      award: 'BEST MARKETING CAMPAIGN FOR A NEWS BRAND – SILVER',
+      campaign: 'POWERING THE FUTURE IN PARTNERSHIP WITH TENAGA NASIONAL BERHAD',
+      awardImage: await img('awards/2026-best-marketing-trophy.jpg'),
+      groupPhoto: await img('awards/2026-best-marketing-group.jpg'),
+    },
+    {
+      year: '2025',
+      award: 'DIGITAL PUBLISHER OF THE YEAR – SILVER',
+      campaign: 'THE STAR ESG: BRIDGING ESG KNOWLEDGE INTO ACTION',
+      awardImage: await img('awards/2025-digital-publisher-trophy.jpg'),
+      groupPhoto: await img('awards/2025-digital-publisher-group.jpg'),
+    },
+    {
+      year: '2025',
+      award: 'GREEN JOURNALISM AWARD',
+      campaign: 'THE STAR ESG PUBLICATION',
+      awardImage: await img('awards/2025-green-journalism-trophy.jpg'),
+      groupPhoto: await img('awards/2025-green-journalism-group.jpg'),
+    },
+    {
+      year: '2024',
+      award: 'BEST USE OF AI IN REVENUE STRATEGY – SILVER',
+      campaign: '#JOMSAPOT BELILOKAL GEN AI-LED INTEGRATED MARKETING CAMPAIGN',
+      awardImage: await img('awards/2024-ai-revenue-trophy.jpg'),
+      groupPhoto: await img('awards/2024-ai-revenue-group.jpg'),
+    },
+    {
+      year: '2024',
+      award: 'BEST B2B MARKETING CAMPAIGN – SILVER',
+      campaign: '#JOMSAPOT BELILOKAL GEN AI-LED INTEGRATED MARKETING CAMPAIGN',
+      awardImage: await img('awards/2024-b2b-trophy.jpg'),
+      groupPhoto: await img('awards/2024-mda-group.jpg'),
+    },
+    {
+      year: '2024',
+      award: 'BEST USE OF DIGITAL MARKETING INNOVATION – SILVER',
+      campaign: '#JOMSAPOT BELILOKAL GEN AI-LED INTEGRATED MARKETING CAMPAIGN',
+      awardImage: await img('awards/2024-digital-innovation-trophy.jpg'),
+      groupPhoto: await img('awards/2024-mda-group.jpg'),
+    },
+    {
+      year: '2024',
+      award: 'BEST DIGITAL CAMPAIGN 2024 – BRONZE',
+      awardImage: await img('awards/2024-dragons-bronze-trophy.jpg'),
+      groupPhoto: await img('awards/2024-dragons-bronze-group.jpg'),
+    },
+    {
+      year: '2024',
+      award: 'BEST DIGITAL CAMPAIGN 2024 – GOLD',
+      awardImage: await img('awards/2024-dragons-gold-trophy.jpg'),
+      groupPhoto: await img('awards/2024-dragons-gold-group.jpg'),
+    },
+    {
+      year: '2023',
+      award: 'BEST NATIVE ADVERTISING/SPONSORED CONTENT CAMPAIGN GOLD',
+      campaign:
+        'SIME DARBY PROPERTY – ELMINA RAINFOREST KNOWLEDGE CENTRE (ERKC) SUSTAINABILITY CAMPAIGN',
+      awardImage: await img('awards/2023-native-content-trophy.jpg'),
+      groupPhoto: await img('awards/2023-native-content-group.jpg'),
+    },
+  ]
+
+  for (const entry of awardEntries) {
+    const existing = await payload.find({
+      collection: 'awards',
+      where: { and: [{ year: { equals: entry.year } }, { award: { equals: entry.award } }] },
+      limit: 1,
+    })
+    if (existing.docs[0]) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      await payload.update({ collection: 'awards', id: existing.docs[0].id, data: entry as any })
+    } else {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      await payload.create({ collection: 'awards', data: entry as any })
+    }
+    console.log(`  ✓ ${entry.year} — ${entry.award}`)
+  }
+
+  // Remove any awards no longer in the seed set, so re-seeding stays authoritative.
+  const keepAwardKeys = new Set(awardEntries.map((e) => `${e.year}|||${e.award}`))
+  const staleAwards = await payload.find({ collection: 'awards', limit: 200 })
+  for (const doc of staleAwards.docs) {
+    if (!keepAwardKeys.has(`${doc.year}|||${doc.award}`)) {
+      await payload.delete({ collection: 'awards', id: doc.id })
+      console.log(`  ✗ removed ${doc.year} — ${doc.award}`)
+    }
+  }
 
   console.log('Seeding works collection…')
   // Each project is its own document in the `works` collection (a custom-post-type

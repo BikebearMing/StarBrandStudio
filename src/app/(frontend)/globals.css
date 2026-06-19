@@ -1940,18 +1940,16 @@ section.awards {
    group's rows. Empty (but space-reserved) until a row is hovered. */
 .awards-page__media {
     grid-column: 2;
-    position: absolute;
-    top: 0.833vw;
-    left: 4.514vw;
     align-self: start;
     width: 11.736vw;
-    height: 8.819vw;
-    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 0.556vw;
 }
 
 .awards-page__media-img {
     width: 100%;
-    height: 100%;
+    height: 8.819vw;
     object-fit: cover;
     display: block;
     animation: awards-img-in 0.35s ease;
@@ -1973,13 +1971,12 @@ section.awards {
 
 .awards-page__row {
     display: grid;
-    grid-template-columns: 1fr 1fr 1.1fr;
-    column-gap: 1.5vw;
+    grid-template-columns: 1fr 1fr;
+    gap: 23.6vw;
     align-items: start;
     padding-block: 0.833vw;
     padding-left: 0.347vw;
-    /* padding: 1.25vw 1.5vw; */
-    margin-inline: -1.5vw;
+    padding-right: 4.5vw;
     transition: background-color 0.3s ease, color 0.3s ease;
     cursor: default;
     border-bottom: 1px solid rgba(255, 255, 255, 0.14);
@@ -1993,7 +1990,7 @@ section.awards {
 .awards-page__campaign {
     color: rgba(255, 255, 255, 0.4);
     transition: color 0.3s ease;
-    max-width: 90%;
+    margin-right: ;
 }
 
 .awards-page__row.is-active .awards-page__campaign {
@@ -2054,7 +2051,6 @@ section.awards {
         margin-inline: -4vw;
     }
 
-    .awards-page__org,
     .awards-page__award,
     .awards-page__campaign {
         font-size: 3.4vw;

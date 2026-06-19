@@ -11,7 +11,7 @@ export const dynamic = 'force-dynamic'
 
 export const metadata = {
   title: 'Awards — Star Brand Studio',
-  description: 'Award-winning ideas grounded in good storytelling.',
+  description: 'Award-winning ideas, grounded in the craft of storytelling.',
 }
 
 function mediaUrl(m: number | Media | null | undefined): string | undefined {
@@ -21,30 +21,45 @@ function mediaUrl(m: number | Media | null | undefined): string | undefined {
 async function getAwards() {
   try {
     const payload = await getPayload({ config })
-    const [awardsPage, footer] = await Promise.all([
+    const [awards, awardsPage, footer] = await Promise.all([
+      // Awards are their own collection (a custom post type) — sorted by the
+      // drag-to-reorder `_order`, then grouped by year below.
+      payload.find({ collection: 'awards', sort: '_order', depth: 1, limit: 100 }),
       payload.findGlobal({ slug: 'awardsPage', depth: 1 }),
       payload.findGlobal({ slug: 'footer', depth: 1 }),
     ])
-    return { awardsPage, footer }
+    return { awards, awardsPage, footer }
   } catch {
     // If Payload/DB is unavailable, components fall back to their defaults.
-    return { awardsPage: undefined, footer: undefined }
+    return { awards: undefined, awardsPage: undefined, footer: undefined }
   }
 }
 
 export default async function AwardsRoute() {
-  const { awardsPage, footer } = await getAwards()
+  const { awards, awardsPage, footer } = await getAwards()
 
-  const years: AwardYear[] | undefined = awardsPage?.years?.map((y) => ({
-    year: y.year,
-    entries:
-      y.entries?.map((e) => ({
-        organization: e.organization,
-        award: e.award,
-        campaign: e.campaign ?? undefined,
-        image: mediaUrl(e.image),
-      })) ?? [],
-  }))
+  // Group the flat award documents into year groups, preserving `_order` (the
+  // first year seen leads, and so on) so the page reads newest-first as seeded.
+  let years: AwardYear[] | undefined
+  if (awards?.docs.length) {
+    const byYear = new Map<string, AwardYear>()
+    const groups: AwardYear[] = []
+    for (const doc of awards.docs) {
+      let group = byYear.get(doc.year)
+      if (!group) {
+        group = { year: doc.year, entries: [] }
+        byYear.set(doc.year, group)
+        groups.push(group)
+      }
+      group.entries.push({
+        award: doc.award,
+        campaign: doc.campaign ?? undefined,
+        awardImage: mediaUrl(doc.awardImage),
+        groupPhoto: mediaUrl(doc.groupPhoto),
+      })
+    }
+    years = groups
+  }
 
   const footerProps = footer
     ? {

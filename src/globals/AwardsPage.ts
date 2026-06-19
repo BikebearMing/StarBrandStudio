@@ -1,12 +1,14 @@
 import type { GlobalConfig } from 'payload'
 
 /**
- * Awards page content (route: /awards). A singleton global of year groups, each
- * holding a list of award entries. Every entry can carry an image that fades in
- * (in a fixed spot on the left) when its row is hovered.
+ * Awards page chrome (route: /awards) — just the eyebrow + heading shown above
+ * the list. The awards themselves live in the `awards` collection (a custom post
+ * type, one document per award win); the /awards route fetches those and groups
+ * them by year. This singleton stays small on purpose so editors manage the page
+ * title here and the award entries in the collection.
  *
- * The <AwardsPage> component keeps hardcoded DEFAULT_GROUPS as a fallback, so the
- * page still renders fully even with an empty/unavailable CMS.
+ * The <AwardsPage> component keeps hardcoded defaults as a fallback, so the page
+ * still renders fully even with an empty/unavailable CMS.
  */
 export const AwardsPage: GlobalConfig = {
   slug: 'awardsPage',
@@ -17,47 +19,8 @@ export const AwardsPage: GlobalConfig = {
     {
       name: 'heading',
       type: 'textarea',
-      defaultValue: 'AWARD-WINNING IDEAS\nGROUNDED IN GOOD STORYTELLING',
+      defaultValue: 'Award-winning ideas,\ngrounded in the craft of storytelling.',
       admin: { description: 'Page heading. Use line breaks for stacked lines.' },
-    },
-    {
-      name: 'years',
-      type: 'array',
-      labels: { singular: 'Year Group', plural: 'Year Groups' },
-      admin: { description: 'One group per year, newest first.' },
-      fields: [
-        { name: 'year', type: 'text', required: true, admin: { description: 'e.g. "2025"' } },
-        {
-          name: 'entries',
-          type: 'array',
-          labels: { singular: 'Award', plural: 'Awards' },
-          fields: [
-            {
-              name: 'organization',
-              type: 'text',
-              required: true,
-              admin: { description: 'Award body, e.g. "MDA D-AWARDS 2025".' },
-            },
-            {
-              name: 'award',
-              type: 'text',
-              required: true,
-              admin: { description: 'Award won, e.g. "DIGITAL PUBLISHER OF THE YEAR – SILVER".' },
-            },
-            {
-              name: 'campaign',
-              type: 'text',
-              admin: { description: 'Campaign / project the award was for.' },
-            },
-            {
-              name: 'image',
-              type: 'upload',
-              relationTo: 'media',
-              admin: { description: 'Shown on the left when this row is hovered.' },
-            },
-          ],
-        },
-      ],
     },
   ],
 }
