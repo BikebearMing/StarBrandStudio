@@ -179,11 +179,9 @@ async function run() {
         'Menara Star, 15, Jalan 16/11, Seksyen 16, 46350 Petaling Jaya, Selangor Darul Ehsan, Malaysia',
       phones: [{ number: '+603 7967 1388' }, { number: '+60126429027' }],
       directory: [
-        { label: 'OUR STORY', href: '/about' },
+        { label: 'HOME', href: '/' },
         { label: 'WORKS', href: '/works' },
-        { label: 'SERVICES', href: '/services' },
         { label: 'AWARDS', href: '/awards' },
-        { label: 'CONTACT', href: '/contact' },
       ],
       updatesLabel: 'GET THE LATEST UPDATES',
       socials: [

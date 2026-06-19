@@ -16,11 +16,9 @@ const DEFAULT_ADDRESS =
   'Menara Star, 15, Jalan 16/11, Seksyen 16, 46350 Petaling Jaya, Selangor Darul Ehsan, Malaysia'
 const DEFAULT_PHONES = ['+603 7967 1388', '+60126429027']
 const DEFAULT_DIRECTORY: FooterLink[] = [
-  { label: 'OUR STORY', href: '/about' },
+  { label: 'HOME', href: '/' },
   { label: 'WORKS', href: '/works' },
-  { label: 'SERVICES', href: '/services' },
   { label: 'AWARDS', href: '/awards' },
-  { label: 'CONTACT', href: '/contact' },
 ]
 const DEFAULT_SOCIALS: FooterSocial[] = [
   { label: 'Facebook', href: '#', icon: '/footer/facebook.svg' },

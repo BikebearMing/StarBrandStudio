@@ -6,11 +6,8 @@ type NavLink = { label: string; href: string }
 
 const NAV_LINKS: NavLink[] = [
   { label: 'HOME', href: '/' },
-  { label: 'OUR STORY', href: '/about' },
   { label: 'WORKS', href: '/works' },
-  { label: 'SERVICES', href: '/services' },
   { label: 'AWARDS', href: '/awards' },
-  { label: 'CONTACT', href: '/contact' },
 ]
 
 export default function Header() {
