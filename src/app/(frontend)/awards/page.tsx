@@ -1,3 +1,6 @@
+import { readdirSync } from 'fs'
+import path from 'path'
+
 import { getPayload } from 'payload'
 import config from '@payload-config'
 import type { Media } from '@payload-types'
@@ -16,6 +19,27 @@ export const metadata = {
 
 function mediaUrl(m: number | Media | null | undefined): string | undefined {
   return m && typeof m === 'object' ? m.url ?? undefined : undefined
+}
+
+// Award images are also committed as static assets under `public/awards`. The
+// Payload media volume on prod has dropped some of these files (group photos and
+// every Sharp size-variant 500 there), so when a committed twin exists we serve
+// that instead — it's baked into the build and never depends on the media volume.
+// Genuine CMS-only uploads (no committed twin) keep their Payload URL.
+const AWARDS_STATIC: Set<string> = (() => {
+  try {
+    return new Set(readdirSync(path.join(process.cwd(), 'public', 'awards')))
+  } catch {
+    return new Set<string>()
+  }
+})()
+
+function resolveAwardImage(m: number | Media | null | undefined): string | undefined {
+  const url = mediaUrl(m)
+  if (!url) return undefined
+  const filename = url.split('/').pop()
+  if (filename && AWARDS_STATIC.has(filename)) return `/awards/${filename}`
+  return url
 }
 
 async function getAwards() {
@@ -54,8 +78,8 @@ export default async function AwardsRoute() {
       group.entries.push({
         award: doc.award,
         campaign: doc.campaign ?? undefined,
-        awardImage: mediaUrl(doc.awardImage),
-        groupPhoto: mediaUrl(doc.groupPhoto),
+        awardImage: resolveAwardImage(doc.awardImage),
+        groupPhoto: resolveAwardImage(doc.groupPhoto),
       })
     }
     years = groups
