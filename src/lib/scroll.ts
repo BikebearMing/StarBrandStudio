@@ -1,5 +1,8 @@
 type LenisHandle = {
-  scrollTo: (target: number, options?: { immediate?: boolean; force?: boolean }) => void
+  scrollTo: (
+    target: number | string | HTMLElement,
+    options?: { immediate?: boolean; force?: boolean; offset?: number; duration?: number },
+  ) => void
   stop: () => void
   start: () => void
 }

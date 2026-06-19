@@ -31,7 +31,7 @@ export default function Awards({
   const captionLines = caption.split('\n')
 
   return (
-    <section className="awards grain-effect">
+    <section className="awards">
       <div className="awards__inner">
         <div className="awards__heading">
           <div className="awards__heading-top">

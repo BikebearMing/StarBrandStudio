@@ -133,7 +133,7 @@ export default function HeroSection({
   return (
     <section
       ref={sectionRef}
-      className={`hero-parent grain-effect${isHovering ? ' is-dim' : ''}`}
+      className={`hero-parent${isHovering ? ' is-dim' : ''}`}
 
       style={{
         width: '100%',

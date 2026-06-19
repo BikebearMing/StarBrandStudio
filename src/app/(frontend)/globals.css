@@ -16,6 +16,10 @@
     --amplitude-condensed: "amplitude-condensed", sans-serif;
 }
 
+main.grain-effect {
+    position: relative;
+}
+
 .grain-effect::after {
     content: "";
     position: absolute;
@@ -150,7 +154,7 @@ canvas {
     width: 100%;
     position: fixed;
     z-index: 999;
-    background-color: #000;
+    /* background-color: #000; */
 
     & .wrapper {
         position: relative;
@@ -274,14 +278,11 @@ button {
 }
 
 .custom-button:hover,
-.custom-button:hover *,
-.site-header.is-on-red .custom-button,
-.site-header.is-on-red .custom-button * {
+.custom-button:hover * {
     color: #000000 !important;
 }
 
-.custom-button:hover::before,
-.site-header.is-on-red .custom-button::before {
+.custom-button:hover::before {
     transform: translateY(-50%) scale(40);
 }
 
@@ -302,21 +303,17 @@ button {
         r 0.35s ease;
 }
 
-.custom-button:hover .ring--outer,
-.site-header.is-on-red .custom-button .ring--outer {
+.custom-button:hover .ring--outer {
     stroke: #ffffff;
 }
 
 .custom-button:hover .ring--middle,
-.custom-button:hover .ring--inner,
-.site-header.is-on-red .custom-button .ring--middle,
-.site-header.is-on-red .custom-button .ring--inner {
+.custom-button:hover .ring--inner {
     fill: var(--red);
     stroke: var(--red);
 }
 
-.custom-button:hover .ring--inner,
-.site-header.is-on-red .custom-button .ring--inner {
+.custom-button:hover .ring--inner {
     r: 7;
 }
 

@@ -95,9 +95,9 @@ export default async function WorkDetailRoute({ params }: { params: Promise<{ sl
   })
 
   return (
-    <main>
+    <main className="grain-effect">
       <Header />
-      <section className="work-detail grain-effect">
+      <section className="work-detail">
         <nav className="body breadcrumb work-detail__breadcrumb" aria-label="Breadcrumb">
           <Link href="/">HOME</Link> / <Link href="/works">WORKS</Link> /{' '}
           <span>{slide.title ?? 'PROJECT'}</span>
@@ -181,7 +181,7 @@ export default async function WorkDetailRoute({ params }: { params: Promise<{ sl
       </section>
 
       <ImpactCTA />
-      <section className="contact-section grain-effect" id="contact">
+      <section className="contact-section" id="contact">
         <div className="contact-section__inner">
           <ContactForm
             formId={contactForm?.id}

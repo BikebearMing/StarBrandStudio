@@ -180,7 +180,7 @@ export default function Projects({
     return (
         <section
             ref={sectionRef}
-            className="projects grain-effect"
+            className="projects"
             onMouseEnter={(e) => {
                 console.log("[1] mouse enter section", { x: e.clientX, y: e.clientY })
                 cursorStartRef.current = { x: e.clientX, y: e.clientY }

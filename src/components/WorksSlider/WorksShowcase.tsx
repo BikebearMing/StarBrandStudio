@@ -38,7 +38,7 @@ export default function WorksShowcase({ slides }: Props) {
 
   return (
     <section
-      className={`works-page grain-effect${hovered !== null ? ' is-revealing' : ''}`}
+      className={`works-page${hovered !== null ? ' is-revealing' : ''}`}
       onMouseEnter={(e) => {
         cursorStartRef.current = { x: e.clientX, y: e.clientY }
         setCursorActive(true)

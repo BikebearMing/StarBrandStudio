@@ -80,7 +80,7 @@ export default function LogoCarousel({ logos }: { logos?: string[] } = {}) {
   }, [])
 
   return (
-    <section className="logo-carousel grain-effect">
+    <section className="logo-carousel">
       <div className="logo-carousel-wrapper">
         <div className="carousel-header">
           <h2 className="h4 amp-mask logo-carousel__h4">

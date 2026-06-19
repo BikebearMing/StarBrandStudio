@@ -51,7 +51,7 @@ export default async function WorksRoute() {
     .filter((s): s is WorksSlide => Boolean(s))
 
   return (
-    <main>
+    <main className="grain-effect">
       <Header />
       <nav className="body breadcrumb works-breadcrumb" aria-label="Breadcrumb">
         <Link href="/">HOME</Link> / <span>WORKS</span>

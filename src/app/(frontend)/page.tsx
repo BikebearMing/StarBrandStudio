@@ -153,7 +153,7 @@ export default async function Home() {
     : {}
 
   return (
-    <main>
+    <main className="grain-effect">
       {/* Must stay first: it arms itself during render so the hero/headings
           below know to wait for the intro before animating. */}
       <Preloader />
@@ -166,7 +166,7 @@ export default async function Home() {
           words={hero?.typewriterWords?.map((w) => w.word)}
           slides={heroSlides}
         />
-        <section className="what-we-do red-section grain-effect">
+        <section className="what-we-do red-section">
           <div className="wrapper">
             <div className="top">
               <div className="left">
@@ -198,7 +198,7 @@ export default async function Home() {
           </div>
         </section>
 
-        <section className="pillars-section grain-effect">
+        <section className="pillars-section">
           <h3 className="h3">
             {pillars?.heading
               ? pillars.heading.split('\n').map((line, i, arr) => (
@@ -232,14 +232,14 @@ export default async function Home() {
           items={projectItems}
         />
 
-        <section className="services grain-effect">
+        <section className="services">
           <div className="wrapper">
             <Services items={services?.items?.map((s) => ({ title: s.title, copy: s.copy }))} />
           </div>
         </section>
       </div>
       <ImpactCTA />
-      <section className="contact-section grain-effect" id="contact">
+      <section className="contact-section" id="contact">
         <div className="contact-section__inner">
           <ContactForm
             formId={contactForm?.id}

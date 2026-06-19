@@ -100,7 +100,7 @@ export default function AwardsPage({ eyebrow, heading, years }: Props) {
   const headingLines = (heading ?? DEFAULT_HEADING).split('\n')
 
   return (
-    <section className="awards-page grain-effect">
+    <section className="awards-page">
       <div className="awards-page__head">
         <nav className="body breadcrumb" aria-label="Breadcrumb">
           <Link href="/">HOME</Link> / <span>{eyebrow ?? DEFAULT_EYEBROW}</span>

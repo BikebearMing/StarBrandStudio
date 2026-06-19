@@ -1,123 +1,72 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect } from 'react'
+import { onPreloaderDone } from '@/components/Preloader/Preloader'
+import { scrollState } from '@/lib/scroll'
 
-type NavLink = { label: string; href: string }
+// sessionStorage flag set just before we navigate home so the contact form can
+// be revealed once the page (and its preloader) has finished loading.
+const PENDING_SCROLL_KEY = 'scrollToContact'
 
-const NAV_LINKS: NavLink[] = [
-  { label: 'HOME', href: '/' },
-  { label: 'WORKS', href: '/works' },
-  { label: 'AWARDS', href: '/awards' },
-]
+/**
+ * Smooth-scroll to the on-page contact form. Returns false if this page has no
+ * contact form (so the caller can fall back to navigating home).
+ */
+function scrollToContact(): boolean {
+  const el = document.getElementById('contact')
+  if (!el) return false
+
+  const lenis = scrollState.lenis
+  if (lenis) {
+    lenis.scrollTo(el, { offset: 0, duration: 2 })
+  } else {
+    el.scrollIntoView({ behavior: 'smooth' })
+  }
+  return true
+}
 
 export default function Header() {
-  const headerRef = useRef<HTMLElement>(null)
-  const [menuOpen, setMenuOpen] = useState(false)
-
+  // If we arrived here after a "Let's Talk" click on a page without a contact
+  // form, scroll to the form once the preloader has finished. We wait for the
+  // slide-up to complete (body scroll is locked until then) before scrolling.
   useEffect(() => {
-    const header = headerRef.current
-    if (!header) return
+    if (typeof window === 'undefined') return
+    if (sessionStorage.getItem(PENDING_SCROLL_KEY) !== '1') return
+    sessionStorage.removeItem(PENDING_SCROLL_KEY)
 
-    const sections = Array.from(
-      document.querySelectorAll<HTMLElement>('.red-section')
-    )
-    if (sections.length === 0) return
-
-    let rafId = 0
-
-    const update = () => {
-      rafId = 0
-      const headerRect = header.getBoundingClientRect()
-      const midline = headerRect.top + headerRect.height / 2
-
-      const onRed = sections.some((section) => {
-        const r = section.getBoundingClientRect()
-        return r.top <= midline && r.bottom >= midline
-      })
-
-      header.classList.toggle('is-on-red', onRed)
-    }
-
-    const onScroll = () => {
-      if (rafId) return
-      rafId = window.requestAnimationFrame(update)
-    }
-
-    update()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    window.addEventListener('resize', onScroll)
-
-    return () => {
-      window.removeEventListener('scroll', onScroll)
-      window.removeEventListener('resize', onScroll)
-      if (rafId) window.cancelAnimationFrame(rafId)
-    }
+    return onPreloaderDone((instant) => {
+      window.setTimeout(() => scrollToContact(), instant ? 0 : 1300)
+    })
   }, [])
 
-  // Close on Escape + lock body scroll while the menu is open.
-  useEffect(() => {
-    if (!menuOpen) return
-
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setMenuOpen(false)
+  const handleContactClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault()
+    // On a page that already has the contact form, just scroll to it.
+    if (scrollToContact()) return
+    // Otherwise head home and scroll to its contact form after it loads.
+    try {
+      sessionStorage.setItem(PENDING_SCROLL_KEY, '1')
+    } catch {
+      // ignore storage failures — navigation still happens
     }
-
-    const prevOverflow = document.body.style.overflow
-    document.body.style.overflow = 'hidden'
-    window.addEventListener('keydown', onKeyDown)
-
-    return () => {
-      document.body.style.overflow = prevOverflow
-      window.removeEventListener('keydown', onKeyDown)
-    }
-  }, [menuOpen])
+    window.location.href = '/'
+  }
 
   return (
-    <header
-      ref={headerRef}
-      className={`site-header grain-effect${menuOpen ? ' is-menu-open' : ''}`}
-    >
+    <header className="site-header">
       <div className="wrapper">
         <a href="/" className="site-header__logo" aria-label="Star Brand Studio">
           <img src="/Logo.svg" alt="Star Brand Studio" />
         </a>
-        <button
-          type="button"
-          className="custom-button"
-          aria-expanded={menuOpen}
-          aria-controls="site-menu"
-          onClick={() => setMenuOpen((open) => !open)}
-        >
+        <a href="/#contact" className="custom-button" onClick={handleContactClick}>
           <svg className="custom-button-icon" viewBox="0 0 24 24" aria-hidden="true">
             <circle className="ring ring--outer" cx="12" cy="12" r="11" />
             <circle className="ring ring--middle" cx="12" cy="12" r="7" />
             <circle className="ring ring--inner" cx="12" cy="12" r="3" />
           </svg>
-          <span>{menuOpen ? 'close' : 'menu'}</span>
-        </button>
+          <span>LET&rsquo;S TALK</span>
+        </a>
       </div>
-
-      <nav
-        id="site-menu"
-        className="site-menu"
-        aria-hidden={!menuOpen}
-        aria-label="Main"
-      >
-        <ul className="site-menu__list">
-          {NAV_LINKS.map((link) => (
-            <li className="site-menu__item" key={link.href}>
-              <a
-                href={link.href}
-                className="site-menu__link h2"
-                tabIndex={menuOpen ? 0 : -1}
-                onClick={() => setMenuOpen(false)}
-              >
-                {link.label}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </nav>
     </header>
   )
 }

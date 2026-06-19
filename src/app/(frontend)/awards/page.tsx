@@ -64,7 +64,7 @@ export default async function AwardsRoute() {
     : {}
 
   return (
-    <main>
+    <main className="grain-effect">
       <Header />
       <AwardsPage
         eyebrow={awardsPage?.eyebrow ?? undefined}
