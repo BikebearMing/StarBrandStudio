@@ -24,6 +24,16 @@ type Props = {
 // Mirrors the seeded Awards Page so the route always renders, even with no DB.
 const DEFAULT_GROUPS: AwardYear[] = [
   {
+    year: '2026',
+    entries: [
+      {
+        organization: 'WAN-IFRA DIGITAL MEDIA AWARDS ASIA 2026',
+        award: 'BEST MARKETING CAMPAIGN FOR A NEWS BRAND – SILVER',
+        campaign: 'POWERING THE FUTURE IN PARTNERSHIP WITH TENAGA NASIONAL BERHAD',
+      },
+    ],
+  },
+  {
     year: '2025',
     entries: [
       {
@@ -48,23 +58,21 @@ const DEFAULT_GROUPS: AwardYear[] = [
       },
       {
         organization: 'MDA D-AWARDS 2024',
-        award: 'BEST B2B MARKETING CAMPAIGN - SILVER',
-        campaign: '#JOMSAPOT BELILOKAL GEN AI- LED INTERGRATED MARKETING CAMPAIGN',
+        award: 'BEST B2B MARKETING CAMPAIGN – SILVER',
+        campaign: '#JOMSAPOT BELILOKAL GEN AI-LED INTEGRATED MARKETING CAMPAIGN',
       },
       {
         organization: 'MDA D-AWARDS 2024',
-        award: 'BEST USE OF DIGITAL MARKETING INNOVATION - SILVER',
-        campaign: '#JOMSAPOT BELILOKAL GEN AI- LED INTEGRATED MARKETING CAMPAIGN',
+        award: 'BEST USE OF DIGITAL MARKETING INNOVATION – SILVER',
+        campaign: '#JOMSAPOT BELILOKAL GEN AI-LED INTEGRATED MARKETING CAMPAIGN',
       },
       {
         organization: 'PMAA DRAGONS OF ASIA 2024',
         award: 'BEST DIGITAL CAMPAIGN 2024 – BRONZE',
-        campaign: '#JOMSAPOT BELILOKAL GEN AI-LED INTERGRATED MARKETING CAMPAIGN',
       },
       {
         organization: 'PMAA DRAGONS OF MALAYSIA 2024',
-        award: 'BEST DIGITAL CAMPAIGN 2024 - GOLD',
-        campaign: '#JOMSAPOT BELILOKAL GEN AI- LED INTERGRATED MARKETING CAMPAIGN',
+        award: 'BEST DIGITAL CAMPAIGN 2024 – GOLD',
       },
     ],
   },
@@ -75,7 +83,7 @@ const DEFAULT_GROUPS: AwardYear[] = [
         organization: 'WAN-IFRA ASIAN DIGITAL MEDIA AWARDS (ADMA) 2023',
         award: 'BEST NATIVE ADVERTISING/SPONSORED CONTENT CAMPAIGN GOLD',
         campaign:
-          'SIME DARBY PROPERTY – ELMINA RAINFOREST KNOWLEDGE CETRE (ERKC) SUSTAINABILITY CAMPAIGN',
+          'SIME DARBY PROPERTY – ELMINA RAINFOREST KNOWLEDGE CENTRE (ERKC) SUSTAINABILITY CAMPAIGN',
       },
     ],
   },
