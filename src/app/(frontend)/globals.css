@@ -107,6 +107,7 @@ img {
 
 h4,
 .h4 {
+    font-family: var(--amplitude-condensed);
     font-size: 1.6vw;
     font-weight: 700;
     letter-spacing: -0.5px;
@@ -160,10 +161,35 @@ canvas {
         position: relative;
         z-index: 2;
         display: flex;
-        align-items: center;
+        align-items: flex-start;
         justify-content: space-between;
         padding: var(--sidepadding-xs);
     }
+}
+
+/* Stack the CTA + secondary page links in a right-aligned column. Only the
+   first child (the .custom-button "Let's Talk") keeps the red fill, hover wipe
+   and ring icon; the rest are plain right-aligned text links. */
+.site-header__nav {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    text-align: right;
+    gap: 0.694vw;
+}
+
+.site-header__nav .custom-button {
+    margin-bottom: 0.5vw;
+}
+
+.site-header__nav-link {
+    color: #fff;
+    text-decoration: none;
+    transition: color 0.35s ease;
+}
+
+.site-header__nav-link:hover {
+    color: var(--red);
 }
 
 .site-menu {
@@ -694,7 +720,7 @@ section.services {
 }
 
 .work-detail__breadcrumb {
-    margin: 0 3.5vw 2vw 3.5vw;
+    margin: 0 4.5vw 2vw;
 }
 
 .work-detail__head {
@@ -702,7 +728,7 @@ section.services {
     gap: 1.4vw;
     justify-content: space-between;
     align-items: flex-end;
-    padding: 0 7.3vw 1.9vw 5.9vw;
+    padding: 0 5.2vw 1.9vw 4.5vw;
 }
 
 .work-detail__title {

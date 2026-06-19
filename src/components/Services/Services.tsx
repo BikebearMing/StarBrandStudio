@@ -18,16 +18,8 @@ const DEFAULT_SERVICES: ServiceItem[] = [
     copy: 'We craft narratives with the discipline of journalism and the impact of great creative.',
   },
   {
-    title: 'VIDEO & MULTIMEDIA PRODUCTION',
-    copy: 'From short-form social cuts to long-form documentary, we produce video content that conveys the brand message with clarity and craft.',
-  },
-  {
     title: 'YOUTH & SOCIAL IMPACT PROGRAMME',
     copy: 'We design programmes that engage young audiences around causes that matter through meaningful partnerships.',
-  },
-  {
-    title: 'RESEARCH & INSIGHTS',
-    copy: 'Quantitative rigour meets qualitative depth. We uncover the audience truths that shape sharper strategy and more resonant creative work.',
   },
   {
     title: 'SOCIAL MEDIA & INFLUENCER ENGAGEMENT',
@@ -143,14 +135,6 @@ export default function Services({ items }: { items?: ServiceItem[] } = {}) {
           <span>FULL-FLEDGED </span>
           <span className="text-highlight">SERVICES</span>
         </h2>
-        <button type="button" className="custom-button">
-          <svg className="custom-button-icon" viewBox="0 0 24 24" aria-hidden="true">
-            <circle className="ring ring--outer" cx="12" cy="12" r="11" />
-            <circle className="ring ring--middle" cx="12" cy="12" r="7" />
-            <circle className="ring ring--inner" cx="12" cy="12" r="3" />
-          </svg>
-          <span>OUR SERVICES</span>
-        </button>
       </div>
 
       <ul className="services-list" ref={listRef}>

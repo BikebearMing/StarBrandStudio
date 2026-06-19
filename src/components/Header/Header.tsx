@@ -58,14 +58,18 @@ export default function Header() {
         <a href="/" className="site-header__logo" aria-label="Star Brand Studio">
           <img src="/Logo.svg" alt="Star Brand Studio" />
         </a>
-        <a href="/#contact" className="custom-button" onClick={handleContactClick}>
-          <svg className="custom-button-icon" viewBox="0 0 24 24" aria-hidden="true">
-            <circle className="ring ring--outer" cx="12" cy="12" r="11" />
-            <circle className="ring ring--middle" cx="12" cy="12" r="7" />
-            <circle className="ring ring--inner" cx="12" cy="12" r="3" />
-          </svg>
-          <span>LET&rsquo;S TALK</span>
-        </a>
+        <nav className="site-header__nav">
+          <a href="/#contact" className="custom-button" onClick={handleContactClick}>
+            <svg className="custom-button-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <circle className="ring ring--outer" cx="12" cy="12" r="11" />
+              <circle className="ring ring--middle" cx="12" cy="12" r="7" />
+              <circle className="ring ring--inner" cx="12" cy="12" r="3" />
+            </svg>
+            <span>LET&rsquo;S TALK</span>
+          </a>
+          <a href="/works" className="site-header__nav-link body">Works</a>
+          <a href="/awards" className="site-header__nav-link body">Awards</a>
+        </nav>
       </div>
     </header>
   )

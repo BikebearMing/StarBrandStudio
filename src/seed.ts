@@ -146,9 +146,7 @@ async function run() {
       items: [
         { title: 'INTEGRATED MARKETING & CREATIVE STRATEGY', copy: 'By connecting strategy, storytelling, and media across platforms, we create campaigns that reach the right audiences and deliver results for your brand.' },
         { title: 'EDITORIAL STORYTELLING', copy: 'We craft narratives with the discipline of journalism and the impact of great creative.' },
-        { title: 'VIDEO & MULTIMEDIA PRODUCTION', copy: 'From short-form social cuts to long-form documentary, we produce video content that conveys the brand message with clarity and craft.' },
         { title: 'YOUTH & SOCIAL IMPACT PROGRAMME', copy: 'We design programmes that engage young audiences around causes that matter through meaningful partnerships.' },
-        { title: 'RESEARCH & INSIGHTS', copy: 'Quantitative rigour meets qualitative depth. We uncover the audience truths that shape sharper strategy and more resonant creative work.' },
         { title: 'SOCIAL MEDIA & INFLUENCER ENGAGEMENT', copy: 'We manage always-on presence and hand-picked creator partnerships as a single integrated system — brand voice, community, and earned attention in lockstep.' },
         { title: 'DIGITAL EXPERIENCES', copy: 'Websites, apps, interactive campaigns. We design and build digital products that carry the same narrative discipline as editorial work.' },
         { title: 'MEDIA STRATEGY & BUYING', copy: 'Data-led planning across paid, owned and earned — designed to put the right message in front of the right people at the moment it matters.' },
