@@ -1494,34 +1494,26 @@ section.awards {
     text-align: right;
 }
 
-.awards__grid {
-    list-style: none;
-    display: flex;
-    justify-content: center;
-    flex-wrap: nowrap;
+/* ── Awards horizontal auto-scroll slider ────────────────────────── */
+/* Bleeds past the section's side padding so the marquee runs edge-to-edge. */
+.awards-slider-wrapper {
+    position: relative;
+    margin-inline: calc(-1 * var(--sidepadding-xm));
 }
 
-.awards__item {
-    width: 19.931vw;
-    flex-shrink: 0;
+.awards-slider .splide__track {
+    overflow: hidden;
 }
 
-.awards__placeholder {
+.awards-slider__slide {
+    cursor: default;
+}
+
+.awards-slider__img {
     width: 100%;
     aspect-ratio: 287 / 400;
-    background: linear-gradient(
-        135deg,
-        rgba(255, 255, 255, 0.06),
-        rgba(255, 255, 255, 0.02)
-    );
-    border: 1px dashed rgba(255, 255, 255, 0.18);
-}
-
-.awards__img {
-    width: 100%;
-    height: auto;
-    display: block;
     object-fit: contain;
+    display: block;
 }
 
 /* ── Impact CTA section ──────────────────────────────────────────── */
@@ -1898,13 +1890,50 @@ section.awards {
     margin-bottom: 5vw;
 }
 
-/* .awards-page__title {
-    font-family: var(--serif);
-    font-weight: 400;
-    font-size: 4.5vw;
-    line-height: 1.05;
-    text-transform: uppercase;
-} */
+.awards-page__head .breadcrumb {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.awards-page__caption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 17vw;
+}
+
+/* Banner heading — mirrors the home "Awards & Recognition" strip. */
+.awards-page__banner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1.5vw;
+}
+
+.awards-page__title {
+    line-height: 1;
+}
+
+.awards-page__title .text-highlight {
+    padding: 0 0.4em;
+
+    @media (min-width: 768px) {
+        margin-right: 30vw;
+    }
+}
+
+.awards-page__rec {
+    line-height: 1;
+    font-weight: 700;
+    font-size: 8.333vw;
+    white-space: nowrap;
+
+    @media (min-width: 768px) {
+        margin-left: 20vw;
+    }
+}
 
 .awards-page__list {
     position: relative;
@@ -2011,6 +2040,15 @@ section.awards {
 
     .awards-page__title {
         font-size: 9vw;
+    }
+
+    .awards-page__rec {
+        font-size: 16vw;
+        white-space: normal;
+    }
+
+    .awards-page__banner {
+        gap: 3vw;
     }
 
     .awards-page__head {
@@ -2300,15 +2338,6 @@ section.awards {
         font-size: 16vw;
         text-align: left;
         white-space: normal;
-    }
-
-    .awards__grid {
-        flex-wrap: wrap;
-        gap: 4vw;
-    }
-
-    .awards__item {
-        width: calc(50% - 2vw);
     }
 
     /* ── Impact CTA — restore the cursor, stack the rows ─────────────── */

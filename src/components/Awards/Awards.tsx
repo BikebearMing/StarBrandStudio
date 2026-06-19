@@ -1,13 +1,15 @@
 import { Fragment } from 'react'
 
-export type AwardImage = { src: string; alt?: string }
+import AwardsSlider, { type AwardSlide } from './AwardsSlider'
 
-const DEFAULT_AWARDS: AwardImage[] = [
-  { src: '/award1.png' },
-  { src: '/award2.png' },
-  { src: '/award3.png' },
-  { src: '/award4.png' },
-  { src: '/award5.png' },
+export type AwardImage = AwardSlide
+
+const DEFAULT_AWARDS: AwardSlide[] = [
+  { src: '/award1.png', name: 'AWARD' },
+  { src: '/award2.png', name: 'AWARD' },
+  { src: '/award3.png', name: 'AWARD' },
+  { src: '/award4.png', name: 'AWARD' },
+  { src: '/award5.png', name: 'AWARD' },
 ]
 
 const DEFAULT_CAPTION = 'AWARD-WINNING IDEAS \nGROUNDED IN GOOD\nSTORYTELLING'
@@ -17,7 +19,7 @@ type AwardsProps = {
   buttonLabel?: string
   caption?: string
   recognitions?: string
-  items?: AwardImage[]
+  items?: AwardSlide[]
 }
 
 export default function Awards({
@@ -60,13 +62,7 @@ export default function Awards({
           </div>
         </div>
 
-        <ul className="awards__grid">
-          {AWARDS.map((award, i) => (
-            <li key={i} className="awards__item">
-              <img className="awards__img" src={award.src} alt={award.alt || `Award ${i + 1}`} />
-            </li>
-          ))}
-        </ul>
+        <AwardsSlider slides={AWARDS} />
       </div>
     </section>
   )

@@ -1,6 +1,6 @@
 'use client'
 
-import { Fragment, useState } from 'react'
+import { useState } from 'react'
 import Link from 'next/link'
 
 export type AwardEntry = {
@@ -18,6 +18,7 @@ export type AwardYear = {
 type Props = {
   eyebrow?: string
   heading?: string
+  recognitions?: string
   years?: AwardYear[]
 }
 
@@ -81,29 +82,34 @@ const DEFAULT_GROUPS: AwardYear[] = [
 ]
 
 const DEFAULT_EYEBROW = 'AWARDS'
-const DEFAULT_HEADING = 'Award-winning ideas,\ngrounded in the craft of storytelling.'
+const DEFAULT_RECOGNITIONS = '& RECOGNITIONS'
 
-export default function AwardsPage({ eyebrow, heading, years }: Props) {
+export default function AwardsPage({ eyebrow, recognitions, years }: Props) {
   const GROUPS = years?.length ? years : DEFAULT_GROUPS
   // Active hovered row, scoped per group so each year shows its own image.
   const [active, setActive] = useState<{ g: number; r: number } | null>(null)
 
-  const headingLines = (heading ?? DEFAULT_HEADING).split('\n')
+  const title = eyebrow ?? DEFAULT_EYEBROW
 
   return (
     <section className="awards-page">
       <div className="awards-page__head">
         <nav className="body breadcrumb" aria-label="Breadcrumb">
-          <Link href="/">HOME</Link> / <span>{eyebrow ?? DEFAULT_EYEBROW}</span>
+          <Link href="/">HOME</Link> / <span>{title}</span>
         </nav>
-        <h1 className="body awards-page__title">
-          {headingLines.map((line, i) => (
-            <Fragment key={i}>
-              {line}
-              {i < headingLines.length - 1 && <br />}
-            </Fragment>
-          ))}
-        </h1>
+        {/* Banner mirrors the home "Awards & Recognition" strip, minus the
+            button and the "award-winning ideas…" caption. */}
+        <div className="awards-page__banner">
+          <h1 className="h1 awards-page__title">
+            <span className="text-highlight">{title}</span>
+          </h1>
+          <p className="h1 amplitude amp-mask awards-page__rec">
+            {recognitions ?? DEFAULT_RECOGNITIONS}
+          </p>
+        </div>
+        <p className="body awards-page__caption">
+          Award-winning ideas, grounded in the craft of storytelling.
+        </p>
       </div>
 
       <div className="awards-page__list">

@@ -52,7 +52,7 @@ function lexicalToText(node: unknown): string | undefined {
 async function getHome() {
   try {
     const payload = await getPayload({ config })
-    const [pages, footer, forms] = await Promise.all([
+    const [pages, footer, forms, awards] = await Promise.all([
       payload.find({
         collection: 'pages',
         where: { slug: { equals: 'home' } },
@@ -66,16 +66,19 @@ async function getHome() {
         depth: 0,
         limit: 1,
       }),
+      // The "Awards & Recognition" strip pulls its images from the awards
+      // custom post type, in the same drag-to-reorder order as /awards.
+      payload.find({ collection: 'awards', sort: '_order', depth: 1, limit: 100 }),
     ])
-    return { layout: pages.docs[0]?.layout, footer, contactForm: forms.docs[0] }
+    return { layout: pages.docs[0]?.layout, footer, contactForm: forms.docs[0], awards }
   } catch {
     // If Payload/DB is unavailable, components fall back to their defaults.
-    return { layout: undefined, footer: undefined, contactForm: undefined }
+    return { layout: undefined, footer: undefined, contactForm: undefined, awards: undefined }
   }
 }
 
 export default async function Home() {
-  const { layout, footer, contactForm } = await getHome()
+  const { layout, footer, contactForm, awards: awardDocs } = await getHome()
 
   // Form Builder stores fields as a flat block array; map to the shape ContactForm needs.
   const contactFields = contactForm?.fields?.flatMap((f) => {
@@ -113,9 +116,11 @@ export default async function Home() {
     return url ? [url] : []
   })
 
-  const awardItems = awards?.items?.flatMap((it) => {
-    const src = mediaUrl(it.image)
-    return src ? [{ src, alt: it.alt ?? undefined }] : []
+  // Images come from the awards collection (the `awardImage` / trophy photo),
+  // labelled with the award name; the group photo is intentionally ignored.
+  const awardItems = awardDocs?.docs.flatMap((doc) => {
+    const src = mediaUrl(doc.awardImage)
+    return src ? [{ src, name: doc.award }] : []
   })
 
   const projectItems = projects?.items?.flatMap((p) => {
