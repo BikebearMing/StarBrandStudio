@@ -154,13 +154,76 @@ canvas {
 
     & .wrapper {
         position: relative;
-        z-index: 1;
+        z-index: 2;
         display: flex;
         align-items: center;
         justify-content: space-between;
         padding: var(--sidepadding-xs);
     }
 }
+
+.site-menu {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    background-color: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition:
+        opacity 0.45s ease,
+        visibility 0s linear 0.45s;
+}
+
+.site-header.is-menu-open .site-menu {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transition:
+        opacity 0.45s ease,
+        visibility 0s;
+}
+
+.site-menu__list {
+    list-style: none;
+    margin: 0;
+    padding: var(--sidepadding-xs);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5vw;
+    text-align: center;
+}
+
+.site-menu__link {
+    display: inline-block;
+    color: #fff;
+    text-decoration: none;
+    transform: translateY(40px);
+    opacity: 0;
+    transition:
+        color 0.35s ease,
+        transform 0.55s cubic-bezier(0.6, 0, 0.3, 1),
+        opacity 0.55s ease;
+}
+
+.site-menu__link:hover {
+    color: var(--red);
+}
+
+.site-header.is-menu-open .site-menu__link {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.site-header.is-menu-open .site-menu__item:nth-child(1) .site-menu__link { transition-delay: 0.08s; }
+.site-header.is-menu-open .site-menu__item:nth-child(2) .site-menu__link { transition-delay: 0.14s; }
+.site-header.is-menu-open .site-menu__item:nth-child(3) .site-menu__link { transition-delay: 0.2s; }
+.site-header.is-menu-open .site-menu__item:nth-child(4) .site-menu__link { transition-delay: 0.26s; }
+.site-header.is-menu-open .site-menu__item:nth-child(5) .site-menu__link { transition-delay: 0.32s; }
+.site-header.is-menu-open .site-menu__item:nth-child(6) .site-menu__link { transition-delay: 0.38s; }
 
 .custom-button {
     display: inline-flex;
@@ -484,10 +547,48 @@ section.services {
     transition: opacity 0.3s ease;
 }
 
-.works-slider__slide.is-active .works-slider__link {
-    visibility: visible;
+/* Desktop: the slider auto-scrolls, so the button follows the hovered slide
+   (auto-scroll pauses on hover) rather than whichever slide is centered. */
+@media (hover: hover) {
+    .works-slider__slide:hover .works-slider__link {
+        visibility: visible;
+        opacity: 1;
+        pointer-events: auto;
+    }
+}
+
+/* Touch/mobile: no hover, so reveal the button on the centered slide. */
+@media (max-width: 768px) {
+    .works-slider__slide.is-active .works-slider__link {
+        visibility: visible;
+        opacity: 1;
+        pointer-events: auto;
+    }
+}
+
+/* Desktop: the title / year / description / tags only appear while a slide is
+   hovered (`.is-revealing` is toggled by WorksShowcase). Hidden via opacity so
+   the grid columns keep their place and the slider stays centered. */
+.works-showcase__title,
+.works-showcase__detail {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.works-page.is-revealing .works-showcase__title,
+.works-page.is-revealing .works-showcase__detail {
     opacity: 1;
     pointer-events: auto;
+}
+
+/* Mobile keeps the static slider, so always show the centered slide's details. */
+@media (max-width: 768px) {
+    .works-showcase__title,
+    .works-showcase__detail {
+        opacity: 1;
+        pointer-events: auto;
+    }
 }
 
 .works-slider__img {
@@ -1348,7 +1449,7 @@ section.awards {
     position: relative;
     color: white;
     padding-inline: 6.736vw;
-    padding-block: 6.944vw;
+    padding-block: 7vw 4.7vw;
     overflow: hidden;
     isolation: isolate;
     cursor: none;
@@ -1409,7 +1510,7 @@ section.awards {
     pointer-events: none;
     display: flex;
     flex-direction: column;
-    /* gap: 2vw; */
+    gap: 1vw;
     text-align: center;
     align-items: flex-end;
 }
@@ -1420,16 +1521,21 @@ section.awards {
 }
 
 .impact-cta__top {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    /* gap: 10.486vw; */
-    flex-wrap: wrap;
+    gap: 1vw;
     width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: center;
+    margin-right: 6vw;
 
     .custom-button {
         align-self: flex-end;
         margin-bottom: 2.1vw;
+    }
+
+    & .body {
+        text-align: left !important;
     }
 }
 
@@ -1437,6 +1543,7 @@ section.awards {
     text-transform: uppercase;
     color: white;
     margin: 0;
+    line-height: 0.7;
 }
 
 .impact-cta__bottom {
@@ -1445,6 +1552,7 @@ section.awards {
     justify-content: center;
     gap: 2.5vw;
     flex-wrap: wrap;
+    margin-right: 15.5vw;
 
     & .body {
         text-align: start !important;
@@ -1870,5 +1978,405 @@ section.awards {
     .awards-page__award,
     .awards-page__campaign {
         font-size: 3.4vw;
+    }
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   MOBILE  (≤ 768px)
+   The whole layout is authored in vw for a ~1440 desktop, so on a phone
+   every size collapses to a few px and the multi-column rows never reflow.
+   Same approach as the .contact-section / .awards-page blocks above: keep
+   vw, bump the global type scale so copy is legible, stack each section's
+   columns to one, and trade the wide vw gutters for --sidepadding-xm.
+   ══════════════════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+    /* ── Type scale — the single highest-impact fix ──────────────────── */
+    .h1 {
+        font-size: 9vw;
+        letter-spacing: -0.3vw;
+    }
+
+    .h2 {
+        font-size: 7vw;
+        letter-spacing: -0.2vw;
+    }
+
+    .h3 {
+        font-size: 5vw;
+    }
+
+    h4,
+    .h4 {
+        font-size: 4.5vw;
+    }
+
+    .body,
+    .subhead {
+        font-size: 3.6vw;
+        line-height: 1.35;
+    }
+
+    /* ── Buttons — bigger tap target, icon-anchored hover wipe ───────── */
+    .custom-button {
+        gap: 4vw;
+        padding: 3vw;
+    }
+
+    .custom-button::before {
+        left: 3vw;
+    }
+
+    /* ── Header ──────────────────────────────────────────────────────── */
+    .site-header .wrapper {
+        padding: 4vw var(--sidepadding-xm);
+    }
+
+    .site-header__logo img {
+        width: 30vw;
+        max-width: 200px;
+    }
+
+    /* ── Hero ────────────────────────────────────────────────────────── */
+    .hero-parent .h1:first-child {
+        top: 20vw; /* clear the fixed header */
+        left: var(--sidepadding-xm);
+    }
+
+    .hero-parent .h1:last-child {
+        left: var(--sidepadding-xm);
+        right: var(--sidepadding-xm);
+        bottom: 8vw;
+        white-space: normal;
+        letter-spacing: -0.2vw;
+    }
+
+    /* ── What we do ──────────────────────────────────────────────────── */
+    section.what-we-do .wrapper {
+        gap: 12vw;
+    }
+
+    section.what-we-do .wrapper .top {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8vw;
+    }
+
+    section.what-we-do .wrapper .top .left .h2 {
+        width: 100%;
+    }
+
+    section.what-we-do .wrapper .top .right {
+        margin-top: 0;
+        align-self: stretch;
+    }
+
+    section.what-we-do .wrapper .top .right .video-popup-wrapper {
+        width: 100%;
+        height: 56vw;
+    }
+
+    /* ── Services — stack index/title/toggle, copy drops full-width ──── */
+    section.services {
+        padding-block: 16vw;
+    }
+
+    .service__row {
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 3vw 4vw;
+        padding-block: 5vw;
+    }
+
+    .service__index {
+        width: auto;
+        padding-top: 0;
+    }
+
+    .service__title {
+        flex: 1;
+        width: auto;
+        padding-left: 0;
+    }
+
+    .service__copy-slot {
+        flex-basis: 100%;
+        order: 3;
+    }
+
+    .service__copy {
+        width: 100%;
+        margin-left: 0;
+    }
+
+    .service__toggle {
+        width: 9vw;
+        height: 9vw;
+    }
+
+    /* ── Pillars — label over copy, drop the connector line ──────────── */
+    section.pillars-section {
+        padding-block: 16vw;
+    }
+
+    .pillar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 3vw;
+        padding-block: 5vw;
+    }
+
+    .pillar .pillar__line {
+        display: none;
+    }
+
+    .pillar .pillar__copy {
+        width: 100%;
+    }
+
+    /* ── Logo carousel — fewer, larger circles ───────────────────────── */
+    .logo-carousel {
+        padding-top: 18vw;
+    }
+
+    .logo-carousel .carousel-header .logo-carousel__h4 {
+        font-size: 5vw;
+        line-height: 1.2;
+    }
+
+    .logo-carousel .carousel-track {
+        gap: 5vw;
+    }
+
+    .logo-carousel .carousel-item {
+        width: 34vw;
+        height: 34vw;
+    }
+
+    /* ── Projects — let the hover grid flow as a normal single column ── */
+    section.projects {
+        min-height: 0;
+        padding-block: 16vw;
+    }
+
+    section.projects .h1 {
+        margin-bottom: 8vw;
+    }
+
+    section.projects .wrapper {
+        min-height: 0;
+    }
+
+    section.projects .wrapper .project-grid {
+        position: static;
+        grid-template-columns: 1fr;
+        row-gap: 10vw;
+        column-gap: 0;
+        padding-inline: var(--sidepadding-xm);
+    }
+
+    section.projects .wrapper .project-grid .project .project-image {
+        height: 60vw;
+    }
+
+    /* hover-only chrome has no place on touch */
+    section.projects .project-grid .empty-div {
+        display: none;
+    }
+
+    .project-info {
+        display: none;
+    }
+
+    /* ── Awards (home) ───────────────────────────────────────────────── */
+    section.awards {
+        padding-top: 16vw;
+        padding-bottom: 20vw;
+    }
+
+    .awards__inner {
+        gap: 10vw;
+    }
+
+    .awards__heading {
+        padding-inline: 0;
+        gap: 6vw;
+    }
+
+    .awards__heading-top {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6vw;
+    }
+
+    .awards__heading-bottom {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 3vw;
+    }
+
+    .awards__caption {
+        text-align: left;
+        white-space: normal;
+        margin-bottom: 0;
+    }
+
+    .awards__rec {
+        font-size: 16vw;
+        text-align: left;
+        white-space: normal;
+    }
+
+    .awards__grid {
+        flex-wrap: wrap;
+        gap: 4vw;
+    }
+
+    .awards__item {
+        width: calc(50% - 2vw);
+    }
+
+    /* ── Impact CTA — restore the cursor, stack the rows ─────────────── */
+    .impact-cta {
+        cursor: auto;
+        padding-block: 18vw 0;
+        padding-inline: var(--sidepadding-xm);
+    }
+
+    .impact-cta__inner {
+        align-items: flex-start;
+        gap: 6vw;
+    }
+
+    .impact-cta__top {
+        flex-direction: column-reverse;
+        align-items: flex-start;
+        gap: 6vw;
+        margin-right: unset;
+    }
+
+    .impact-cta__top .custom-button {
+        align-self: flex-start;
+        margin-bottom: 0;
+    }
+
+    .impact-cta__bottom {
+        flex-direction: column-reverse;
+        align-items: flex-start;
+        gap: 4vw;
+        margin-right: unset;
+    }
+
+    .impact-cta__bottom .body {
+        margin-top: 0;
+    }
+
+    /* ── Footer ──────────────────────────────────────────────────────── */
+    .custom-footer {
+        padding: 14vw var(--sidepadding-xm) 4vw;
+        font-size: 3.6vw;
+        line-height: 1.4;
+    }
+
+    .custom-footer .footer-top {
+        flex-direction: column;
+        gap: 10vw;
+    }
+
+    .custom-footer .footer-column-left {
+        width: 100%;
+    }
+
+    .custom-footer .footer-directory {
+        align-items: flex-start;
+        text-align: left;
+    }
+
+    .custom-footer .footer-column-right {
+        gap: 3vw;
+    }
+
+    .custom-footer .footer-socmed img {
+        width: 8vw;
+        height: 8vw;
+    }
+
+    .custom-footer .footer-bottom {
+        margin-top: 16vw;
+    }
+
+    .custom-footer .footer-bottom-top {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4vw;
+    }
+
+    .custom-footer .footer-bottom-bottom p {
+        font-size: 11vw;
+        line-height: 1.05;
+    }
+
+    /* ── Work detail (/works/[slug]) ─────────────────────────────────── */
+    .work-detail {
+        padding: 26vw var(--sidepadding-xm) 16vw;
+    }
+
+    .work-detail__breadcrumb {
+        margin: 0 0 6vw;
+    }
+
+    .work-detail__head {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5vw;
+        padding: 0 0 6vw;
+    }
+
+    .work-detail__title {
+        font-size: 13vw;
+        letter-spacing: -1px;
+    }
+
+    .work-detail__meta {
+        gap: 3vw;
+    }
+
+    .work-detail__tags {
+        gap: 2vw;
+    }
+
+    .work-detail__tag {
+        padding: 1.5vw 3vw;
+        border-radius: 6vw;
+    }
+
+    .work-detail__img {
+        aspect-ratio: 3 / 2;
+    }
+
+    .work-detail__section {
+        gap: 3vw;
+        padding: 10vw var(--sidepadding-xm) 0;
+    }
+
+    .work-detail__section-body {
+        max-width: 100%;
+    }
+
+    .work-detail__section-body--columns {
+        column-count: 1;
+    }
+
+    .work-detail__grid {
+        grid-template-columns: 1fr;
+        gap: 6vw;
+        padding: 10vw var(--sidepadding-xm) 0;
+    }
+
+    .work-detail__grid .work-detail__grid-img:last-child {
+        max-height: none;
+    }
+
+    .work-detail__footer-media {
+        margin-top: 10vw;
     }
 }

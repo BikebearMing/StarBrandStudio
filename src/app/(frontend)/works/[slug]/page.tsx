@@ -130,7 +130,7 @@ export default async function WorkDetailRoute({ params }: { params: Promise<{ sl
           switch (block.blockType) {
             case 'textSection': {
               if (!block.body) return null
-              const isSolution = /solution/i.test(block.heading ?? '')
+              const isColumns = /big idea/i.test(block.heading ?? '')
               return (
                 <div className="work-detail__section" key={block.id ?? i}>
                   {block.heading && (
@@ -138,7 +138,7 @@ export default async function WorkDetailRoute({ params }: { params: Promise<{ sl
                   )}
                   <p
                     className={`body work-detail__section-body${
-                      isSolution ? ' work-detail__section-body--columns' : ''
+                      isColumns ? ' work-detail__section-body--columns' : ''
                     }`}
                   >
                     {/* Render newlines from the textarea as real <br> — SplitText

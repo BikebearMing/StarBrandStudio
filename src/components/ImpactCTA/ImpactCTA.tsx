@@ -20,21 +20,13 @@ export default function ImpactCTA() {
       <ImageTrail items={TRAIL_IMAGES} variant={1} threshold={80} />
       <div className="impact-cta__inner">
         <div className="impact-cta__top">
-          <h2 className="h1-v2 amp-mask impact-cta__heading">LET&rsquo;S MAKE AN</h2>
-          <a href="/contact" className="custom-button">
-            <svg className="custom-button-icon" viewBox="0 0 24 24" aria-hidden="true">
-              <circle className="ring ring--outer" cx="12" cy="12" r="11" />
-              <circle className="ring ring--middle" cx="12" cy="12" r="7" />
-              <circle className="ring ring--inner" cx="12" cy="12" r="3" />
-            </svg>
-            <span>LET&rsquo;S WORK TOGETHER</span>
-          </a>
-        </div>
-        <div className="impact-cta__bottom">
+          <h2 className="h1-v2 amp-mask impact-cta__heading">LET&rsquo;S</h2>
           <p className="body">
             TOGETHER, WE&rsquo;LL BUILD SOMETHING<br />WORTH TALKING ABOUT.
           </p>
-          <span className="h1-v2 impact-cta__impact">IMPACT</span>
+        </div>
+        <div className="impact-cta__bottom">
+          <span className="h1-v2 impact-cta__impact">CONNECT</span>
         </div>
       </div>
     </section>

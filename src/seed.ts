@@ -66,9 +66,27 @@ async function run() {
   const nikeThumb = await img('nikethumb.png', 'Nike')
   const snickersThumb = await img('snickers.png', 'Snickers')
   const mcdThumb = await img('mcdonalds.png', "McDonald's")
-  const eqThumb = await img('carousel/02-eq.png', 'Mercedes-Benz EQ')
-  const busanThumb = await img('carousel/01-busan.jpg', 'Train To Busan')
   const worksBg = await img('works-bg.png', 'Works')
+  // Imagery for the works collection (see the seeding block below). Client-supplied
+  // case-study photos live in public/works/. Campaigns without a dedicated asset
+  // (Kimball, The Star ESG, A Shared Home) reuse `worksBg` as a placeholder.
+  const elminaImg = await img('carousel/07-elmina.jpg', 'Elmina Rainforest Knowledge Centre')
+  const elminaMasthead = await img('works/elmina-masthead.gif', 'Elmina Rainforest Knowledge Centre campaign masthead')
+  const jomsapotImg = await img('works/rhb-jomsapot.jpg', 'RHB #JomSapot BeliLokal')
+  const rhbMasthead = await img('works/rhb-masthead.jpg', 'RHB #JomSapot BeliLokal masthead')
+  const rhbCta = await img('works/rhb-cta.jpg', 'RHB #JomSapot BeliLokal')
+  const tnb1 = await img('works/tnb-1.jpg', 'TNB Powering The Future')
+  const tnb2 = await img('works/tnb-2.jpg', 'TNB Powering The Future')
+  const tnb3 = await img('works/tnb-3.jpg', 'TNB Powering The Future')
+  const tnb4 = await img('works/tnb-4.jpg', 'TNB Powering The Future')
+  const sngei1 = await img('works/sngei-1.jpg', 'Star Next Gen Eco Innovators')
+  const sngei2 = await img('works/sngei-2.jpg', 'Star Next Gen Eco Innovators')
+  const sngei3 = await img('works/sngei-3.jpg', 'Star Next Gen Eco Innovators')
+  const sngei4 = await img('works/sngei-4.jpg', 'Star Next Gen Eco Innovators')
+  const mpocImg = await img('works/mpoc-1.jpg', 'The Sustainable Palm Oil Revolution')
+  const mpocImg2 = await img('works/mpoc-2.jpg', 'The Sustainable Palm Oil Revolution')
+  const mpocImg3 = await img('works/mpoc-3.jpg', 'The Sustainable Palm Oil Revolution')
+  const esgImg = await img('4433@712817_PULLOUT_SP03_NAT_27-02-2025_p01.jpg', 'The Star ESG')
   const brandLogo = await img('footer/smg-brand-studio.png', 'SMG Brand Studio')
   const fbIcon = await img('footer/facebook.svg', 'Facebook')
   const igIcon = await img('footer/instagram.svg', 'Instagram')
@@ -251,171 +269,245 @@ async function run() {
   // the admin (the collection is `orderable`). Idempotent — matched by slug.
   const works = [
     {
-      slug: 'gucci',
-      image: gucciThumb,
-      title: 'GUCCI WALK YOUR WAY',
-      year: '2025',
+      slug: 'elmina-rainforest-knowledge-centre',
+      image: elminaImg,
+      title: 'ELMINA RAINFOREST KNOWLEDGE CENTRE SUSTAINABILITY CAMPAIGN',
+      year: '2023',
       description:
-        'A FASHION-FORWARD CAMPAIGN CELEBRATING SELF-EXPRESSION THROUGH WALKING, BLENDING ICONIC HOUSE CODES WITH STREET CULTURE.',
-      tags: [{ label: 'FASHION' }, { label: 'BRAND FILM' }],
+        'A thought-leadership sustainability campaign for Sime Darby Property that reframed biodiversity conservation as an emotionally engaging human story.',
+      tags: [{ label: 'SUSTAINABILITY' }, { label: 'CONTENT CAMPAIGN' }],
       content: [
+        { blockType: 'textSection', heading: 'Client', body: `Sime Darby Property` },
         {
           blockType: 'textSection',
-          heading: 'Project Brief',
-          body: 'Gucci wanted to reintroduce its heritage to a younger, culturally fluent audience without losing the prestige that defines the house. The brief: turn the simple act of walking into a statement of individuality that felt unmistakably Gucci.',
-        },
-        { blockType: 'twoImages', left: busanThumb, right: eqThumb },
-        {
-          blockType: 'textSection',
-          heading: 'The Solution',
-          body: 'We built an integrated brand film and social campaign around the idea that every walk tells a story. Shot across the streets of three cities, the work paired archival house motifs with contemporary street styling, then extended into a series of short, platform-native cuts for TikTok and Reels.',
+          heading: 'The Background',
+          body: `Sime Darby Property wanted to position the Elmina Rainforest Knowledge Centre (ERKC) as more than a sustainability initiative — establishing the brand as a credible advocate for biodiversity conservation and future-ready communities where people and nature coexist. The challenge was to cut through sustainability clutter and greenwashing with authentic, educational storytelling that could build trust, simplify complex environmental topics, and make biodiversity relevant to everyday audiences.`,
         },
         {
           blockType: 'textSection',
-          heading: 'Impact & Results',
-          body: 'The campaign drove a 38% lift in brand search and over 24 million organic video views in its first month, with the hero film outperforming the previous season’s launch by 2.1x on engagement.',
+          heading: 'The Big Idea',
+          body: `"Imagine a World Without Biodiversity." Instead of leading with corporate sustainability messaging, we reframed conservation as a human story — inviting audiences to imagine a world where nature disappears from everyday life. Built on a thought-leadership content strategy and developed with the Tropical Rainforest Conservation & Research Centre (TRCRC), the campaign turned complex environmental issues into accessible, emotionally engaging narratives — positioning ERKC as both an educational platform and a symbol of sustainable urban living.`,
         },
-        { blockType: 'oneImage', image: worksBg },
+        {
+          blockType: 'textSection',
+          heading: 'The Execution',
+          body: `At its heart was a co-branded multimedia microsite housed within The Star Online, giving audiences a dedicated, distraction-free space to explore ERKC's biodiversity initiatives. To sustain engagement across six months, the campaign rolled out in three phases, each introducing one clear message at a time.\n\nPhase 1 — Imagine a World Without Biodiversity: An emotionally driven opening built on documentary-style storytelling, impactful visuals, interactive quizzes, and simplified educational content, inviting audiences to picture — and reflect on — a future without biodiversity.\n\nPhase 2 — A Force for Good: A shift to Sime Darby Property's conservation and reforestation efforts through ERKC, reinforcing its role as a credible sustainability advocate rather than simply a developer.\n\nPhase 3 — Rewilding the Future of Urban Living: Stories on rewilding, urban forests, and city–nature coexistence, framing sustainable living as a practical vision for future communities.\n\nDelivered through long-form editorial, rich media, documentary video, infographics, and interactive experiences, the campaign turned a complex sustainability topic into an accessible public conversation.`,
+        },
+        {
+          blockType: 'textSection',
+          heading: 'Awards',
+          body: `WAN-IFRA Asian Digital Media Awards — Best Native Advertising / Sponsored Content Campaign (Gold)`,
+        },
+        { blockType: 'oneImage', image: elminaMasthead },
       ],
     },
     {
-      slug: 'nike',
-      image: nikeThumb,
-      title: 'NIKE EVERYTHING IS POSSIBLE',
-      year: '2025',
-      description:
-        "A BOLD MANIFESTO PROVING THAT NO LIMIT IS FIXED — TURNING ATHLETES' DOUBT INTO PROOF THROUGH UNFLINCHING STORYTELLING.",
-      tags: [{ label: 'SPORTS' }, { label: 'VIDEO PRODUCTION & MEDIA' }],
-      content: [
-        {
-          blockType: 'textSection',
-          heading: 'Project Brief',
-          body: 'Nike asked us to reignite the brand’s founding belief — that limits exist only to be broken — for a generation of athletes who have heard every motivational slogan before. The work needed to feel earned, not preached.',
-        },
-        { blockType: 'twoImages', left: eqThumb, right: busanThumb },
-        {
-          blockType: 'textSection',
-          heading: 'The Solution',
-          body: 'We followed real athletes through the moments most campaigns leave out: the failed attempts, the rehab, the early mornings. The result was a documentary-style hero film and a paid media plan built to surface each athlete’s story to the audiences who shared their sport.',
-        },
-        {
-          blockType: 'textSection',
-          heading: 'Impact & Results',
-          body: 'The film reached 41 million people across paid and earned channels, lifted purchase intent by 17 points among 18–24s, and became Nike Malaysia’s most-shared piece of the year.',
-        },
-        { blockType: 'oneImage', image: worksBg },
-      ],
-    },
-    {
-      slug: 'snickers',
-      image: snickersThumb,
-      title: "SNICKERS YOU'RE NOT YOU WHEN YOU'RE HUNGRY",
-      year: '2025',
-      description:
-        'A WITTY INTEGRATED CAMPAIGN LEANING INTO THE INSIGHT THAT HUNGER CHANGES WHO YOU ARE — BUILT FOR SOCIAL AND OUT-OF-HOME.',
-      tags: [{ label: 'FMCG' }, { label: 'INTEGRATED CAMPAIGN' }],
-      content: [
-        {
-          blockType: 'textSection',
-          heading: 'Project Brief',
-          body: 'Snickers wanted to localise its globally recognised platform for a Malaysian audience while keeping the humour sharp and the message instantly readable on a billboard or a six-second pre-roll.',
-        },
-        { blockType: 'twoImages', left: busanThumb, right: eqThumb },
-        {
-          blockType: 'textSection',
-          heading: 'The Solution',
-          body: 'We cast familiar local “hangry” personas and built a flexible toolkit of out-of-home, social, and influencer content that all paid off the same punchline. Each execution worked standalone but compounded when seen in sequence across a commuter’s day.',
-        },
-        {
-          blockType: 'textSection',
-          heading: 'Impact & Results',
-          body: 'The campaign delivered a 12% sales uplift over the promotional period and a 3.4x return on media spend, with the OOH executions earning unprompted social re-shares.',
-        },
-        { blockType: 'oneImage', image: worksBg },
-      ],
-    },
-    {
-      slug: 'mcdonalds',
-      image: mcdThumb,
-      title: "MCDONALD'S I'M LOVIN' IT",
-      year: '2025',
-      description:
-        'AN INTEGRATED BRAND CAMPAIGN DESIGNED TO SPARK AWARENESS, TURN AUDIENCES INTO ADVOCATES ACROSS DIGITAL TOUCHPOINTS.',
-      tags: [{ label: 'F&B' }, { label: 'DIGITAL & SOCIAL' }],
-      content: [
-        {
-          blockType: 'textSection',
-          heading: 'Project Brief',
-          body: "McDonald's needed to keep its always-on platform feeling fresh and culturally present, turning everyday menu moments into reasons for audiences to engage and advocate.",
-        },
-        { blockType: 'twoImages', left: eqThumb, right: busanThumb },
-        {
-          blockType: 'textSection',
-          heading: 'The Solution',
-          body: 'We designed an always-on content engine that reacted to local conversations in near real time, supported by hero seasonal films and a creator programme that put the brand into authentic, everyday contexts.',
-        },
-        {
-          blockType: 'textSection',
-          heading: 'Impact & Results',
-          body: 'The programme grew social engagement by 56% year on year and generated a sustained lift in consideration among families, the campaign’s priority audience.',
-        },
-        { blockType: 'oneImage', image: worksBg },
-      ],
-    },
-    {
-      slug: 'mercedes-eq',
-      image: eqThumb,
-      title: 'THE LAUNCH OF EQ',
+      slug: 'rhb-jomsapot-belilokal',
+      image: jomsapotImg,
+      title: 'RHB #JOMSAPOT BELILOKAL',
       year: '2024',
       description:
-        'A PREMIUM LAUNCH CAMPAIGN INTRODUCING MERCEDES-BENZ’S ALL-ELECTRIC EQ RANGE TO A NEW GENERATION OF DRIVERS.',
-      tags: [{ label: 'AUTOMOTIVE' }, { label: 'INTEGRATED CAMPAIGN' }],
+        'A scalable SME empowerment platform for RHB Bank, combining AI-driven personalisation, celebrity influence, and hyperlocal discovery.',
+      tags: [{ label: 'INTEGRATED CAMPAIGN' }, { label: 'AI INNOVATION' }],
       content: [
+        { blockType: 'textSection', heading: 'Client', body: `RHB Bank` },
         {
           blockType: 'textSection',
-          heading: 'Project Brief',
-          body: 'Mercedes-Benz was entering the electric category against fast-moving challengers. The launch needed to assert that going electric meant no compromise on the luxury the brand is known for.',
+          heading: 'The Background',
+          body: `RHB Bank and Star Media Group came together to support Malaysian SMEs facing declining visibility and rising marketing costs in the post-pandemic economy. SMEs form the backbone of the economy, yet many lack the resources to compete in an increasingly digital, crowded marketplace. The initiative set out to give local businesses accessible marketing support — and to encourage Malaysians to rediscover and back their neighbourhood merchants.`,
         },
-        { blockType: 'twoImages', left: busanThumb, right: gucciThumb },
+        { blockType: 'twoImages', left: rhbMasthead, right: rhbCta },
         {
           blockType: 'textSection',
-          heading: 'The Solution',
-          body: 'We framed EQ as “the future, perfected” — a multi-channel launch spanning editorial partnerships, experiential test-drive events, and a digital configurator that let prospects build their own EQ.',
+          heading: 'The Big Idea',
+          body: `Turning every local business into a discoverable brand. Rather than another awareness campaign, we built #JomSapot BeliLokal into a scalable SME empowerment platform — combining AI-driven personalisation, celebrity influence, and hyperlocal discovery to help small businesses market themselves like major brands. At its centre was The BeliLokal Guide, an ecosystem that made local businesses easier to discover while giving SMEs promotional assets normally beyond their budgets. Using AI-powered facial and voice recognition, merchants could instantly generate personalized video ads featuring Sazzy Falak as their virtual brand ambassador — at no cost.`,
         },
         {
           blockType: 'textSection',
-          heading: 'Impact & Results',
-          body: 'The launch generated 9,200 qualified test-drive leads and positioned EQ as the most-considered premium EV in market within its first quarter.',
+          heading: 'The Execution',
+          body: `The campaign paired AI-generated branded content with location-based targeting to drive both awareness and real-world discovery. SMEs were onboarded onto a co-branded ecosystem spanning the RHB #JomSapot platform and SMG's BeliLokal network, gaining exposure across digital, print, radio, and social. Consumers discovered nearby merchants through QR-enabled journeys and geo-targeted recommendations powered by The BeliLokal Guide. By merging technology, media reach, and community-driven commerce, the campaign turned SME support from a corporate initiative into an interactive nationwide movement.`,
         },
-        { blockType: 'oneImage', image: worksBg },
+        {
+          blockType: 'textSection',
+          heading: 'Awards',
+          body: `WAN-IFRA Digital Media Awards Asia — Best Use of AI in Revenue Strategy (Silver)\nMDA d-Awards — Best B2B Marketing Campaign (Silver)\nMDA d-Awards — Best Use of Digital Marketing Innovation (Silver)\nPMAA Dragons of Malaysia — Best Digital Campaign (Gold)\nPMAA Dragons of Asia — Best Digital Campaign (Bronze)`,
+        },
       ],
     },
     {
-      slug: 'train-to-busan',
-      image: busanThumb,
-      title: 'TRAIN TO BUSAN',
-      year: '2024',
+      slug: 'tnb-powering-the-future',
+      image: tnb1,
+      title: 'TNB POWERING THE FUTURE',
       description:
-        'AN IMMERSIVE ENTERTAINMENT ACTIVATION BRINGING THE WORLD OF TRAIN TO BUSAN TO LIFE AT RESORTS WORLD GENTING.',
-      tags: [{ label: 'ENTERTAINMENT' }, { label: 'EXPERIENTIAL' }],
+        'A youth-focused energy-literacy programme for Tenaga Nasional Berhad, turning national sustainability goals into lived, experiential learning.',
+      tags: [{ label: 'ENERGY' }, { label: 'YOUTH PROGRAMME' }],
       content: [
         {
           blockType: 'textSection',
-          heading: 'Project Brief',
-          body: 'Resorts World Genting wanted a tentpole attraction that would drive footfall and dominate social feeds by turning a beloved film franchise into a physical, shareable experience.',
-        },
-        { blockType: 'twoImages', left: gucciThumb, right: eqThumb },
-        {
-          blockType: 'textSection',
-          heading: 'The Solution',
-          body: 'We designed an end-to-end immersive walkthrough, supported by a teaser content series, influencer previews, and a ticketing-integrated social campaign that built anticipation ahead of opening.',
+          heading: 'Client',
+          body: `Tenaga Nasional Berhad (Malaysia Energy Literacy Programme)`,
         },
         {
           blockType: 'textSection',
-          heading: 'Impact & Results',
-          body: 'The activation sold out its opening weeks, drove a measurable spike in resort visitation, and earned widespread organic coverage across entertainment media.',
+          heading: 'The Background',
+          body: `Malaysia faces a growing energy trilemma — balancing security, affordability, and sustainability — amid accelerating climate pressures. Awareness of climate change is rising, but a persistent "say–do gap" remains: stated intentions to be energy-efficient rarely translate into action, held back by comfort-first habits, scepticism over individual impact, and reluctance to invest in change. As Malaysia pursues its Net Zero 2050 ambition, behavioural adoption remains the missing link. Through the Malaysia Energy Literacy Programme (MELP), Tenaga Nasional Berhad partnered with Star Media Group to translate national sustainability goals into a youth-focused education initiative — building understanding of energy transition, renewable energy, and ESG through lived experience rather than passive learning. The premise: if energy behaviour is to change, it must begin early.`,
         },
-        { blockType: 'oneImage', image: worksBg },
+        { blockType: 'twoImages', left: tnb2, right: tnb3 },
+        {
+          blockType: 'textSection',
+          heading: 'The Big Idea',
+          body: `"Start young to change the energy future." (Small actions today, big impact tomorrow.) Rather than treating energy education as information delivery, the programme reframed it as early behaviour formation — challenging the misconception that climate impact comes only from large-scale policy or corporate action, and positioning students as active contributors whose everyday habits, multiplied across millions, become a force for systemic change.`,
+        },
+        {
+          blockType: 'textSection',
+          heading: 'The Execution',
+          body: `Powering The Future was designed as an experiential learning programme that moves energy education from theory into lived experience. Rather than classroom learning, students were placed in real-world energy decision scenarios through interactive workshops, energy-saving challenges, and practical simulations — making abstract concepts tangible and personally relevant. First piloted across 10 schools, the programme was scaled to 60 schools and has since expanded across multiple states, refining its engagement design with each rollout. It continues today as a sustained national initiative, with a long-term mission to embed energy-conscious behaviour early and cultivate a generation of Malaysians who actively contribute to a more sustainable energy future.`,
+        },
+        { blockType: 'oneImage', image: tnb4 },
+        {
+          blockType: 'textSection',
+          heading: 'Awards',
+          body: `WAN-IFRA Digital Media Awards Asia — Best Marketing Campaign for a News Brand (Silver)`,
+        },
+      ],
+    },
+    {
+      slug: 'star-next-gen-eco-innovators',
+      image: sngei1,
+      title: 'STAR NEXT GEN ECO INNOVATORS',
+      description:
+        'A youth-led innovation platform for The Coca-Cola Company that reframed plastic waste from pollution to potential.',
+      tags: [{ label: 'SUSTAINABILITY' }, { label: 'YOUTH PROGRAMME' }],
+      content: [
+        { blockType: 'textSection', heading: 'Client', body: `The Coca-Cola Company (Malaysia)` },
+        {
+          blockType: 'textSection',
+          heading: 'The Background',
+          body: `Plastic waste is one of Malaysia's most complex environmental challenges — driven by high consumption, limited recycling efficiency, and systemic leakage into natural ecosystems. The plastic manufacturing sector contributes significantly to national growth (annual sales exceeding RM61 billion, 4–5% of GDP), yet Malaysia is also among ASEAN's highest per-capita consumers of plastic packaging, generating over a million tonnes of plastic waste a year — only around 24% of which is recycled. Plastic, in other words, is not just an environmental issue but a systems problem spanning consumption behaviour, waste infrastructure, and circular-economy readiness.\n\nFor The Coca-Cola Company in Malaysia, this carried added reputational complexity. As a major user of plastic packaging, the brand sits at the centre of public scrutiny on waste — while investing in global circular-economy commitments and sustainable-packaging goals. A clear trust gap remained, particularly among Gen Z: highly eco-conscious, yet deeply sceptical of corporate sustainability messaging. In response, Coca-Cola backed a youth-led innovation platform built to move beyond awareness into hands-on circular-economy experimentation — positioning students as co-creators of solutions rather than passive recipients of messaging.`,
+        },
+        { blockType: 'twoImages', left: sngei2, right: sngei3 },
+        {
+          blockType: 'textSection',
+          heading: 'The Big Idea',
+          body: `"Flip plastic from pollution to potential." Instead of framing plastic as a burden, the programme reframed it as a designable material system — something the next generation could reimagine, repurpose, and re-engineer. This shifted youth from observers of the climate crisis to active system designers, building real-world solutions through innovation, collaboration, and circular thinking.`,
+        },
+        {
+          blockType: 'textSection',
+          heading: 'The Execution',
+          body: `Next Gen Eco Innovators launched as a national, university-based innovation platform focused on plastic circularity and sustainable design thinking. Five universities took part in a structured programme of education, ideation, and rapid prototyping: students were grounded in circular-economy principles, then challenged to apply them in a high-intensity 24-hour innovation sprint tackling Malaysia's plastic-waste and circularity gaps. Standout teams were shortlisted to represent their university at a grand finale at Menara Star, where ideas were judged by industry and sustainability experts on feasibility, innovation, and impact potential.`,
+        },
+        { blockType: 'oneImage', image: sngei4 },
+      ],
+    },
+    {
+      slug: 'resipi-jadi-rezeki',
+      image: worksBg,
+      title: 'RESIPI JADI REZEKI WITH KIMBALL MALAYSIA',
+      description:
+        'A four-phase entrepreneurial transformation journey for Kimball Malaysia, turning everyday cooking into a sustainable livelihood.',
+      tags: [{ label: 'SOCIAL IMPACT' }, { label: 'INTEGRATED CAMPAIGN' }],
+      content: [
+        { blockType: 'textSection', heading: 'Client', body: `Kimball Malaysia` },
+        {
+          blockType: 'textSection',
+          heading: 'The Background',
+          body: `Despite Malaysia's growing emphasis on SME empowerment and food entrepreneurship, many B40 and PPR home cooks remain trapped in informal, low-income cooking with no clear path to professionalisation. Three barriers persist: capital risk (high upfront costs to start a food business), an infrastructure gap (limited access to hygienic, MOH-compliant kitchens for scaling), and market marginalisation (limited branding, pricing power, and digital literacy). Many already have strong culinary skills — what they lack is the system, support, and structure to turn cooking into a sustainable livelihood. Kimball, long known as a kitchen-staple brand, saw an opportunity to evolve beyond product utility and become an enabler of income generation and community upliftment.`,
+        },
+        {
+          blockType: 'textSection',
+          heading: 'The Big Idea',
+          body: `"Resipi Jadi Rezeki — turning everyday cooking into sustainable livelihood." Rather than focusing on product usage, the campaign positioned Kimball as an enabling system that unlocks income-generating potential within everyday cooking. The belief at its core: with the right system and support, even a single recipe can become a sustainable source of income. By pairing Kimball's cost-efficient base sauces with structured entrepreneurial training, participants could adopt a "high-volume, low-margin" model — selling quality meals at an accessible RM5 "Menu Rahmah" price point while staying profitable. Food, empowerment, and economic inclusion came together in a scalable ecosystem for everyday livelihood creation.`,
+        },
+        {
+          blockType: 'textSection',
+          heading: 'The Execution',
+          body: `The campaign was built as a four-phase entrepreneurial transformation journey, taking participants from home cooks to validated micro-entrepreneurs.\n\nPhase 1 — Recruitment: A talent-discovery phase identified high-potential home cooks from B40 and PPR communities through Suria FM outreach and grassroots networks, balancing national reach with hyperlocal authenticity.\n\nPhase 2 — Training & Development: Hands-on workshops equipped participants with digital marketing, food storytelling, content creation, and commercial cooking skills, and guided them to develop their RM5 "Menu Rahmah" offerings.\n\nPhase 3 — Live Market Rally: A real-world bazaar "stress test," where participants operated as independent vendors under time pressure — managing sales, cooking, and public engagement.\n\nPhase 4 — Expanding Community Impact: The journey extended beyond participants, channeling RM10,000 of Kimball products to five welfare homes, reinforcing that entrepreneurial success should benefit the wider community.`,
+        },
+      ],
+    },
+    {
+      slug: 'sustainable-palm-oil-revolution',
+      image: mpocImg,
+      title: 'THE SUSTAINABLE PALM OIL REVOLUTION',
+      description:
+        'An impact-journalism platform for MPOC that reframed palm oil through verified facts and evidence-led storytelling.',
+      tags: [{ label: 'SUSTAINABILITY' }, { label: 'EDITORIAL STORYTELLING' }],
+      content: [
+        { blockType: 'textSection', heading: 'Client', body: `Malaysia Palm Oil Council (MPOC)` },
+        {
+          blockType: 'textSection',
+          heading: 'The Background',
+          body: `Oil palm is one of the world's most efficient oil-producing crops, needing far less land than other vegetable oils for the same yield — which, with its affordability and versatility, has made palm oil one of the most widely used ingredients in global food and consumer supply chains. It is also one of the most contested commodities. Rising demand has raised legitimate concerns around deforestation, biodiversity loss, land-use change, labour practices, and sustainability governance — concerns that have hardened into a simplified global narrative casting palm oil as inherently harmful, with little distinction between conventional and certified sustainable production. As one of the world's largest producers and exporters, Malaysia sits at the centre of this debate. Working with the Malaysia Palm Oil Council (MPOC), the challenge was to ensure sustainably sourced palm oil is understood accurately — in relation to its environmental safeguards, certification systems, and role in more efficient land use and conservation.`,
+        },
+        { blockType: 'twoImages', left: mpocImg2, right: mpocImg3 },
+        {
+          blockType: 'textSection',
+          heading: 'The Big Idea',
+          body: `Reframing palm oil through verified facts. Rather than defending the industry or reacting to criticism, the campaign reframed the challenge as an information-gap problem, not a perception battle — moving global audiences away from simplified assumptions toward evidence-based understanding, where palm oil is assessed through verified data, credible science, and differentiated sustainability practices.`,
+        },
+        {
+          blockType: 'textSection',
+          heading: 'The Execution',
+          body: `The campaign took an impact-journalism approach, countering misinformation through structured storytelling rather than persuasion. Built as a guided discovery experience, it rested on three principles:\n\nReframing through context and data: Fact-led comparisons highlighted palm oil's land-use efficiency and productivity, and the importance of distinguishing conventional from certified sustainable production.\n\nCredibility through independent validation: Key insights were anchored in trusted external sources — including WWF, Conservation International, and Wild Asia — so the narrative rested on independent expertise, not industry-only positioning.\n\nComplexity made simple: A dedicated interactive platform, The Sustainable Palm Oil Revolution, turned complex sustainability data into an immersive editorial experience through long-form storytelling, data visualisation, and explainer videos — letting audiences navigate claims, context, and evidence in an accessible format.\n\nBy replacing defensive rhetoric with evidence-led storytelling, the initiative gave international audiences a more informed, data-grounded lens on Malaysia's role in advancing sustainable agriculture.`,
+        },
+      ],
+    },
+    {
+      slug: 'the-star-esg',
+      image: esgImg,
+      title: 'THE STAR ESG',
+      description:
+        'A monthly editorial pull-out by Star Media Group that makes complex ESG topics clear, credible, and accessible to Malaysians.',
+      tags: [{ label: 'EDITORIAL PLATFORM' }, { label: 'ESG' }],
+      content: [
+        { blockType: 'textSection', heading: 'Client', body: `Star Media Group — an owned editorial platform` },
+        {
+          blockType: 'textSection',
+          heading: 'The Background',
+          body: `In Malaysia, ESG has moved from a reputational nice-to-have to a business reality: sustainability reporting is now mandatory for Bursa Malaysia's larger listed companies and is being phased in across the rest of the market, with expectations increasingly cascading to the SMEs in their supply chains. Yet for most Malaysians — businesses, SMEs, policymakers, and consumers alike — the landscape remains abstract, jargon-heavy, and clouded by greenwashing, with no sustained, credible, easy-to-follow platform making it relevant to a broad local audience.`,
+        },
+        {
+          blockType: 'textSection',
+          heading: 'The Big Idea',
+          body: `Expert-led ESG, made accessible to all. A dedicated monthly editorial pull-out that pairs journalistic credibility with subject-matter expertise — turning complex ESG topics into clear, relevant narratives, and giving Malaysians a trusted ongoing guide rather than scattered, one-off coverage.`,
+        },
+        {
+          blockType: 'textSection',
+          heading: 'The Execution',
+          body: `StarESG breaks down emerging trends, regulatory developments, and the real-world challenges organisations face — combining our editorial expertise with the perspectives of policymakers, industry leaders, and businesses to give a balanced, authoritative view that surfaces both the risks and the opportunities of a changing ESG landscape. It's built around a consistent set of editorial pillars:\n\nCover stories — topical features with expert and policymaker insight across environmental, social, and governance themes.\n\nSME focus — accessible content that helps SMEs understand and adopt ESG.\n\nESG news — timely updates on the policies, regulations, and trends shaping the landscape.\n\nBrand stories — corporate initiatives, commitments, and challenges.\n\n"Small Act, Big Impact" — community-driven narratives that inspire collective action.\n\nPublished monthly, StarESG has grown into a sustained platform for more informed, responsible decision-making.`,
+        },
+      ],
+    },
+    {
+      slug: 'a-shared-home-carey-island',
+      image: worksBg,
+      title: 'A SHARED HOME — CAREY ISLAND',
+      year: '2026',
+      description:
+        'A multi-dimensional storytelling ecosystem for SD Guthrie that turned an abstract ESG narrative into a place audiences could see and connect with.',
+      tags: [{ label: 'SUSTAINABILITY' }, { label: 'MULTIMEDIA STORYTELLING' }],
+      content: [
+        { blockType: 'textSection', heading: 'Client', body: `SD Guthrie Berhad` },
+        {
+          blockType: 'textSection',
+          heading: 'The Background',
+          body: `SD Guthrie is more than a palm oil producer. With a heritage spanning nearly two centuries, it has continually evolved to lead the industry in sustainable production, biodiversity conservation and community development. Through its "Beyond Zero" sustainability framework, the company has committed not only to reducing its environmental footprint but also to restoring ecosystems and transforming lives and livelihoods through three strategic pillars: Zero, Restore and Transform.\n\nYet despite these commitments, SD Guthrie operates within an industry often viewed through a lens of scepticism. Palm oil continues to carry significant reputational challenges, where genuine progress is frequently overshadowed by concerns around environmental impact and accusations of corporate greenwashing. This created three fundamental barriers: a perception gap (an industry often judged before its actions are understood), a credibility gap (sustainability commitments audiences may dismiss without tangible proof), and an abstraction gap (meaningful initiatives documented in reports but rarely experienced by the public). The challenge was not a lack of substance. It was making real impact visible, relatable and believable.`,
+        },
+        {
+          blockType: 'textSection',
+          heading: 'The Big Idea',
+          body: `"A Shared Home: A Legacy, Keepers of the Future." Instead of asking audiences to trust another sustainability claim, the campaign invited them to experience one. It repositioned Carey Island as the narrative centrepiece of SD Guthrie's sustainability journey — a living landscape where certified sustainable palm oil production exists alongside biodiversity conservation, ecological restoration, heritage preservation and thriving local communities. Rather than serving as a backdrop, the island became the campaign's proof point: a place where sustainability could be seen, explored and understood. Grounded in the "Beyond Zero" pillars of Zero, Restore and Transform, the campaign translated corporate commitments into tangible human stories and real places — shifting the narrative from defending sustainability claims to demonstrating stewardship through lived experience.`,
+        },
+        {
+          blockType: 'textSection',
+          heading: 'The Execution',
+          body: `The campaign was designed as a multi-dimensional storytelling ecosystem, with each format playing a distinct role and reinforcing the others.\n\nDocumentary — the emotional centrepiece that brought Carey Island to life through immersive storytelling, showcasing SD Guthrie's stewardship in practice and translating sustainability from concept into lived reality through people, place and progress.\n\nLong-form Editorial Feature — the credibility anchor. An in-depth article providing narrative depth around SD Guthrie's legacy, the "Beyond Zero" framework, and Carey Island as a real-world demonstration of integrated sustainability across biodiversity conservation, heritage preservation and community development.\n\nSocial Media Amplification — the distribution engine. Social platforms drove awareness, traffic and engagement, directing audiences toward the documentary and long-form editorial content and ensuring the story reached both broad public and news- and business-oriented communities.\n\nIntegrated Audience Journey — each touchpoint worked in sequence: social amplification sparked discovery, the documentary delivered emotional engagement, and the editorial feature provided context, credibility and depth — turning awareness into understanding.`,
+        },
+        {
+          blockType: 'textSection',
+          heading: 'The Outcome',
+          body: `By turning an abstract ESG narrative into a place people could see and connect with, "A Shared Home" reframed SD Guthrie's sustainability story. Instead of asking audiences to accept corporate claims at face value, it invited them to witness a living example where certified sustainable palm oil production, biodiversity conservation, heritage and community coexist within a shared landscape. In doing so, the campaign repositioned SD Guthrie not simply as a palm oil producer, but as a long-term steward of people, nature and place — demonstrating that the strongest sustainability stories are those that can be experienced as well as told.`,
+        },
       ],
     },
   ]
@@ -434,6 +526,19 @@ async function run() {
       await payload.create({ collection: 'works', data: work as any })
     }
     console.log(`  ✓ ${work.slug}`)
+  }
+
+  // Remove any works no longer in the seed set (e.g. the earlier placeholder
+  // projects), so "use these instead" stays true on every re-seed.
+  const keepSlugs = works.map((w) => w.slug)
+  const staleWorks = await payload.find({
+    collection: 'works',
+    where: { slug: { not_in: keepSlugs } },
+    limit: 100,
+  })
+  for (const doc of staleWorks.docs) {
+    await payload.delete({ collection: 'works', id: doc.id })
+    console.log(`  ✗ removed ${doc.slug}`)
   }
 
   console.log('Setting up contact form…')

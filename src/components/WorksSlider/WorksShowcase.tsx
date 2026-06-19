@@ -23,8 +23,12 @@ const DEFAULT_SLIDES: WorksSlide[] = [
 export default function WorksShowcase({ slides }: Props) {
   const SLIDES = slides?.length ? slides : DEFAULT_SLIDES
   // The slider moves; this index keeps the surrounding text in sync without moving it.
+  // On mobile (no auto-scroll, no hover) the centered slide drives the text.
   const [active, setActive] = useState(0)
-  const current = SLIDES[active] ?? SLIDES[0]
+  // Desktop only: which slide the pointer is over. While hovering, the slider
+  // auto-scroll pauses and only this slide's details are shown; otherwise hidden.
+  const [hovered, setHovered] = useState<number | null>(null)
+  const current = SLIDES[hovered ?? active] ?? SLIDES[0]
 
   // The custom target cursor only renders while the pointer is over the section, so it
   // never lingers over the rest of the page. `cursorStart` seeds its initial position
@@ -34,7 +38,7 @@ export default function WorksShowcase({ slides }: Props) {
 
   return (
     <section
-      className="works-page grain-effect"
+      className={`works-page grain-effect${hovered !== null ? ' is-revealing' : ''}`}
       onMouseEnter={(e) => {
         cursorStartRef.current = { x: e.clientX, y: e.clientY }
         setCursorActive(true)
@@ -52,7 +56,7 @@ export default function WorksShowcase({ slides }: Props) {
         />
       )}
       <p className="body dark works-showcase__title">{current.title}</p>
-      <WorksSlider slides={SLIDES} onActiveChange={setActive} />
+      <WorksSlider slides={SLIDES} onActiveChange={setActive} onHoverChange={setHovered} />
       <div className="works-showcase__detail">
         <p className="bodys dark works-showcase__year">{current.year}</p>
         <div className="works-showcase__detail-body">
