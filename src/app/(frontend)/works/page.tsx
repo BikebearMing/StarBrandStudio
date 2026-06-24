@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import { getPayload } from 'payload'
 import config from '@payload-config'
 import type { Media } from '@payload-types'
@@ -53,16 +52,8 @@ export default async function WorksRoute() {
   return (
     <main className="grain-effect">
       <Header />
-      <nav className="body breadcrumb works-breadcrumb" aria-label="Breadcrumb">
-        <Link href="/">HOME</Link> / <span>WORKS</span>
-      </nav>
-      <div className="works-title">
-        <h2 className="h1 amplitude dark">
-          The <br />
-          <span className="text-highlight">Works</span>
-        </h2>
-        <p className="body dark">we&rsquo;re proud of</p>
-      </div>
+      {/* Breadcrumb + "The Works" title now live inside WorksShowcase so they
+          pin with the sticky scroll-stack section on desktop. */}
       <WorksShowcase slides={slides} />
       <Footer />
     </main>

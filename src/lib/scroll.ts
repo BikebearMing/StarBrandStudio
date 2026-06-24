@@ -5,6 +5,8 @@ type LenisHandle = {
   ) => void
   stop: () => void
   start: () => void
+  /** Recompute wrapper/content dimensions (call after the page height changes). */
+  resize: () => void
 }
 
 export const scrollState: { velocity: number; lenis: LenisHandle | null } = {

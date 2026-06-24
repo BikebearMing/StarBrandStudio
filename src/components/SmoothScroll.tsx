@@ -8,18 +8,23 @@ import { scrollState } from '@/lib/scroll'
 export default function SmoothScroll() {
   const pathname = usePathname()
 
-  // After a route change (especially back/forward, where Next restores the
-  // old scroll position) Lenis's internal position goes stale — the next
-  // wheel input would teleport to wherever Lenis last thought it was.
-  // Re-sync it to the browser's actual position.
+  // After a client-side route change Lenis keeps the PREVIOUS page's cached
+  // dimensions, so its max-scroll stays clamped to the old (often shorter) page
+  // — you can't scroll to the bottom of a taller page until a hard refresh.
+  // (Lenis's autoResize observer doesn't catch the App-Router content swap.)
+  // Recompute dimensions, then re-sync the position (back/forward restores the
+  // old scrollY, which would otherwise teleport on the next wheel input).
+  // Repeat on a few delays to catch late-loading content (images, 3D canvas).
   useEffect(() => {
-    const sync = () =>
+    const sync = () => {
+      scrollState.lenis?.resize()
       scrollState.lenis?.scrollTo(window.scrollY, { immediate: true, force: true })
+    }
     const raf = requestAnimationFrame(() => requestAnimationFrame(sync))
-    const timer = setTimeout(sync, 250)
+    const timers = [250, 800, 1600].map((ms) => setTimeout(sync, ms))
     return () => {
       cancelAnimationFrame(raf)
-      clearTimeout(timer)
+      timers.forEach(clearTimeout)
     }
   }, [pathname])
 

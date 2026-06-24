@@ -1,8 +1,9 @@
 'use client'
 
-import { useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
+import Link from 'next/link'
 import WorksSlider, { type WorksSlide } from './WorksSlider'
-import TargetCursor from '@/components/TargetCursor/TargetCursor'
+import WorksScrollStack from './WorksScrollStack'
 
 type Props = {
   slides?: WorksSlide[]
@@ -20,43 +21,51 @@ const DEFAULT_SLIDES: WorksSlide[] = [
   },
 ]
 
+/**
+ * Picks the works experience by viewport:
+ *   • Desktop → scroll-driven vertical stack (WorksScrollStack).
+ *   • Mobile  → the existing horizontal swipe slider (WorksSlider).
+ *
+ * `mode` starts as 'pre' on the server / first paint and resolves on mount, so
+ * we never render the desktop pin during SSR (it needs measured DOM + Lenis).
+ */
 export default function WorksShowcase({ slides }: Props) {
   const SLIDES = slides?.length ? slides : DEFAULT_SLIDES
-  // The slider moves; this index keeps the surrounding text in sync without moving it.
-  // On mobile (no auto-scroll, no hover) the centered slide drives the text.
-  const [active, setActive] = useState(0)
-  // Desktop only: which slide the pointer is over. While hovering, the slider
-  // auto-scroll pauses and only this slide's details are shown; otherwise hidden.
-  const [hovered, setHovered] = useState<number | null>(null)
-  const current = SLIDES[hovered ?? active] ?? SLIDES[0]
+  const [mode, setMode] = useState<'pre' | 'desktop' | 'mobile'>('pre')
 
-  // The custom target cursor only renders while the pointer is over the section, so it
-  // never lingers over the rest of the page. `cursorStart` seeds its initial position
-  // so it appears under the pointer instead of animating in from the origin.
-  const [cursorActive, setCursorActive] = useState(false)
-  const cursorStartRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 })
+  useEffect(() => {
+    const mq = window.matchMedia('(min-width: 769px)')
+    const apply = () => setMode(mq.matches ? 'desktop' : 'mobile')
+    apply()
+    mq.addEventListener('change', apply)
+    return () => mq.removeEventListener('change', apply)
+  }, [])
+
+  if (mode === 'desktop') return <WorksScrollStack slides={SLIDES} />
+
+  return <MobileWorks slides={SLIDES} />
+}
+
+/** Mobile / fallback layout: the centred slide drives the title + tags. */
+function MobileWorks({ slides }: { slides: WorksSlide[] }) {
+  const [active, setActive] = useState(0)
+  const current = slides[active] ?? slides[0]
 
   return (
-    <section
-      className={`works-page${hovered !== null ? ' is-revealing' : ''}`}
-      onMouseEnter={(e) => {
-        cursorStartRef.current = { x: e.clientX, y: e.clientY }
-        setCursorActive(true)
-      }}
-      onMouseLeave={() => setCursorActive(false)}
-    >
-      {cursorActive && (
-        <TargetCursor
-          spinDuration={5}
-          hideDefaultCursor
-          parallaxOn
-          hoverDuration={0.1}
-          initialX={cursorStartRef.current.x}
-          initialY={cursorStartRef.current.y}
-        />
-      )}
+    <section className="works-page">
+      <nav className="body breadcrumb works-breadcrumb" aria-label="Breadcrumb">
+        <Link href="/">HOME</Link> / <span>WORKS</span>
+      </nav>
+      <div className="works-title">
+        <h2 className="h1 amplitude dark">
+          The <br />
+          <span className="text-highlight">Works</span>
+        </h2>
+        <p className="body dark">we&rsquo;re proud of</p>
+      </div>
+
       <p className="body dark works-showcase__title">{current.title}</p>
-      <WorksSlider slides={SLIDES} onActiveChange={setActive} onHoverChange={setHovered} />
+      <WorksSlider slides={slides} onActiveChange={setActive} />
       <div className="works-showcase__detail">
         <p className="bodys dark works-showcase__year">{current.year}</p>
         <div className="works-showcase__detail-body">

@@ -40,7 +40,7 @@ export default function AwardsSlider({ slides }: Props) {
     const splide = new Splide(ref.current, {
       type: 'loop', // infinite continuous scroll
       direction: 'ltr',
-      fixedWidth: isDesktop ? '19.931vw' : '52vw',
+      fixedWidth: isDesktop ? '14vw' : '44vw',
       gap: isDesktop ? '2vw' : '4vw',
       focus: 'center',
       arrows: false,

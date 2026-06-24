@@ -157,6 +157,21 @@ canvas {
     z-index: 999;
     /* background-color: #000; */
 
+    /* Subtle black→transparent scrim for legibility over bright (red) sections.
+       Imperceptible on the dark hero; keeps the logo/links readable on red.
+       Sits below the .wrapper (z-index 2) so it never dims the logo/links. */
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 220%;
+        background: linear-gradient(to bottom, rgba(0, 0, 0, 0.25), transparent);
+        pointer-events: none;
+        z-index: 1;
+    }
+
     & .wrapper {
         position: relative;
         z-index: 2;
@@ -172,14 +187,15 @@ canvas {
    and ring icon; the rest are plain right-aligned text links. */
 .site-header__nav {
     display: flex;
-    flex-direction: column;
-    align-items: flex-end;
+    align-items: center;
+    flex-direction: row-reverse;
     text-align: right;
     gap: 0.694vw;
 }
 
 .site-header__nav .custom-button {
-    margin-bottom: 0.5vw;
+    margin-bottom: 0;
+    margin-left: 1vw;
 }
 
 .site-header__nav-link {
@@ -627,6 +643,92 @@ section.services {
     display: block;
 }
 
+/* ── Desktop: scroll-driven vertical works stack (WorksScrollStack) ────────
+   A tall `.works-scroll` track (height set inline from JS) holds a sticky
+   100vh section. The `.works-stack` is translated by scroll progress so one
+   slide sits at centre, framed by `.works-reticle`. */
+.works-scroll {
+    position: relative;
+}
+
+.works-page--pinned {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    min-height: 0;
+}
+
+/* Pinned layout reveals content from the centred slide, not hover. */
+.works-page--pinned .works-showcase__title,
+.works-page--pinned .works-showcase__detail {
+    opacity: 1;
+    pointer-events: auto;
+    transition: none;
+}
+
+.works-stack-viewport {
+    position: relative;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.works-stack {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2.2vw;
+    will-change: transform;
+}
+
+.works-stack__slide {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 2 / 1;
+    overflow: hidden;
+}
+
+.works-stack__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* Fixed centre reticle framing the centred slide + its VIEW PROJECT link. */
+.works-reticle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    aspect-ratio: 2 / 1;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.works-reticle__corner {
+    position: absolute;
+    width: 1.6vw;
+    height: 1.6vw;
+    border: 0.16vw solid #ffffff;
+}
+
+.works-reticle__corner--tl { top: -0.5vw; left: -0.5vw; border-right: none; border-bottom: none; }
+.works-reticle__corner--tr { top: -0.5vw; right: -0.5vw; border-left: none; border-bottom: none; }
+.works-reticle__corner--br { bottom: -0.5vw; right: -0.5vw; border-left: none; border-top: none; }
+.works-reticle__corner--bl { bottom: -0.5vw; left: -0.5vw; border-right: none; border-top: none; }
+
+.works-reticle__link {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 3;
+}
+
 .works-showcase__detail {
     display: flex;
     gap: 8.8vw;
@@ -1032,7 +1134,7 @@ section.pillars-section .wrapper {
 
 .pillar {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 2.083vw;
     opacity: 0.35;
     transition: opacity 0.35s ease;
@@ -1054,7 +1156,7 @@ section.pillars-section .wrapper {
 }
 
 .pillar .pillar__copy {
-    width: 18.75vw;
+    width: 29.75vw;
     flex-shrink: 0;
     text-transform: uppercase;
 }
@@ -1075,6 +1177,13 @@ section.pillars-section .wrapper {
 
 .pillar.is-active .pillar__line {
     transform: scaleX(1);
+    margin-block: auto;
+}
+
+/* The last pillar's label wraps to two lines, so the auto-centred connector
+   sits low between them — nudge it up to read against the first line. */
+.pillar:last-child.is-active .pillar__line {
+    transform: scaleX(1) translateY(-2.2vw);
 }
 
 /* Logo Carousel */
