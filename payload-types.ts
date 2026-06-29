@@ -359,6 +359,32 @@ export interface Page {
             blockName?: string | null;
             blockType: 'services';
           }
+        | {
+            /**
+             * Top heading word.
+             */
+            headingTop?: string | null;
+            /**
+             * Supporting line; use a line break for two lines.
+             */
+            copy?: string | null;
+            /**
+             * Large word shown at the bottom.
+             */
+            impactWord?: string | null;
+            /**
+             * Images that trail the cursor across this section. Leave empty to use the built-in defaults.
+             */
+            trailImages?:
+              | {
+                  image: number | Media;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'impactCTA';
+          }
       )[]
     | null;
   meta?: {
@@ -462,23 +488,55 @@ export interface Award {
   id: number;
   _order?: string | null;
   /**
-   * Award won, e.g. “DIGITAL PUBLISHER OF THE YEAR – SILVER”.
+   * Short label for the admin list only — not shown on the site, e.g. “WAN-IFRA 2023 — Native Advertising”.
    */
-  award: string;
+  label: string;
   /**
    * e.g. “2025”. Awards are grouped under this year on the page.
    */
   year: string;
   /**
+   * Award show title (bold) followed by the award categories as a bullet list, e.g. “Best Native Advertising/Sponsored Content Campaign - GOLD”.
+   */
+  middle?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
    * Campaign / project the award was for.
    */
-  campaign?: string | null;
+  campaign?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
   /**
-   * Trophy / award photo. Shown on the left when this row is hovered.
+   * Trophy / award photo. Used on the home “Awards & Recognition” strip.
    */
   awardImage?: (number | null) | Media;
   /**
-   * Group / team photo. Shown below the trophy when this row is hovered.
+   * Group / team photo. Shown in the media column when this row is hovered.
    */
   groupPhoto?: (number | null) | Media;
   updatedAt: string;
@@ -974,6 +1032,21 @@ export interface PagesSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
+        impactCTA?:
+          | T
+          | {
+              headingTop?: T;
+              copy?: T;
+              impactWord?: T;
+              trailImages?:
+                | T
+                | {
+                    image?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
       };
   meta?:
     | T
@@ -1038,8 +1111,9 @@ export interface WorksSelect<T extends boolean = true> {
  */
 export interface AwardsSelect<T extends boolean = true> {
   _order?: T;
-  award?: T;
+  label?: T;
   year?: T;
+  middle?: T;
   campaign?: T;
   awardImage?: T;
   groupPhoto?: T;

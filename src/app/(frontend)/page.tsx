@@ -105,6 +105,7 @@ export default async function Home() {
   const awards = findBlock(layout, 'awards')
   const projects = findBlock(layout, 'projects')
   const services = findBlock(layout, 'services')
+  const impactCTA = findBlock(layout, 'impactCTA')
 
   const heroSlides = hero?.carousel?.flatMap((c) => {
     const url = mediaUrl(c.image)
@@ -120,7 +121,7 @@ export default async function Home() {
   // labelled with the award name; the group photo is intentionally ignored.
   const awardItems = awardDocs?.docs.flatMap((doc) => {
     const src = mediaUrl(doc.awardImage)
-    return src ? [{ src, name: doc.award }] : []
+    return src ? [{ src, name: doc.label }] : []
   })
 
   const projectItems = projects?.items?.flatMap((p) => {
@@ -138,6 +139,11 @@ export default async function Home() {
           },
         ]
       : []
+  })
+
+  const impactImages = impactCTA?.trailImages?.flatMap((t) => {
+    const url = mediaUrl(t.image)
+    return url ? [url] : []
   })
 
   const footerProps = footer
@@ -243,7 +249,12 @@ export default async function Home() {
           </div>
         </section>
       </div>
-      <ImpactCTA />
+      <ImpactCTA
+        headingTop={impactCTA?.headingTop ?? undefined}
+        copy={impactCTA?.copy ?? undefined}
+        impactWord={impactCTA?.impactWord ?? undefined}
+        images={impactImages}
+      />
       <section className="contact-section" id="contact">
         <div className="contact-section__inner">
           <ContactForm

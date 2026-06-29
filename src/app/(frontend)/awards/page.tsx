@@ -3,6 +3,8 @@ import path from 'path'
 
 import { getPayload } from 'payload'
 import config from '@payload-config'
+import { convertLexicalToHTML } from '@payloadcms/richtext-lexical/html'
+import type { SerializedEditorState } from '@payloadcms/richtext-lexical/lexical'
 import type { Media } from '@payload-types'
 
 import Header from '@/components/Header/Header'
@@ -75,9 +77,14 @@ export default async function AwardsRoute() {
         byYear.set(doc.year, group)
         groups.push(group)
       }
+      const toHtml = (data: unknown) =>
+        data
+          ? convertLexicalToHTML({ data: data as SerializedEditorState, disableContainer: true })
+          : undefined
       group.entries.push({
-        award: doc.award,
-        campaign: doc.campaign ?? undefined,
+        label: doc.label ?? undefined,
+        middleHtml: toHtml(doc.middle),
+        rightHtml: toHtml(doc.campaign),
         awardImage: resolveAwardImage(doc.awardImage),
         groupPhoto: resolveAwardImage(doc.groupPhoto),
       })

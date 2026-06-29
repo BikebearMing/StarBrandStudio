@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react"
 import TargetCursor from "@/components/TargetCursor/TargetCursor"
 import ParallaxImage from "@/components/ParallaxImage/ParallaxImage"
+import { useScrollJoin } from "@/lib/useScrollJoin"
 
 export type ProjectItem = {
     key: string
@@ -23,6 +24,17 @@ const DEFAULT_PROJECTS: ProjectItem[] = [
         hoverVideoUrl: "https://streamable.com/l/ulxzt8/mp4.mp4",
         copy: "A FASHION-FORWARD CAMPAIGN CELEBRATING SELF-EXPRESSION THROUGH WALKING, BLENDING ICONIC HOUSE CODES WITH STREET CULTURE.",
         tags: ["FASHION", "BRAND FILM"],
+    },
+    {
+        // 5th project — sits in the former empty middle slot of row 1.
+        // Replace the thumbnail/content via Payload (Featured Projects block)
+        // or edit this default directly.
+        key: "newproject",
+        title: "NEW PROJECT TITLE",
+        year: "2025",
+        thumbnail: "/works-bg.png",
+        copy: "ADD A SHORT PROJECT OVERVIEW HERE — WHAT THE CAMPAIGN WAS AND WHY IT WORKED.",
+        tags: ["CATEGORY", "DISCIPLINE"],
     },
     {
         key: "nike",
@@ -64,10 +76,8 @@ export default function Projects({
 }: ProjectsProps = {}) {
     const projects = items?.length ? items : DEFAULT_PROJECTS
     const byKey: Record<string, ProjectItem> = Object.fromEntries(projects.map((p) => [p.key, p]))
-    const get = (k: string) => byKey[k] ?? DEFAULT_PROJECTS.find((p) => p.key === k)!
     const sectionRef = useRef<HTMLElement>(null)
-    const gucciRef = useRef<HTMLVideoElement>(null)
-    const nikeRef = useRef<HTMLVideoElement>(null)
+    const { headingRef, beforeRef, afterRef } = useScrollJoin<HTMLHeadingElement, HTMLSpanElement>()
 
     const [hoveredId, setHoveredId] = useState<string | null>(null)
     const [cursorActive, setCursorActive] = useState(false)
@@ -76,16 +86,13 @@ export default function Projects({
     const hideAllRef = useRef<() => void>(() => {})
     const showVideoRef = useRef<(id: string) => void>(() => {})
 
-    const videoMap: Record<string, React.RefObject<HTMLVideoElement | null>> = {
-        gucci: gucciRef,
-        nike: nikeRef,
-    }
+    // One <video> per project that has a hover video; refs collected by key.
+    const videoRefs = useRef<Record<string, HTMLVideoElement | null>>({})
+    const videoProjects = projects.filter((p) => p.hoverVideoUrl)
 
     const showVideo = (id: string) => {
-        console.log("[2] mouse enter project", id)
         setHoveredId(id)
-        Object.entries(videoMap).forEach(([key, ref]) => {
-            const vid = ref.current
+        Object.entries(videoRefs.current).forEach(([key, vid]) => {
             if (!vid) return
             if (key === id) {
                 vid.style.opacity = "1"
@@ -101,11 +108,10 @@ export default function Projects({
 
     const hideAll = () => {
         setHoveredId(null)
-        Object.values(videoMap).forEach((ref) => {
-            const v = ref.current
-            if (!v) return
-            v.style.opacity = "0"
-            v.pause()
+        Object.values(videoRefs.current).forEach((vid) => {
+            if (!vid) return
+            vid.style.opacity = "0"
+            vid.pause()
         })
     }
     hideAllRef.current = hideAll
@@ -137,10 +143,6 @@ export default function Projects({
 
             const project = el?.closest(".project") as HTMLElement | null
             if (project !== lastProject) {
-                console.log("[1.5] scroll changed project under cursor", {
-                    from: (lastProject as HTMLElement | null)?.id,
-                    to: project?.id,
-                })
                 lastProject = project
                 if (project?.id) {
                     showVideoRef.current(project.id)
@@ -182,7 +184,6 @@ export default function Projects({
             ref={sectionRef}
             className="projects"
             onMouseEnter={(e) => {
-                console.log("[1] mouse enter section", { x: e.clientX, y: e.clientY })
                 cursorStartRef.current = { x: e.clientX, y: e.clientY }
                 setCursorActive(true)
             }}
@@ -201,100 +202,47 @@ export default function Projects({
                     initialY={cursorStartRef.current.y}
                 />
             )}
-            <h2 className="h1 amplitude dark">{headingBefore} <span className="text-highlight">{headingHighlight}</span></h2>
+            <h2 ref={headingRef} className="h1 amplitude dark projects-heading">
+                <span ref={beforeRef} className="projects-heading__word">{headingBefore}</span>{' '}
+                <span ref={afterRef} className="projects-heading__word text-highlight">{headingHighlight}</span>
+            </h2>
             <div className="wrapper">
                 <div className="video-bg">
                     <div className="video-wrapper">
-                        <video
-                            ref={gucciRef}
-                            data-gucci
-                            loop
-                            muted
-                            playsInline
-                            preload="auto"
-                            style={videoStyle}
-                            src={get("gucci").hoverVideoUrl}
-                        ></video>
-
-                        <video
-                            ref={nikeRef}
-                            data-nike
-                            loop
-                            muted
-                            playsInline
-                            preload="auto"
-                            style={videoStyle}
-                            src={get("nike").hoverVideoUrl}
-                        ></video>
+                        {videoProjects.map((p) => (
+                            <video
+                                key={p.key}
+                                ref={(el) => {
+                                    videoRefs.current[p.key] = el
+                                }}
+                                loop
+                                muted
+                                playsInline
+                                preload="auto"
+                                style={videoStyle}
+                                src={p.hoverVideoUrl}
+                            ></video>
+                        ))}
                     </div>
-
                 </div>
                 <div className="project-grid" onMouseLeave={hideAll}>
-                    <div
-                        id="gucci"
-                        className="project"
-                        onMouseEnter={() => showVideo("gucci")}
-                    >
-                        <div className="title-wrapper">
-                            <p className="body dark">{get("gucci").title}</p>
+                    {projects.map((p) => (
+                        <div
+                            key={p.key}
+                            id={p.key}
+                            className="project"
+                            onMouseEnter={() => showVideo(p.key)}
+                        >
+                            <div className="title-wrapper">
+                                <p className="body dark">{p.title}</p>
+                                <p className="body dark">{p.year}</p>
+                            </div>
 
-                            <p className="body dark">{get("gucci").year}</p>
+                            <div className="project-image cursor-target">
+                                <ParallaxImage src={p.thumbnail} alt="" style={imgStyle(p.key)} />
+                            </div>
                         </div>
-
-                        <div className="project-image cursor-target">
-                            <ParallaxImage src={get("gucci").thumbnail} alt="" style={imgStyle("gucci")} />
-                        </div>
-                    </div>
-
-                    <div className="empty-div"></div>
-
-                    <div
-                        id="nike"
-                        className="project"
-                        onMouseEnter={() => showVideo("nike")}
-                    >
-                        <div className="title-wrapper">
-                            <p className="body dark">{get("nike").title}</p>
-
-                            <p className="body dark">{get("nike").year}</p>
-                        </div>
-
-                        <div className="project-image cursor-target">
-                            <ParallaxImage src={get("nike").thumbnail} alt="" style={imgStyle("nike")} />
-                        </div>
-                    </div>
-
-                    <div
-                        id="snickers"
-                        className="project"
-                        onMouseEnter={() => showVideo("snickers")}
-                    >
-                        <div className="title-wrapper">
-                            <p className="body dark">{get("snickers").title}</p>
-
-                            <p className="body dark">{get("snickers").year}</p>
-                        </div>
-
-                        <div className="project-image cursor-target">
-                            <ParallaxImage src={get("snickers").thumbnail} alt="" style={imgStyle("snickers")} />
-                        </div>
-                    </div>
-
-                    <div
-                        id="mcdonalds"
-                        className="project"
-                        onMouseEnter={() => showVideo("mcdonalds")}
-                    >
-                        <div className="title-wrapper">
-                            <p className="body dark">{get("mcdonalds").title}</p>
-
-                            <p className="body dark">{get("mcdonalds").year}</p>
-                        </div>
-
-                        <div className="project-image cursor-target">
-                            <ParallaxImage src={get("mcdonalds").thumbnail} alt="" style={imgStyle("mcdonalds")} />
-                        </div>
-                    </div>
+                    ))}
 
                     <div className={`project-info${hoveredId ? ' is-visible' : ''}`} aria-hidden="true">
                         {hoveredId && byKey[hoveredId] && (
@@ -319,7 +267,6 @@ export default function Projects({
                             </>
                         )}
                     </div>
-
                 </div>
             </div>
         </section>

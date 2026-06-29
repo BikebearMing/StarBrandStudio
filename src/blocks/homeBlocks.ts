@@ -193,6 +193,28 @@ export const ServicesBlock: Block = {
   ],
 }
 
+export const ImpactCTABlock: Block = {
+  slug: 'impactCTA',
+  labels: { singular: 'Impact CTA', plural: 'Impact CTA' },
+  fields: [
+    { name: 'headingTop', type: 'text', defaultValue: 'LET’S', admin: { description: 'Top heading word.' } },
+    {
+      name: 'copy',
+      type: 'textarea',
+      defaultValue: 'TOGETHER, WE’LL BUILD SOMETHING\nWORTH TALKING ABOUT.',
+      admin: { description: 'Supporting line; use a line break for two lines.' },
+    },
+    { name: 'impactWord', type: 'text', defaultValue: 'CONNECT', admin: { description: 'Large word shown at the bottom.' } },
+    {
+      name: 'trailImages',
+      type: 'array',
+      labels: { singular: 'Trail Image', plural: 'Trail Images' },
+      admin: { description: 'Images that trail the cursor across this section. Leave empty to use the built-in defaults.' },
+      fields: [{ name: 'image', type: 'upload', relationTo: 'media', required: true }],
+    },
+  ],
+}
+
 export const homeBlocks: Block[] = [
   HeroBlock,
   WhatWeDoBlock,
@@ -201,4 +223,5 @@ export const homeBlocks: Block[] = [
   AwardsBlock,
   ProjectsBlock,
   ServicesBlock,
+  ImpactCTABlock,
 ]

@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { SplitText } from 'gsap/SplitText'
+import { useScrollJoin } from '@/lib/useScrollJoin'
 
 gsap.registerPlugin(SplitText)
 
@@ -45,6 +46,7 @@ export default function Services({ items }: { items?: ServiceItem[] } = {}) {
   const innersRef = useRef<HTMLElement[][]>([])
   const [active, setActive] = useState<number | null>(null)
   const prevActiveRef = useRef<number | null>(null)
+  const { headingRef, beforeRef, afterRef } = useScrollJoin<HTMLHeadingElement, HTMLSpanElement>()
 
   useEffect(() => {
     const list = listRef.current
@@ -131,9 +133,9 @@ export default function Services({ items }: { items?: ServiceItem[] } = {}) {
   return (
     <>
       <div className="services-heading">
-        <h2 className="h1 amplitude dark services-heading__title">
-          <span>FULL-FLEDGED </span>
-          <span className="text-highlight">SERVICES</span>
+        <h2 ref={headingRef} className="h1 amplitude dark services-heading__title">
+          <span ref={beforeRef} className="services-heading__word">FULL-FLEDGED</span>{' '}
+          <span ref={afterRef} className="services-heading__word text-highlight">SERVICES</span>
         </h2>
       </div>
 

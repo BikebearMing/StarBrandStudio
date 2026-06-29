@@ -82,6 +82,18 @@ function MobileWorks({ slides }: { slides: WorksSlide[] }) {
           </div>
         </div>
       </div>
+
+      {/* Mobile CTA: the per-slide overlay button is hidden on touch (see
+          globals.css); this one sits below the carousel and points at the
+          centered work. */}
+      <a className="custom-button works-showcase__cta" href={current.href ?? '#'}>
+        <svg className="custom-button-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <circle className="ring ring--outer" cx="12" cy="12" r="11" />
+          <circle className="ring ring--middle" cx="12" cy="12" r="7" />
+          <circle className="ring ring--inner" cx="12" cy="12" r="3" />
+        </svg>
+        <span>VIEW PROJECT</span>
+      </a>
     </section>
   )
 }

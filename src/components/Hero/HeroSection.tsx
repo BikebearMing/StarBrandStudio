@@ -148,8 +148,15 @@ export default function HeroSection({
       </h1>
       <CylinderCarousel onHoverChange={setIsHovering} slides={slides} />
       <h2 className="h1 amplitude dark">
-        <span className="line"><span className="line-inner">{subheading}&nbsp;</span></span>
-        <span className='black typewriter text-highlight'>{WORDS[0]}</span>
+        {/* The typewriter lives inside the masked line so the word flows with
+            the subheading (e.g. "…WANT TO LEAD" wraps together on mobile)
+            instead of dropping to its own line beside the inline-block. */}
+        <span className="line">
+          <span className="line-inner">
+            {subheading}&nbsp;
+            <span className="black typewriter text-highlight">{WORDS[0]}</span>
+          </span>
+        </span>
       </h2>
     </section>
   )

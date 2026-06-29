@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { onPreloaderDone } from '@/components/Preloader/Preloader'
 import { scrollState } from '@/lib/scroll'
 
@@ -26,6 +26,23 @@ function scrollToContact(): boolean {
 }
 
 export default function Header() {
+  const [menuOpen, setMenuOpen] = useState(false)
+
+  // While the mobile drawer is open, pause Lenis so the page behind doesn't
+  // scroll, and allow Escape to close it.
+  useEffect(() => {
+    if (!menuOpen) return
+    scrollState.lenis?.stop()
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setMenuOpen(false)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => {
+      window.removeEventListener('keydown', onKey)
+      scrollState.lenis?.start()
+    }
+  }, [menuOpen])
+
   // If we arrived here after a "Let's Talk" click on a page without a contact
   // form, scroll to the form once the preloader has finished. We wait for the
   // slide-up to complete (body scroll is locked until then) before scrolling.
@@ -41,6 +58,10 @@ export default function Header() {
 
   const handleContactClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault()
+    setMenuOpen(false)
+    // Closing the drawer re-starts Lenis via effect cleanup, but that runs after
+    // this handler — start it now so the scroll below isn't swallowed.
+    scrollState.lenis?.start()
     // On a page that already has the contact form, just scroll to it.
     if (scrollToContact()) return
     // Otherwise head home and scroll to its contact form after it loads.
@@ -53,11 +74,12 @@ export default function Header() {
   }
 
   return (
-    <header className="site-header">
+    <header className={`site-header${menuOpen ? ' is-menu-open' : ''}`}>
       <div className="wrapper">
         <a href="/" className="site-header__logo" aria-label="Star Brand Studio">
           <img src="/Logo.svg" alt="Star Brand Studio" />
         </a>
+        {/* Desktop nav — hidden on mobile, where the burger + drawer take over. */}
         <nav className="site-header__nav">
           <a href="/#contact" className="custom-button" onClick={handleContactClick}>
             <svg className="custom-button-icon" viewBox="0 0 24 24" aria-hidden="true">
@@ -69,6 +91,41 @@ export default function Header() {
           </a>
           <a href="/works" className="site-header__nav-link body">Works</a>
           <a href="/awards" className="site-header__nav-link body">Awards</a>
+        </nav>
+
+        {/* Mobile-only hamburger; toggles .is-menu-open on the header. */}
+        <button
+          type="button"
+          className="site-header__burger"
+          aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+          aria-expanded={menuOpen}
+          onClick={() => setMenuOpen((open) => !open)}
+        >
+          <span className="site-header__burger-line" />
+          <span className="site-header__burger-line" />
+          <span className="site-header__burger-line" />
+        </button>
+      </div>
+
+      {/* Right-side drawer. Clicking the scrim (outside the panel) closes it. */}
+      <div
+        className="site-menu"
+        onClick={(e) => {
+          if (e.target === e.currentTarget) setMenuOpen(false)
+        }}
+      >
+        <nav className="site-menu__panel" aria-label="Mobile menu">
+          <ul className="site-menu__list">
+            <li className="site-menu__item">
+              <a href="/works" className="site-menu__link h2" onClick={() => setMenuOpen(false)}>Works</a>
+            </li>
+            <li className="site-menu__item">
+              <a href="/awards" className="site-menu__link h2" onClick={() => setMenuOpen(false)}>Awards</a>
+            </li>
+            <li className="site-menu__item">
+              <a href="/#contact" className="site-menu__link h2" onClick={handleContactClick}>Let&rsquo;s Talk</a>
+            </li>
+          </ul>
         </nav>
       </div>
     </header>

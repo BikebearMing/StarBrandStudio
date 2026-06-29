@@ -4,8 +4,12 @@ import { useState } from 'react'
 import Link from 'next/link'
 
 export type AwardEntry = {
-  award: string
-  campaign?: string
+  /** Admin-only label; not rendered on the site. */
+  label?: string
+  /** Middle column (show title + category bullets), pre-rendered to HTML on the server. */
+  middleHtml?: string
+  /** Right column (campaign), pre-rendered to HTML on the server. */
+  rightHtml?: string
   awardImage?: string
   groupPhoto?: string
 }
@@ -28,8 +32,10 @@ const DEFAULT_GROUPS: AwardYear[] = [
     year: '2026',
     entries: [
       {
-        award: 'BEST MARKETING CAMPAIGN FOR A NEWS BRAND – SILVER',
-        campaign: 'POWERING THE FUTURE IN PARTNERSHIP WITH TENAGA NASIONAL BERHAD',
+        middleHtml:
+          '<p><strong>Wan-Ifra Digital Media Awards Asia 2026</strong></p><ul><li>Best Marketing Campaign for a News Brand - SILVER</li></ul>',
+        rightHtml:
+          '<p>Campaign: Powering The Future in partnership with Tenaga Nasional Berhad</p>',
       },
     ],
   },
@@ -37,12 +43,14 @@ const DEFAULT_GROUPS: AwardYear[] = [
     year: '2025',
     entries: [
       {
-        award: 'DIGITAL PUBLISHER OF THE YEAR – SILVER',
-        campaign: 'THE STAR ESG: BRIDGING ESG KNOWLEDGE INTO ACTION',
+        middleHtml:
+          '<p><strong>MDA d-Awards 2025</strong></p><ul><li>Digital Publisher Of The Year - SILVER</li></ul>',
+        rightHtml: '<p>The Star ESG: Bridging ESG Knowledge Into Action</p>',
       },
       {
-        award: 'GREEN JOURNALISM AWARD',
-        campaign: 'THE STAR ESG PUBLICATION',
+        middleHtml:
+          '<p><strong>Waste Management Association of Malaysia (WMAM)</strong></p><ul><li>Green Journalism Award</li></ul>',
+        rightHtml: '<p>The Star ESG Publication</p>',
       },
     ],
   },
@@ -50,22 +58,28 @@ const DEFAULT_GROUPS: AwardYear[] = [
     year: '2024',
     entries: [
       {
-        award: 'BEST USE OF AI IN REVENUE STRATEGY – SILVER',
-        campaign: '#JOMSAPOT BELILOKAL GEN AI-LED INTEGRATED MARKETING CAMPAIGN',
+        middleHtml:
+          '<p><strong>Wan-Ifra Digital Media Awards Asia 2024</strong></p><ul><li>Best Use of AI in Revenue Strategy - SILVER</li></ul>',
+        rightHtml:
+          '<p>Campaign: #JomSapot BeliLokal Gen AI- Led Integrated Marketing Campaign</p>',
       },
       {
-        award: 'BEST B2B MARKETING CAMPAIGN – SILVER',
-        campaign: '#JOMSAPOT BELILOKAL GEN AI-LED INTEGRATED MARKETING CAMPAIGN',
+        middleHtml:
+          '<p><strong>MDA d-Awards 2024</strong></p><ul><li>Best B2B Marketing Campaign - SILVER</li><li>Best Use of Digital Marketing Innovation - SILVER</li></ul>',
+        rightHtml:
+          '<p>Campaign: #JomSapot BeliLokal Gen AI- Led Integrated Marketing Campaign</p>',
       },
       {
-        award: 'BEST USE OF DIGITAL MARKETING INNOVATION – SILVER',
-        campaign: '#JOMSAPOT BELILOKAL GEN AI-LED INTEGRATED MARKETING CAMPAIGN',
+        middleHtml:
+          '<p><strong>PMAA Dragons of Asia 2024</strong></p><ul><li>Best Digital Campaign 2024 - BRONZE</li></ul>',
+        rightHtml:
+          '<p>Campaign: #JomSapot BeliLokal Gen AI- Led Integrated Marketing Campaign</p>',
       },
       {
-        award: 'BEST DIGITAL CAMPAIGN 2024 – BRONZE',
-      },
-      {
-        award: 'BEST DIGITAL CAMPAIGN 2024 – GOLD',
+        middleHtml:
+          '<p><strong>PMAA Dragons of Malaysia 2024</strong></p><ul><li>Best Digital Campaign 2024 - GOLD</li></ul>',
+        rightHtml:
+          '<p>Campaign: #JomSapot BeliLokal Gen AI- Led Integrated Marketing Campaign</p>',
       },
     ],
   },
@@ -73,9 +87,10 @@ const DEFAULT_GROUPS: AwardYear[] = [
     year: '2023',
     entries: [
       {
-        award: 'BEST NATIVE ADVERTISING/SPONSORED CONTENT CAMPAIGN GOLD',
-        campaign:
-          'SIME DARBY PROPERTY – ELMINA RAINFOREST KNOWLEDGE CENTRE (ERKC) SUSTAINABILITY CAMPAIGN',
+        middleHtml:
+          '<p><strong>WAN-IFRA Digital Media Awards Asia 2023</strong></p><ul><li>Best Native Advertising/Sponsored Content Campaign - GOLD</li></ul>',
+        rightHtml:
+          '<p>Campaign: Sime Darby Property – Elmina Rainforest Knowledge Centre (ERKC) Sustainability Campaign</p>',
       },
     ],
   },
@@ -97,19 +112,21 @@ export default function AwardsPage({ eyebrow, recognitions, years }: Props) {
         <nav className="body breadcrumb" aria-label="Breadcrumb">
           <Link href="/">HOME</Link> / <span>{title}</span>
         </nav>
-        {/* Banner mirrors the home "Awards & Recognition" strip, minus the
-            button and the "award-winning ideas…" caption. */}
+        {/* Banner mirrors the home "Awards & Recognition" strip: the caption
+            shares the bottom row with the giant "& RECOGNITIONS" line. */}
         <div className="awards-page__banner">
           <h1 className="h1 awards-page__title">
             <span className="text-highlight">{title}</span>
           </h1>
-          <p className="h1 amplitude amp-mask awards-page__rec">
-            {recognitions ?? DEFAULT_RECOGNITIONS}
-          </p>
+          <div className="awards-page__banner-bottom">
+            <p className="body awards-page__caption">
+              Award-winning ideas, grounded in the craft of storytelling.
+            </p>
+            <p className="h1 amplitude amp-mask awards-page__rec">
+              {recognitions ?? DEFAULT_RECOGNITIONS}
+            </p>
+          </div>
         </div>
-        <p className="body awards-page__caption">
-          Award-winning ideas, grounded in the craft of storytelling.
-        </p>
       </div>
 
       <div className="awards-page__list">
@@ -135,8 +152,14 @@ export default function AwardsPage({ eyebrow, recognitions, years }: Props) {
                     onMouseEnter={() => setActive({ g, r })}
                     onMouseLeave={() => setActive(null)}
                   >
-                    <p className="body awards-page__award">{entry.award}</p>
-                    <p className="body awards-page__campaign">{entry.campaign}</p>
+                    <div
+                      className="body awards-page__middle"
+                      dangerouslySetInnerHTML={{ __html: entry.middleHtml ?? '' }}
+                    />
+                    <div
+                      className="body awards-page__right"
+                      dangerouslySetInnerHTML={{ __html: entry.rightHtml ?? '' }}
+                    />
                   </li>
                 ))}
               </ul>

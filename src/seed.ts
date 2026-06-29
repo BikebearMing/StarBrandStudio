@@ -136,6 +136,7 @@ async function run() {
       headingHighlight: 'PROJECTS',
       items: [
         { key: 'gucci', title: 'GUCCI WALK YOUR WAY', year: '2025', thumbnail: gucciThumb, hoverVideoUrl: 'https://streamable.com/l/ulxzt8/mp4.mp4', copy: 'A FASHION-FORWARD CAMPAIGN CELEBRATING SELF-EXPRESSION THROUGH WALKING, BLENDING ICONIC HOUSE CODES WITH STREET CULTURE.', tags: [{ tag: 'FASHION' }, { tag: 'BRAND FILM' }] },
+        { key: 'newproject', title: 'NEW PROJECT TITLE', year: '2025', thumbnail: worksBg, copy: 'ADD A SHORT PROJECT OVERVIEW HERE — WHAT THE CAMPAIGN WAS AND WHY IT WORKED.', tags: [{ tag: 'CATEGORY' }, { tag: 'DISCIPLINE' }] },
         { key: 'nike', title: 'NIKE EVERYTHING IS POSSIBLE', year: '2025', thumbnail: nikeThumb, hoverVideoUrl: 'https://streamable.com/l/xx3sll/mp4-high.mp4', copy: "A BOLD MANIFESTO PROVING THAT NO LIMIT IS FIXED — TURNING ATHLETES' DOUBT INTO PROOF THROUGH UNFLINCHING STORYTELLING.", tags: [{ tag: 'SPORTS' }, { tag: 'VIDEO PRODUCTION & MEDIA' }] },
         { key: 'snickers', title: "SNICKERS YOU'RE NOT YOU WHEN YOU'RE HUNGRY", year: '2025', thumbnail: snickersThumb, copy: 'A WITTY INTEGRATED CAMPAIGN LEANING INTO THE INSIGHT THAT HUNGER CHANGES WHO YOU ARE — BUILT FOR SOCIAL AND OUT-OF-HOME.', tags: [{ tag: 'FMCG' }, { tag: 'INTEGRATED CAMPAIGN' }] },
         { key: 'mcdonalds', title: "MCDONALD'S I'M LOVIN' IT", year: '2025', thumbnail: mcdThumb, copy: 'AN INTEGRATED BRAND CAMPAIGN DESIGNED TO SPARK AWARENESS, TURN AUDIENCES INTO ADVOCATES ACROSS DIGITAL TOUCHPOINTS.', tags: [{ tag: 'F&B' }, { tag: 'DIGITAL & SOCIAL' }] },
@@ -151,6 +152,15 @@ async function run() {
         { title: 'DIGITAL EXPERIENCES', copy: 'Websites, apps, interactive campaigns. We design and build digital products that carry the same narrative discipline as editorial work.' },
         { title: 'MEDIA STRATEGY & BUYING', copy: 'Data-led planning across paid, owned and earned — designed to put the right message in front of the right people at the moment it matters.' },
       ],
+    },
+    {
+      blockType: 'impactCTA',
+      headingTop: 'LET’S',
+      copy: 'TOGETHER, WE’LL BUILD SOMETHING\nWORTH TALKING ABOUT.',
+      impactWord: 'CONNECT',
+      // Upload your own trail images in the admin; empty falls back to the
+      // component's built-in defaults.
+      trailImages: [],
     },
   ]
 
@@ -202,71 +212,139 @@ async function run() {
     },
   })
 
+  // Build minimal Lexical rich-text values for the awards `middle` / `right`
+  // WYSIWYG columns. Editors edit these with the admin WYSIWYG afterwards.
+  /* eslint-disable @typescript-eslint/no-explicit-any */
+  const rtText = (text: string, bold = false): any => ({
+    type: 'text',
+    text,
+    format: bold ? 1 : 0,
+    detail: 0,
+    mode: 'normal',
+    style: '',
+    version: 1,
+  })
+  const rtPara = (children: any[]): any => ({
+    type: 'paragraph',
+    format: '',
+    indent: 0,
+    version: 1,
+    direction: 'ltr',
+    textFormat: 0,
+    children,
+  })
+  const rtRoot = (children: any[]): any => ({
+    root: { type: 'root', format: '', indent: 0, version: 1, direction: 'ltr', children },
+  })
+  // Middle column: bold show title followed by the award categories as bullets.
+  const middleRT = (title: string, categories: string[]) =>
+    rtRoot([
+      rtPara([rtText(title, true)]),
+      {
+        type: 'list',
+        listType: 'bullet',
+        tag: 'ul',
+        start: 1,
+        format: '',
+        indent: 0,
+        version: 1,
+        direction: 'ltr',
+        children: categories.map((t, i) => ({
+          type: 'listitem',
+          value: i + 1,
+          format: '',
+          indent: 0,
+          version: 1,
+          direction: 'ltr',
+          children: [rtText(t)],
+        })),
+      },
+    ])
+  // Right column: a single paragraph (the campaign).
+  const rightRT = (text: string) => rtRoot([rtPara([rtText(text)])])
+  /* eslint-enable @typescript-eslint/no-explicit-any */
+
   console.log('Seeding awards collection…')
   // Each award win is its own document in the `awards` collection (a custom-post-
   // type style, like `works`). They render in the order created here, grouped by
   // year on /awards; editors can drag to reorder in the admin (the collection is
   // `orderable`). Idempotent — matched by year + award text.
+  const JOMSAPOT = 'Campaign: #JomSapot BeliLokal Gen AI- Led Integrated Marketing Campaign'
   const awardEntries = [
     {
       year: '2026',
-      award: 'BEST MARKETING CAMPAIGN FOR A NEWS BRAND – SILVER',
-      campaign: 'POWERING THE FUTURE IN PARTNERSHIP WITH TENAGA NASIONAL BERHAD',
+      label: 'WAN-IFRA 2026 — Best Marketing Campaign for a News Brand',
+      middle: middleRT('Wan-Ifra Digital Media Awards Asia 2026', [
+        'Best Marketing Campaign for a News Brand - SILVER',
+      ]),
+      campaign: rightRT('Campaign: Powering The Future in partnership with Tenaga Nasional Berhad'),
       awardImage: await img('awards/2026-best-marketing-trophy.webp'),
       groupPhoto: await img('awards/2026-best-marketing-group.jpg'),
     },
     {
       year: '2025',
-      award: 'DIGITAL PUBLISHER OF THE YEAR – SILVER',
-      campaign: 'THE STAR ESG: BRIDGING ESG KNOWLEDGE INTO ACTION',
+      label: 'MDA d-Awards 2025 — Digital Publisher of the Year',
+      middle: middleRT('MDA d-Awards 2025', ['Digital Publisher Of The Year - SILVER']),
+      campaign: rightRT('The Star ESG: Bridging ESG Knowledge Into Action'),
       awardImage: await img('awards/2025-digital-publisher-trophy.webp'),
       groupPhoto: await img('awards/2025-digital-publisher-group.jpg'),
     },
     {
       year: '2025',
-      award: 'GREEN JOURNALISM AWARD',
-      campaign: 'THE STAR ESG PUBLICATION',
+      label: 'WMAM 2025 — Green Journalism Award',
+      middle: middleRT('Waste Management Association of Malaysia (WMAM)', [
+        'Green Journalism Award',
+      ]),
+      campaign: rightRT('The Star ESG Publication'),
       awardImage: await img('awards/2025-green-journalism-trophy.webp'),
       groupPhoto: await img('awards/2025-green-journalism-group.jpg'),
     },
     {
       year: '2024',
-      award: 'BEST USE OF AI IN REVENUE STRATEGY – SILVER',
-      campaign: '#JOMSAPOT BELILOKAL GEN AI-LED INTEGRATED MARKETING CAMPAIGN',
+      label: 'WAN-IFRA 2024 — Best Use of AI in Revenue Strategy',
+      middle: middleRT('Wan-Ifra Digital Media Awards Asia 2024', [
+        'Best Use of AI in Revenue Strategy - SILVER',
+      ]),
+      campaign: rightRT(JOMSAPOT),
       awardImage: await img('awards/2024-ai-revenue-trophy.webp'),
       groupPhoto: await img('awards/2024-ai-revenue-group.jpg'),
     },
     {
       year: '2024',
-      award: 'BEST B2B MARKETING CAMPAIGN – SILVER',
-      campaign: '#JOMSAPOT BELILOKAL GEN AI-LED INTEGRATED MARKETING CAMPAIGN',
+      label: 'MDA d-Awards 2024 — B2B & Digital Marketing Innovation',
+      middle: middleRT('MDA d-Awards 2024', [
+        'Best B2B Marketing Campaign - SILVER',
+        'Best Use of Digital Marketing Innovation - SILVER',
+      ]),
+      campaign: rightRT(JOMSAPOT),
       awardImage: await img('awards/2024-b2b-trophy.webp'),
       groupPhoto: await img('awards/2024-mda-group.jpg'),
     },
     {
       year: '2024',
-      award: 'BEST USE OF DIGITAL MARKETING INNOVATION – SILVER',
-      campaign: '#JOMSAPOT BELILOKAL GEN AI-LED INTEGRATED MARKETING CAMPAIGN',
-      awardImage: await img('awards/2024-digital-innovation-trophy.webp'),
-      groupPhoto: await img('awards/2024-mda-group.jpg'),
-    },
-    {
-      year: '2024',
-      award: 'BEST DIGITAL CAMPAIGN 2024 – BRONZE',
+      label: 'PMAA Dragons of Asia 2024 — Best Digital Campaign (Bronze)',
+      middle: middleRT('PMAA Dragons of Asia 2024', ['Best Digital Campaign 2024 - BRONZE']),
+      campaign: rightRT(JOMSAPOT),
       awardImage: await img('awards/2024-dragons-bronze-trophy.webp'),
       groupPhoto: await img('awards/2024-dragons-bronze-group.jpg'),
     },
     {
       year: '2024',
-      award: 'BEST DIGITAL CAMPAIGN 2024 – GOLD',
+      label: 'PMAA Dragons of Malaysia 2024 — Best Digital Campaign (Gold)',
+      middle: middleRT('PMAA Dragons of Malaysia 2024', ['Best Digital Campaign 2024 - GOLD']),
+      campaign: rightRT(JOMSAPOT),
       awardImage: await img('awards/2024-dragons-gold-trophy.webp'),
       groupPhoto: await img('awards/2024-dragons-gold-group.jpg'),
     },
     {
       year: '2023',
-      award: 'BEST NATIVE ADVERTISING/SPONSORED CONTENT CAMPAIGN GOLD',
-      campaign:
-        'SIME DARBY PROPERTY – ELMINA RAINFOREST KNOWLEDGE CENTRE (ERKC) SUSTAINABILITY CAMPAIGN',
+      label: 'WAN-IFRA 2023 — Best Native Advertising/Sponsored Content',
+      middle: middleRT('WAN-IFRA Digital Media Awards Asia 2023', [
+        'Best Native Advertising/Sponsored Content Campaign - GOLD',
+      ]),
+      campaign: rightRT(
+        'Campaign: Sime Darby Property – Elmina Rainforest Knowledge Centre (ERKC) Sustainability Campaign',
+      ),
       awardImage: await img('awards/2023-native-content-trophy.webp'),
       groupPhoto: await img('awards/2023-native-content-group.jpg'),
     },
@@ -275,7 +353,7 @@ async function run() {
   for (const entry of awardEntries) {
     const existing = await payload.find({
       collection: 'awards',
-      where: { and: [{ year: { equals: entry.year } }, { award: { equals: entry.award } }] },
+      where: { and: [{ year: { equals: entry.year } }, { label: { equals: entry.label } }] },
       limit: 1,
     })
     if (existing.docs[0]) {
@@ -285,16 +363,16 @@ async function run() {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       await payload.create({ collection: 'awards', data: entry as any })
     }
-    console.log(`  ✓ ${entry.year} — ${entry.award}`)
+    console.log(`  ✓ ${entry.year} — ${entry.label}`)
   }
 
   // Remove any awards no longer in the seed set, so re-seeding stays authoritative.
-  const keepAwardKeys = new Set(awardEntries.map((e) => `${e.year}|||${e.award}`))
+  const keepAwardKeys = new Set(awardEntries.map((e) => `${e.year}|||${e.label}`))
   const staleAwards = await payload.find({ collection: 'awards', limit: 200 })
   for (const doc of staleAwards.docs) {
-    if (!keepAwardKeys.has(`${doc.year}|||${doc.award}`)) {
+    if (!keepAwardKeys.has(`${doc.year}|||${doc.label}`)) {
       await payload.delete({ collection: 'awards', id: doc.id })
-      console.log(`  ✗ removed ${doc.year} — ${doc.award}`)
+      console.log(`  ✗ removed ${doc.year} — ${doc.label}`)
     }
   }
 
