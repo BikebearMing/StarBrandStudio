@@ -19,6 +19,7 @@ const DEFAULT_DIRECTORY: FooterLink[] = [
   { label: 'HOME', href: '/' },
   { label: 'WORKS', href: '/works' },
   { label: 'AWARDS', href: '/awards' },
+  { label: 'OUR STORY', href: '/our-story' },
 ]
 const DEFAULT_SOCIALS: FooterSocial[] = [
   { label: 'Facebook', href: '#', icon: '/footer/facebook.svg' },

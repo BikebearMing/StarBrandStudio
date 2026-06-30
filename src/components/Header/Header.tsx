@@ -91,6 +91,7 @@ export default function Header() {
           </a>
           <a href="/works" className="site-header__nav-link body">Works</a>
           <a href="/awards" className="site-header__nav-link body">Awards</a>
+          <a href="/our-story" className="site-header__nav-link body">Our Story</a>
         </nav>
 
         {/* Mobile-only hamburger; toggles .is-menu-open on the header. */}
@@ -121,6 +122,9 @@ export default function Header() {
             </li>
             <li className="site-menu__item">
               <a href="/awards" className="site-menu__link h2" onClick={() => setMenuOpen(false)}>Awards</a>
+            </li>
+            <li className="site-menu__item">
+              <a href="/our-story" className="site-menu__link h2" onClick={() => setMenuOpen(false)}>Our Story</a>
             </li>
             <li className="site-menu__item">
               <a href="/#contact" className="site-menu__link h2" onClick={handleContactClick}>Let&rsquo;s Talk</a>

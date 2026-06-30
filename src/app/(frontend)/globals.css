@@ -1309,6 +1309,252 @@ section.pillars-section .wrapper {
     display: block;
 }
 
+/* ── Our Story — top hero ───────────────────────────────────────────────
+   178px top offset (→ 12.361vw) and 1034px tall (→ 71.806vw) on the 1440 base.
+   The image is pinned full-width at the bottom; JS transforms it on scroll. */
+.story-hero {
+    position: relative;
+    height: 71.806vw;
+    padding: 12.361vw var(--sidepadding-xs) 0 var(--sidepadding-xs);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    color: #ffffff;
+}
+
+/* Lines stack in a flex column; each line masks-up via .line / .line-inner. */
+.story-hero__title-inner {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5vw;
+}
+
+/* Keep the heading + breadcrumb above the image. */
+.story-hero__title,
+.story-hero .breadcrumb {
+    position: relative;
+    z-index: 2;
+}
+
+/* Full-bleed image pinned to the bottom; transform-origin centre so the
+   scroll-driven scale grows from the middle. */
+.story-hero__media {
+    position: relative;
+    z-index: 1; /* behind the heading/breadcrumb (z-index 2) */
+    margin-top: auto;
+    margin-left: calc(-1 * var(--sidepadding-xs));
+    width: 100vw;
+    height: 36.042vw; /* 519px @1440 */
+    transform-origin: center center;
+    will-change: transform;
+}
+
+.story-hero__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* ── Our Story — section 1 ──────────────────────────────────────────────
+   Dark section: transparent over the site's black body + grain, white text.
+   Typography comes from the global .h3 / .body classes; these rules only do
+   layout + color. */
+.our-story {
+    position: relative;
+    background: transparent;
+    color: #ffffff;
+    /* No bottom padding — the gap to section 2 is owned by .our-difference's
+       top padding (161px → 11.181vw @1440). */
+    padding: 9.72vw var(--sidepadding-xs) 0 var(--sidepadding-xs);
+    overflow: hidden;
+}
+
+/* Top content stacks top-to-bottom: title on top, the two body copies below
+   and pushed to the right. */
+.our-story__intro {
+    display: flex;
+    flex-direction: column;
+}
+
+.our-story__title {
+    max-width: 55%;
+}
+
+.our-story__copy {
+    align-self: flex-end;
+    width: 50%;
+    margin-top: 3.5vw;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2vw;
+}
+
+/* Angled image marquee. Sits 85.87px (→ 5.963vw @1440) below the top copy.
+   Reuses the homepage carousel scroll mechanism; the JS translates the track. */
+.our-story__marquee {
+    margin-top: 5.963vw;
+    width: 112%;
+    margin-left: -6%;
+    transform: rotate(4deg);
+    transform-origin: center;
+}
+
+.our-story__track {
+    display: flex;
+    gap: 2.083vw; /* 30px @1440 */
+    will-change: transform;
+}
+
+.our-story__slide {
+    flex-shrink: 0;
+    width: 45.634vw; /* 657.134px @1440 */
+    height: 24.378vw; /* 351.05px @1440 */
+    overflow: hidden;
+}
+
+.our-story__slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* ── Our Story — section 2: "What makes us different" ───────────────────
+   Typography from .h2 / .h3 / .body; these rules only do layout + color. */
+.our-difference {
+    position: relative;
+    background: transparent;
+    color: #ffffff;
+    /* Top padding = the 161px gap from section 1 (→ 11.181vw @1440).
+       Medium side padding (--sidepadding-xm). */
+    padding: 11.181vw var(--sidepadding-xm) 7vw var(--sidepadding-xm);
+    overflow: hidden;
+}
+
+.our-difference__title {
+    margin-bottom: 3.5vw;
+}
+
+/* inline-block so the clip-path typewriter wipe clips to the text box. */
+.our-difference__title-inner {
+    display: inline-block;
+    will-change: clip-path;
+}
+
+/* Inverted highlight box. Sets only color/state — inherits the .h2 font. */
+.our-difference__highlight {
+    background: #ffffff;
+    color: #000000;
+    padding: 0 0.12em;
+}
+
+.our-difference__cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.25vw; /* 18px @1440 */
+}
+
+.our-difference__card {
+    background: var(--red);
+    color: #ffffff;
+    height: 26.62vw; /* 383.326px @1440 */
+    padding: 1.94vw 1.39vw;
+    display: flex;
+    flex-direction: column;
+}
+
+.our-difference__card-title {
+    margin-bottom: 1.67vw;
+}
+
+/* Push the body to the bottom of the card; title stays pinned at the top. */
+.our-difference__card-body {
+    margin-top: auto;
+}
+
+/* ── Our Story page — mobile ────────────────────────────────────────────
+   The three bespoke sections are laid out at desktop vw proportions; reflow
+   them for narrow screens. (The cloned CTA / form / footer keep their own
+   existing mobile styles.) */
+@media (max-width: 768px) {
+    /* Top hero — image stays full-width at the bottom. The hero animations are
+       disabled on mobile (see StoryHero.tsx), so reveal the typewriter that's
+       otherwise hidden by its initial clip-path. */
+    .story-hero {
+        height: auto;
+        padding: 32vw 9vw 0 9vw;
+    }
+
+    .story-hero .typewriter {
+        clip-path: none;
+    }
+
+    .story-hero__title {
+        max-width: 100%;
+    }
+
+    .story-hero__title-inner {
+        gap: 1.5vw;
+    }
+
+    .story-hero__media {
+        margin-left: -9vw;
+        height: 72vw;
+        margin-top: 6vw;
+    }
+
+    /* Section 1 — stack title + copy full width, single-column copy. */
+    .our-story {
+        padding: 26vw 9vw 0 9vw;
+    }
+
+    .our-story__title {
+        max-width: 100%;
+    }
+
+    .our-story__copy {
+        align-self: stretch;
+        width: 100%;
+        grid-template-columns: 1fr;
+        gap: 6vw;
+        margin-top: 7vw;
+    }
+
+    .our-story__slide {
+        width: 72vw;
+        height: 42vw;
+    }
+
+    .our-story__track {
+        gap: 4vw;
+    }
+
+    /* Section 2 — single-column cards, content-height. */
+    .our-difference {
+        padding: 30vw 9vw 10vw 9vw;
+    }
+
+    .our-difference__title {
+        margin-bottom: 8vw;
+    }
+
+    .our-difference__cards {
+        grid-template-columns: 1fr;
+        gap: 4vw;
+    }
+
+    .our-difference__card {
+        height: auto;
+        padding: 8vw 7vw;
+    }
+
+    .our-difference__card-title {
+        margin-bottom: 6vw;
+    }
+}
+
 /* Footer */
 .custom-footer {
     background-color: var(--red);
