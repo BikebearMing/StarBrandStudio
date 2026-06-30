@@ -1320,6 +1320,10 @@ section.pillars-section .wrapper {
     flex-direction: column;
     overflow: hidden;
     color: #ffffff;
+
+    & > .h1,.breadcrumb {
+        padding-left: var(--sidepadding-xm);
+    }
 }
 
 /* Lines stack in a flex column; each line masks-up via .line / .line-inner. */
@@ -1345,7 +1349,7 @@ section.pillars-section .wrapper {
     margin-top: auto;
     margin-left: calc(-1 * var(--sidepadding-xs));
     width: 100vw;
-    height: 36.042vw; /* 519px @1440 */
+    height: 42.042vw; /* 519px @1440 */
     transform-origin: center center;
     will-change: transform;
 }
@@ -1353,6 +1357,7 @@ section.pillars-section .wrapper {
 .story-hero__media img {
     width: 100%;
     height: 100%;
+    object-position: 0% 29%;
     object-fit: cover;
     display: block;
 }
@@ -1367,7 +1372,7 @@ section.pillars-section .wrapper {
     color: #ffffff;
     /* No bottom padding — the gap to section 2 is owned by .our-difference's
        top padding (161px → 11.181vw @1440). */
-    padding: 9.72vw var(--sidepadding-xs) 0 var(--sidepadding-xs);
+    padding: 9.72vw var(--sidepadding-xm) 0 var(--sidepadding-xm);
     overflow: hidden;
 }
 
