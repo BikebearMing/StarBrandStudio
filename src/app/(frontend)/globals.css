@@ -1688,7 +1688,7 @@ section.projects {
 
     & .wrapper {
         width: 100%;
-        min-height: 80lvh;
+        min-height: 95lvh;
         position: relative;
 
         & .video-wrapper {
