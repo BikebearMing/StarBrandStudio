@@ -100,10 +100,12 @@ export interface Config {
   globals: {
     footer: Footer;
     awardsPage: AwardsPage;
+    ourStoryPage: OurStoryPage;
   };
   globalsSelect: {
     footer: FooterSelect<false> | FooterSelect<true>;
     awardsPage: AwardsPageSelect<false> | AwardsPageSelect<true>;
+    ourStoryPage: OurStoryPageSelect<false> | OurStoryPageSelect<true>;
   };
   locale: null;
   widgets: {
@@ -1367,6 +1369,55 @@ export interface AwardsPage {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ourStoryPage".
+ */
+export interface OurStoryPage {
+  id: number;
+  hero?: {
+    line1?: string | null;
+    line2?: string | null;
+    /**
+     * Shown in the white highlight box on its own line.
+     */
+    highlight?: string | null;
+    /**
+     * Full-width image that scales into place on scroll.
+     */
+    image?: (number | null) | Media;
+  };
+  intro?: {
+    title?: string | null;
+    copy1?: string | null;
+    copy2?: string | null;
+    /**
+     * Angled scrolling strip under the intro copy.
+     */
+    marquee?:
+      | {
+          image: number | Media;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  difference?: {
+    titlePre?: string | null;
+    /**
+     * Shown in the inverted highlight box.
+     */
+    titleHighlight?: string | null;
+    cards?:
+      | {
+          title: string;
+          body: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "footer_select".
  */
 export interface FooterSelect<T extends boolean = true> {
@@ -1407,6 +1458,49 @@ export interface FooterSelect<T extends boolean = true> {
 export interface AwardsPageSelect<T extends boolean = true> {
   eyebrow?: T;
   heading?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ourStoryPage_select".
+ */
+export interface OurStoryPageSelect<T extends boolean = true> {
+  hero?:
+    | T
+    | {
+        line1?: T;
+        line2?: T;
+        highlight?: T;
+        image?: T;
+      };
+  intro?:
+    | T
+    | {
+        title?: T;
+        copy1?: T;
+        copy2?: T;
+        marquee?:
+          | T
+          | {
+              image?: T;
+              id?: T;
+            };
+      };
+  difference?:
+    | T
+    | {
+        titlePre?: T;
+        titleHighlight?: T;
+        cards?:
+          | T
+          | {
+              title?: T;
+              body?: T;
+              id?: T;
+            };
+      };
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

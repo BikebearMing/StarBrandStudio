@@ -35,9 +35,17 @@ const DEFAULT_CARDS: Card[] = [
   },
 ]
 
-type OurDifferenceProps = { cards?: Card[] }
+type OurDifferenceProps = {
+  cards?: Card[]
+  titlePre?: string
+  titleHighlight?: string
+}
 
-export default function OurDifference({ cards }: OurDifferenceProps = {}) {
+export default function OurDifference({
+  cards,
+  titlePre = 'WHAT MAKES US',
+  titleHighlight = 'DIFFERENT',
+}: OurDifferenceProps = {}) {
   const CARDS = cards?.length ? cards : DEFAULT_CARDS
   const titleRef = useRef<HTMLSpanElement>(null)
 
@@ -90,8 +98,8 @@ export default function OurDifference({ cards }: OurDifferenceProps = {}) {
     <section className="our-difference">
       <h2 className="h2 our-difference__title">
         <span className="our-difference__title-inner" ref={titleRef}>
-          WHAT MAKES US{' '}
-          <span className="our-difference__highlight">DIFFERENT</span>
+          {titlePre}{' '}
+          <span className="our-difference__highlight">{titleHighlight}</span>
         </span>
       </h2>
 

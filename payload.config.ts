@@ -12,6 +12,7 @@ import { Works } from './src/collections/Works'
 import { Awards } from './src/collections/Awards'
 import { Footer } from './src/globals/Footer'
 import { AwardsPage } from './src/globals/AwardsPage'
+import { OurStoryPage } from './src/globals/OurStoryPage'
 import sharp from 'sharp'
 import path from 'path'
 import { fileURLToPath } from 'url'
@@ -27,7 +28,7 @@ export default buildConfig({
     },
   },
   collections: [Users, Media, Pages, Works, Awards],
-  globals: [Footer, AwardsPage],
+  globals: [Footer, AwardsPage, OurStoryPage],
   editor: lexicalEditor(),
   // Required by Payload for image resizing (Media imageSizes) and admin thumbnails.
   sharp,
@@ -35,6 +36,10 @@ export default buildConfig({
     pool: {
       connectionString: process.env.DATABASE_URI || '',
     },
+    // Migrations live here. In dev, Payload still auto-pushes schema changes
+    // (fast iteration); in production push is off, so `payload migrate` applies
+    // committed migrations to the prod DB instead. See src/migrations.
+    migrationDir: path.resolve(dirname, 'src/migrations'),
   }),
   secret: process.env.PAYLOAD_SECRET || 'star-brand-studio-local-secret',
   // Email delivery via Resend — only active when RESEND_API_KEY is set.

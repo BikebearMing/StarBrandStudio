@@ -20,6 +20,9 @@ const TYPE_DURATION = 0.8
 
 // Placeholder still — swap for the real production image.
 const DEFAULT_IMAGE = '/works/rhb-masthead.jpg'
+const DEFAULT_LINE1 = 'WE TELL STORIES'
+const DEFAULT_LINE2 = 'FOR A LIVING.'
+const DEFAULT_HIGHLIGHT = 'THIS ONE’S OURS.'
 
 // Initial (scroll = 0) transform of the image: scaled down, nudged right + up.
 // Eyeballed from the design — easy to tune.
@@ -27,9 +30,19 @@ const START_SCALE = 0.42
 const START_X = 0 // vw, rightward (0 = centred)
 const START_Y = -44 // vw, upward
 
-type Props = { image?: string }
+type Props = {
+  image?: string
+  line1?: string
+  line2?: string
+  highlight?: string
+}
 
-export default function StoryHero({ image = DEFAULT_IMAGE }: Props = {}) {
+export default function StoryHero({
+  image = DEFAULT_IMAGE,
+  line1 = DEFAULT_LINE1,
+  line2 = DEFAULT_LINE2,
+  highlight = DEFAULT_HIGHLIGHT,
+}: Props = {}) {
   const sectionRef = useRef<HTMLElement>(null)
   const mediaRef = useRef<HTMLDivElement>(null)
 
@@ -115,9 +128,9 @@ export default function StoryHero({ image = DEFAULT_IMAGE }: Props = {}) {
       </nav>
       <h1 className="h1 amplitude dark story-hero__title">
         <span className="story-hero__title-inner">
-          <span className="line"><span className="line-inner">WE TELL STORIES</span></span>
-          <span className="line"><span className="line-inner">FOR A LIVING.</span></span>
-          <span className="typewriter text-highlight">THIS ONE&rsquo;S OURS.</span>
+          <span className="line"><span className="line-inner">{line1}</span></span>
+          <span className="line"><span className="line-inner">{line2}</span></span>
+          <span className="typewriter text-highlight">{highlight}</span>
         </span>
       </h1>
       <div className="story-hero__media" ref={mediaRef}>

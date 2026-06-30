@@ -44,7 +44,8 @@ function lexicalToText(node: unknown): string | undefined {
 async function getData() {
   try {
     const payload = await getPayload({ config })
-    const [pages, footer, forms] = await Promise.all([
+    const [story, pages, footer, forms] = await Promise.all([
+      payload.findGlobal({ slug: 'ourStoryPage', depth: 1 }),
       payload.find({
         collection: 'pages',
         where: { slug: { equals: 'home' } },
@@ -59,15 +60,33 @@ async function getData() {
         limit: 1,
       }),
     ])
-    return { layout: pages.docs[0]?.layout, footer, contactForm: forms.docs[0] }
+    return { story, layout: pages.docs[0]?.layout, footer, contactForm: forms.docs[0] }
   } catch {
     // If Payload/DB is unavailable, components fall back to their defaults.
-    return { layout: undefined, footer: undefined, contactForm: undefined }
+    return { story: undefined, layout: undefined, footer: undefined, contactForm: undefined }
   }
 }
 
 export default async function OurStoryRoute() {
-  const { layout, footer, contactForm } = await getData()
+  const { story, layout, footer, contactForm } = await getData()
+
+  // Our Story global → component props (each component falls back to its own
+  // hardcoded defaults when a value is missing, so the page never breaks).
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const s = story as any
+  const heroImage = mediaUrl(s?.hero?.image)
+  const marqueeImages: string[] | undefined = s?.intro?.marquee?.flatMap(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (m: any) => {
+      const url = mediaUrl(m.image)
+      return url ? [url] : []
+    },
+  )
+  const introCopy: [string, string] | undefined =
+    s?.intro?.copy1 && s?.intro?.copy2 ? [s.intro.copy1, s.intro.copy2] : undefined
+  const cards: { title: string; body: string }[] | undefined = s?.difference?.cards
+    ?.filter((c: { title?: string; body?: string }) => c?.title && c?.body)
+    .map((c: { title: string; body: string }) => ({ title: c.title, body: c.body }))
 
   // Form Builder stores fields as a flat block array; map to ContactForm's shape.
   const contactFields = contactForm?.fields?.flatMap((f) => {
@@ -122,9 +141,22 @@ export default async function OurStoryRoute() {
   return (
     <main className="grain-effect">
       <Header />
-      <StoryHero />
-      <OurStory />
-      <OurDifference />
+      <StoryHero
+        image={heroImage}
+        line1={s?.hero?.line1 ?? undefined}
+        line2={s?.hero?.line2 ?? undefined}
+        highlight={s?.hero?.highlight ?? undefined}
+      />
+      <OurStory
+        title={s?.intro?.title ?? undefined}
+        copy={introCopy}
+        images={marqueeImages}
+      />
+      <OurDifference
+        titlePre={s?.difference?.titlePre ?? undefined}
+        titleHighlight={s?.difference?.titleHighlight ?? undefined}
+        cards={cards}
+      />
       <ImpactCTA
         headingTop={impactCTA?.headingTop ?? undefined}
         copy={impactCTA?.copy ?? undefined}
