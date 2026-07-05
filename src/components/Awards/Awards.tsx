@@ -1,6 +1,9 @@
+'use client'
+
 import { Fragment } from 'react'
 
 import AwardsSlider, { type AwardSlide } from './AwardsSlider'
+import { useScrollJoin } from '@/lib/useScrollJoin'
 
 export type AwardImage = AwardSlide
 
@@ -31,13 +34,16 @@ export default function Awards({
 }: AwardsProps = {}) {
   const AWARDS = items?.length ? items : DEFAULT_AWARDS
   const captionLines = caption.split('\n')
+  // Scroll-scrubbed converge — same as the Projects heading: the title slides
+  // in from the left and "& RECOGNITIONS" from the right as the section rises.
+  const { headingRef, beforeRef, afterRef } = useScrollJoin<HTMLDivElement, HTMLHeadingElement>()
 
   return (
     <section className="awards">
       <div className="awards__inner">
-        <div className="awards__heading">
+        <div className="awards__heading" ref={headingRef}>
           <div className="awards__heading-top">
-            <h2 className="h1 awards__title">
+            <h2 ref={beforeRef} className="h1 awards__title">
               <span className="text-highlight">{title}</span>
             </h2>
             <a href="/awards" className="custom-button awards__button">
@@ -58,7 +64,7 @@ export default function Awards({
                 </Fragment>
               ))}
             </p>
-            <h3 className="h1 amplitude amp-mask awards__rec">{recognitions}</h3>
+            <h3 ref={afterRef} className="h1 amplitude awards__rec">{recognitions}</h3>
           </div>
         </div>
 

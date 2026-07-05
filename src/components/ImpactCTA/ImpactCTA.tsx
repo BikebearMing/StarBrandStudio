@@ -44,7 +44,7 @@ export default function ImpactCTA({
       <ImageTrail items={trail} variant={1} threshold={80} />
       <div className="impact-cta__inner">
         <div className="impact-cta__top">
-          <h2 className="h1-v2 amp-mask impact-cta__heading">{heading}</h2>
+          <h2 className="h1-v2-sm amp-mask impact-cta__heading">{heading}</h2>
           <p className="body">
             {copyLines.map((line, i) => (
               <Fragment key={i}>
@@ -55,7 +55,7 @@ export default function ImpactCTA({
           </p>
         </div>
         <div className="impact-cta__bottom">
-          <span className="h1-v2 impact-cta__impact">{word}</span>
+          <span className="h1-v2-sm impact-cta__impact">{word}</span>
         </div>
       </div>
     </section>

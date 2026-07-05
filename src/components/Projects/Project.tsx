@@ -235,7 +235,6 @@ export default function Projects({
                         >
                             <div className="title-wrapper">
                                 <p className="body dark">{p.title}</p>
-                                <p className="body dark">{p.year}</p>
                             </div>
 
                             <div className="project-image cursor-target">
