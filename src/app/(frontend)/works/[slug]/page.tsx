@@ -7,8 +7,6 @@ import type { Media } from '@payload-types'
 
 import Header from '@/components/Header/Header'
 import Footer from '@/components/Footer/Footer'
-import ImpactCTA from '@/components/ImpactCTA/ImpactCTA'
-import ContactForm, { type ContactField } from '@/components/ContactForm/ContactForm'
 
 // Content comes from Payload at request time, so it's always fresh.
 export const dynamic = 'force-dynamic'
@@ -17,43 +15,19 @@ function mediaUrl(m: number | Media | null | undefined): string | undefined {
   return m && typeof m === 'object' ? m.url ?? undefined : undefined
 }
 
-// Pull the first paragraph of plain text out of a Lexical rich-text value.
-function lexicalToText(node: unknown): string | undefined {
-  if (!node || typeof node !== 'object') return undefined
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const root = (node as any).root
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const walk = (n: any): string =>
-    typeof n?.text === 'string'
-      ? n.text
-      : Array.isArray(n?.children)
-        ? n.children.map(walk).join('')
-        : ''
-  const text = root ? walk(root).trim() : ''
-  return text || undefined
-}
-
 async function getWorkData(slug: string) {
   try {
     const payload = await getPayload({ config })
-    const [works, forms] = await Promise.all([
-      payload.find({
-        collection: 'works',
-        where: { slug: { equals: slug } },
-        depth: 1,
-        limit: 1,
-      }),
-      payload.find({
-        collection: 'forms',
-        where: { title: { equals: 'Contact' } },
-        depth: 0,
-        limit: 1,
-      }),
-    ])
-    return { work: works.docs[0], contactForm: forms.docs[0] }
+    const works = await payload.find({
+      collection: 'works',
+      where: { slug: { equals: slug } },
+      depth: 1,
+      limit: 1,
+    })
+    return { work: works.docs[0] }
   } catch {
     // If Payload/DB is unavailable there's nothing to show for this work.
-    return { work: undefined, contactForm: undefined }
+    return { work: undefined }
   }
 }
 
@@ -69,30 +43,12 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function WorkDetailRoute({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
-  const { work: slide, contactForm } = await getWorkData(slug)
+  const { work: slide } = await getWorkData(slug)
 
   if (!slide) notFound()
 
   const image = mediaUrl(slide.image)
   const tags = slide.tags?.map((t) => t.label).filter((l): l is string => Boolean(l)) ?? []
-
-  // Form Builder stores fields as a flat block array; map to the shape ContactForm needs.
-  const contactFields = contactForm?.fields?.flatMap((f) => {
-    if (!('name' in f) || !f.name) return []
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const af = f as any
-    const field: ContactField = {
-      name: af.name,
-      label: af.label ?? undefined,
-      blockType: af.blockType,
-      required: Boolean(af.required),
-      width: typeof af.width === 'number' ? af.width : undefined,
-      options: Array.isArray(af.options)
-        ? af.options.map((o: { label: string; value: string }) => ({ label: o.label, value: o.value }))
-        : undefined,
-    }
-    return [field]
-  })
 
   return (
     <main className="grain-effect">
@@ -178,18 +134,6 @@ export default async function WorkDetailRoute({ params }: { params: Promise<{ sl
               return null
           }
         })}
-      </section>
-
-      <ImpactCTA />
-      <section className="contact-section" id="contact">
-        <div className="contact-section__inner">
-          <ContactForm
-            formId={contactForm?.id}
-            fields={contactFields}
-            submitLabel={contactForm?.submitButtonLabel ?? undefined}
-            confirmationMessage={lexicalToText(contactForm?.confirmationMessage)}
-          />
-        </div>
       </section>
 
       <Footer />

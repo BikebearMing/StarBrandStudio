@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react"
 import TargetCursor from "@/components/TargetCursor/TargetCursor"
-import ParallaxImage from "@/components/ParallaxImage/ParallaxImage"
 import { useScrollJoin } from "@/lib/useScrollJoin"
 
 export type ProjectItem = {
@@ -239,7 +238,7 @@ export default function Projects({
                             </div>
 
                             <div className="project-image cursor-target">
-                                <ParallaxImage src={p.thumbnail} alt="" style={imgStyle(p.key)} />
+                                <img src={p.thumbnail} alt="" style={imgStyle(p.key)} />
                             </div>
                         </div>
                     ))}

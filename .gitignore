@@ -9,3 +9,7 @@ random.html
 # (This is a self-hosted Coolify/Docker deploy — no Vercel Blob.)
 .env.local
 .env
+
+# Site backups (scripts/backup.sh) + their config, which holds secrets
+backups/
+scripts/backup.env
