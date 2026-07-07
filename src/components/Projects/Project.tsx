@@ -13,6 +13,7 @@ export type ProjectItem = {
     hoverVideoUrl?: string
     copy: string
     tags: string[]
+    link?: string
 }
 
 const DEFAULT_PROJECTS: ProjectItem[] = [
@@ -255,7 +256,10 @@ export default function Projects({
                                         <li key={tag} className="project-info__tag">{tag}</li>
                                     ))}
                                 </ul>
-                                <a href="#" className="custom-button project-info__cta">
+                                <a
+                                    href={byKey[hoveredId].link || '/works'}
+                                    className="custom-button project-info__cta"
+                                >
                                     <svg className="custom-button-icon" viewBox="0 0 24 24" aria-hidden="true">
                                         <circle className="ring ring--outer" cx="12" cy="12" r="11" />
                                         <circle className="ring ring--middle" cx="12" cy="12" r="7" />

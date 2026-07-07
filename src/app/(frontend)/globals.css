@@ -1120,6 +1120,16 @@ section.what-we-do {
                         vertical-align: middle;
                         line-height: 0;
 
+                        &::before {
+                            content: '[';
+                            margin-right: 0.15em;
+                        }
+
+                        &::after {
+                            content: ']';
+                            margin-left: 0.15em;
+                        }
+
                         & img {
                             width: 2em;
                             height: 0.81em;
@@ -1445,20 +1455,17 @@ section.pillars-section .wrapper {
 .our-difference__card {
     background: var(--red);
     color: #ffffff;
-    height: 26.62vw; /* 383.326px @1440 */
+    height: 28.62vw; /* 383.326px @1440 */
     padding: 1.94vw 1.39vw;
     display: flex;
+    gap: 4vw;
     flex-direction: column;
+
+    & h3 {
+        min-height: 6vw;
+    }
 }
 
-.our-difference__card-title {
-    margin-bottom: 1.67vw;
-}
-
-/* Push the body to the bottom of the card; title stays pinned at the top. */
-.our-difference__card-body {
-    margin-top: auto;
-}
 
 /* ── Our Story page — mobile ────────────────────────────────────────────
    The three bespoke sections are laid out at desktop vw proportions; reflow
@@ -1741,6 +1748,12 @@ section.projects {
                 & .title-wrapper {
                     display: flex;
                     justify-content: space-between;
+                    min-height: 2.5vw;
+
+                    & > p {
+                        margin-top: auto;
+                    }
+                    
                 }
 
                 & .project-image {

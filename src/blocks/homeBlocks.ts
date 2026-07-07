@@ -167,6 +167,14 @@ export const ProjectsBlock: Block = {
         },
         { name: 'copy', type: 'textarea' },
         {
+          name: 'link',
+          type: 'text',
+          admin: {
+            description:
+              'Path the "OUR WORK" button goes to, e.g. /works or /works/gucci. Defaults to /works.',
+          },
+        },
+        {
           name: 'tags',
           type: 'array',
           labels: { singular: 'Tag', plural: 'Tags' },

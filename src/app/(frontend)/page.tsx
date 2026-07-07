@@ -133,6 +133,7 @@ export default async function Home() {
             hoverVideoUrl: p.hoverVideoUrl ?? undefined,
             copy: p.copy ?? '',
             tags: p.tags?.map((t) => t.tag) ?? [],
+            link: p.link ?? undefined,
           },
         ]
       : []

@@ -336,6 +336,10 @@ export interface Page {
                    */
                   hoverVideoUrl?: string | null;
                   copy?: string | null;
+                  /**
+                   * Path the "OUR WORK" button goes to, e.g. /works or /works/gucci. Defaults to /works.
+                   */
+                  link?: string | null;
                   tags?:
                     | {
                         tag: string;
@@ -1010,6 +1014,7 @@ export interface PagesSelect<T extends boolean = true> {
                     thumbnail?: T;
                     hoverVideoUrl?: T;
                     copy?: T;
+                    link?: T;
                     tags?:
                       | T
                       | {
