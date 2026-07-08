@@ -1739,6 +1739,7 @@ section.projects {
             grid-template-columns: repeat(3, 1fr);
             row-gap: 5.556vw;
             column-gap: 10vw;
+            min-height: 48vw;
 
             & .project {
                 display: flex;
