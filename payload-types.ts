@@ -335,9 +335,13 @@ export interface Page {
                    * Optional video URL shown on hover.
                    */
                   hoverVideoUrl?: string | null;
+                  /**
+                   * Optional background image shown on hover when there is no video — rendered black & white under the dark radial fade.
+                   */
+                  hoverImage?: (number | null) | Media;
                   copy?: string | null;
                   /**
-                   * Path the "OUR WORK" button goes to, e.g. /works or /works/gucci. Defaults to /works.
+                   * Path the project image and "OUR WORK" button go to, e.g. /works or /works/gucci. Defaults to /works.
                    */
                   link?: string | null;
                   tags?:
@@ -1013,6 +1017,7 @@ export interface PagesSelect<T extends boolean = true> {
                     year?: T;
                     thumbnail?: T;
                     hoverVideoUrl?: T;
+                    hoverImage?: T;
                     copy?: T;
                     link?: T;
                     tags?:

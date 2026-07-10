@@ -10,6 +10,8 @@ export type ProjectItem = {
     year: string
     thumbnail: string
     hoverVideoUrl?: string
+    /** Background image used on hover when there is no hoverVideoUrl. */
+    hoverImageUrl?: string
     copy: string
     tags: string[]
     link?: string
@@ -33,6 +35,7 @@ const DEFAULT_PROJECTS: ProjectItem[] = [
         title: "NEW PROJECT TITLE",
         year: "2025",
         thumbnail: "/works-bg.png",
+        hoverImageUrl: "/works-bg.png",
         copy: "ADD A SHORT PROJECT OVERVIEW HERE — WHAT THE CAMPAIGN WAS AND WHY IT WORKED.",
         tags: ["CATEGORY", "DISCIPLINE"],
     },
@@ -50,6 +53,7 @@ const DEFAULT_PROJECTS: ProjectItem[] = [
         title: "SNICKERS YOU'RE NOT YOU WHEN YOU'RE HUNGRY",
         year: "2025",
         thumbnail: "/snickers.png",
+        hoverImageUrl: "/snickers.png",
         copy: "A WITTY INTEGRATED CAMPAIGN LEANING INTO THE INSIGHT THAT HUNGER CHANGES WHO YOU ARE — BUILT FOR SOCIAL AND OUT-OF-HOME.",
         tags: ["FMCG", "INTEGRATED CAMPAIGN"],
     },
@@ -58,6 +62,7 @@ const DEFAULT_PROJECTS: ProjectItem[] = [
         title: "MCDONALD'S I'M LOVIN' IT",
         year: "2025",
         thumbnail: "/mcdonalds.png",
+        hoverImageUrl: "/mcdonalds.png",
         copy: "AN INTEGRATED BRAND CAMPAIGN DESIGNED TO SPARK AWARENESS, TURN AUDIENCES INTO ADVOCATES ACROSS DIGITAL TOUCHPOINTS.",
         tags: ["F&B", "DIGITAL & SOCIAL"],
     },
@@ -86,9 +91,12 @@ export default function Projects({
     const hideAllRef = useRef<() => void>(() => {})
     const showVideoRef = useRef<(id: string) => void>(() => {})
 
-    // One <video> per project that has a hover video; refs collected by key.
+    // One background element per project: a <video> when it has a hover video,
+    // otherwise an <img> when it has a hover image; refs collected by key.
     const videoRefs = useRef<Record<string, HTMLVideoElement | null>>({})
+    const imageRefs = useRef<Record<string, HTMLImageElement | null>>({})
     const videoProjects = projects.filter((p) => p.hoverVideoUrl)
+    const imageProjects = projects.filter((p) => !p.hoverVideoUrl && p.hoverImageUrl)
 
     const showVideo = (id: string) => {
         setHoveredId(id)
@@ -103,6 +111,10 @@ export default function Projects({
                 vid.pause()
             }
         })
+        Object.entries(imageRefs.current).forEach(([key, img]) => {
+            if (!img) return
+            img.style.opacity = key === id ? "1" : "0"
+        })
     }
     showVideoRef.current = showVideo
 
@@ -112,6 +124,10 @@ export default function Projects({
             if (!vid) return
             vid.style.opacity = "0"
             vid.pause()
+        })
+        Object.values(imageRefs.current).forEach((img) => {
+            if (!img) return
+            img.style.opacity = "0"
         })
     }
     hideAllRef.current = hideAll
@@ -223,6 +239,18 @@ export default function Projects({
                                 src={p.hoverVideoUrl}
                             ></video>
                         ))}
+                        {imageProjects.map((p) => (
+                            <img
+                                key={p.key}
+                                ref={(el) => {
+                                    imageRefs.current[p.key] = el
+                                }}
+                                className="video-bg__image"
+                                style={videoStyle}
+                                src={p.hoverImageUrl}
+                                alt=""
+                            />
+                        ))}
                     </div>
                 </div>
                 <div className="project-grid" onMouseLeave={hideAll}>
@@ -237,9 +265,13 @@ export default function Projects({
                                 <p className="body dark">{p.title}</p>
                             </div>
 
-                            <div className="project-image cursor-target">
+                            <a
+                                href={p.link || '/works'}
+                                className="project-image cursor-target"
+                                aria-label={p.title}
+                            >
                                 <img src={p.thumbnail} alt="" style={imgStyle(p.key)} />
-                            </div>
+                            </a>
                         </div>
                     ))}
 

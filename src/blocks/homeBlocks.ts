@@ -165,13 +165,22 @@ export const ProjectsBlock: Block = {
           type: 'text',
           admin: { description: 'Optional video URL shown on hover.' },
         },
+        {
+          name: 'hoverImage',
+          type: 'upload',
+          relationTo: 'media',
+          admin: {
+            description:
+              'Optional background image shown on hover when there is no video — rendered black & white under the dark radial fade.',
+          },
+        },
         { name: 'copy', type: 'textarea' },
         {
           name: 'link',
           type: 'text',
           admin: {
             description:
-              'Path the "OUR WORK" button goes to, e.g. /works or /works/gucci. Defaults to /works.',
+              'Path the project image and "OUR WORK" button go to, e.g. /works or /works/gucci. Defaults to /works.',
           },
         },
         {

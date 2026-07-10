@@ -131,6 +131,7 @@ export default async function Home() {
             year: p.year ?? '2025',
             thumbnail,
             hoverVideoUrl: p.hoverVideoUrl ?? undefined,
+            hoverImageUrl: mediaUrl(p.hoverImage),
             copy: p.copy ?? '',
             tags: p.tags?.map((t) => t.tag) ?? [],
             link: p.link ?? undefined,
