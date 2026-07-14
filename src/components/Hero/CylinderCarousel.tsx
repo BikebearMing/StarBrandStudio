@@ -52,7 +52,7 @@ const CAMERA_X      = 0     // camera left/right
 const CAMERA_Y      = 0.3   // camera height
 const CAMERA_Z      = 6.5   // camera distance (further = zoom out)
 const CAMERA_FOV    = 65    // field of view (wider = more images visible)
-const CYLINDER_Y    = 0.8   // vertical offset of the cylinder (positive = up)
+const CYLINDER_Y    = 0.65  // vertical offset of the cylinder (positive = up)
 
 // Intro animation
 const INTRO_DURATION    = 3.5  // seconds

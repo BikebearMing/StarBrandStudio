@@ -12,36 +12,46 @@ const CylinderCarousel = dynamic(
 )
 
 // Text intro timings — start as carousel intro settles (carousel is 3.5s)
-const TEXT_DELAY      = 2.4   // when the h1 animation kicks in
-const LINE_DURATION   = 0.9
-const LINE_STAGGER    = 0.12
-const H2_GAP          = 0.3   // extra delay between h1 lines finishing and h2 line starting
-const H2_DELAY        = TEXT_DELAY + LINE_DURATION + LINE_STAGGER + H2_GAP
-const TYPE_DURATION   = 0.8
-const TYPE_DELAY      = H2_DELAY + LINE_DURATION - 0.2 // typewriter after h2 line finishes
+const TEXT_DELAY    = 2.4   // when the headline mask reveal kicks in (first load)
+const LINE_DURATION = 0.9   // headline mask-in
+const LINE_OUT      = 0.55  // headline mask-out between messages
+const TYPE_DURATION = 1.4   // typewriter reveal of the serif line
+const TYPE_OVERLAP  = 0.35  // typewriter starts this long before the mask-in ends
+const ERASE_DUR     = 0.5   // typewriter erase between messages
+const MSG_HOLD      = 3.2   // seconds each message stays fully visible
 
-// Word loop for the typewriter — cycles after the initial LEAD reveal
-const DEFAULT_WORDS   = ['LEAD', 'INSPIRE', 'SELL', 'GROW']
-const WORD_HOLD       = 1.5   // seconds each word stays visible before erasing
-const WORD_ERASE_DUR  = 0.35
-const WORD_REVEAL_DUR = 0.5
+// Headline (mask reveal) + serif line (typewriter) pairs the hero cycles through.
+const DEFAULT_MESSAGES = [
+  {
+    heading: 'THE CREDIBILITY OF JOURNALISM',
+    subheading: 'LENDS YOUR BRAND THE CREDIBILITY AUDIENCES ALREADY BELIEVE.',
+  },
+  {
+    heading: 'THE EXPERTISE BEHIND THE STORIES',
+    subheading: 'POSITIONS YOUR BRAND AS AN AUTHORITATIVE VOICE.',
+  },
+  {
+    heading: 'DATA-LED AUDIENCE INTELLIGENCE',
+    subheading: 'TURNS AUDIENCE BEHAVIOUR INTO MARKETING ADVANTAGE.',
+  },
+  {
+    heading: 'AN INTEGRATED ECOSYSTEM',
+    subheading: 'DELIVERS STRATEGY TO EXECUTION AS ONE SEAMLESS SOLUTION.',
+  },
+]
+
+export type HeroMessage = {
+  heading: string
+  subheading: string
+}
 
 export type HeroProps = {
-  headingLine1?: string
-  headingLine2?: string
-  subheading?: string
-  words?: string[]
+  messages?: HeroMessage[]
   slides?: CarouselSlide[]
 }
 
-export default function HeroSection({
-  headingLine1 = 'A FULL SUITE OF',
-  headingLine2 = 'SERVICES',
-  subheading = 'BUILT FOR BRANDS THAT WANT TO',
-  words,
-  slides,
-}: HeroProps = {}) {
-  const WORDS = words?.length ? words : DEFAULT_WORDS
+export default function HeroSection({ messages, slides }: HeroProps = {}) {
+  const MESSAGES = messages?.length ? messages : DEFAULT_MESSAGES
   const sectionRef = useRef<HTMLElement>(null)
   const [isHovering, setIsHovering] = useState(false)
 
@@ -49,76 +59,77 @@ export default function HeroSection({
     const section = sectionRef.current
     if (!section) return
 
-    const h1LineInners = Array.from(section.querySelectorAll<HTMLElement>('h1 .line-inner'))
-    const h2LineInners = Array.from(section.querySelectorAll<HTMLElement>('h2 .line-inner'))
+    const headingInner = section.querySelector<HTMLElement>('h1 .line-inner')
     const typewriter = section.querySelector<HTMLElement>('.typewriter')
+    if (!headingInner || !typewriter) return
 
     // Hide everything immediately so it doesn't flash before the preloader hands off
-    gsap.set([...h1LineInners, ...h2LineInners], { yPercent: 110 })
-    if (typewriter) gsap.set(typewriter, { clipPath: 'inset(0 100% 0 0)' })
+    gsap.set(headingInner, { yPercent: 110 })
+    gsap.set(typewriter, { clipPath: 'inset(0 100% 0 0)' })
 
     const tweens: gsap.core.Tween[] = []
     const timelines: gsap.core.Timeline[] = []
 
     const start = (instant: boolean) => {
-      // First load: long delays choreographed around the preloader handoff and
-      // the 3.5s carousel intro. Client-side navigation: quick stagger instead.
+      const msgs = MESSAGES
+      // First load: long delay choreographed around the preloader handoff and
+      // the 3.5s carousel intro. Client-side navigation: quick reveal instead.
       const textDelay = instant ? 0.15 : TEXT_DELAY
-      const h2Delay = instant ? 0.4 : H2_DELAY
-      const typeDelay = instant ? 0.7 : TYPE_DELAY
+      const typeDelay = textDelay + LINE_DURATION - TYPE_OVERLAP
 
-      const h1Tween = gsap.to(h1LineInners, {
-        yPercent: 0,
-        delay: textDelay,
-        duration: LINE_DURATION,
-        stagger: LINE_STAGGER,
-        ease: 'power3.out',
-      })
-      tweens.push(h1Tween)
-
-      const h2Tween = gsap.to(h2LineInners, {
-        yPercent: 0,
-        delay: h2Delay,
-        duration: LINE_DURATION,
-        ease: 'power3.out',
-      })
-      tweens.push(h2Tween)
-
-      if (typewriter) {
-        const typeTween = gsap.to(typewriter, {
+      tweens.push(
+        gsap.to(headingInner, {
+          yPercent: 0,
+          delay: textDelay,
+          duration: LINE_DURATION,
+          ease: 'power3.out',
+        }),
+        gsap.to(typewriter, {
           clipPath: 'inset(0 0% 0 0)',
           delay: typeDelay,
           duration: TYPE_DURATION,
-          ease: 'steps(5)',
-        })
-        tweens.push(typeTween)
+          ease: 'steps(30)',
+        }),
+      )
 
-        // Word cycle: LEAD → INSPIRE → SELL → GROW → LEAD …
-        let idx = 0
-        const loopTl = gsap.timeline({
-          delay: typeDelay + TYPE_DURATION + WORD_HOLD,
-          repeat: -1,
-        })
-        WORDS.forEach(() => {
-          loopTl
-            .to(typewriter, {
-              clipPath: 'inset(0 100% 0 0)',
-              duration: WORD_ERASE_DUR,
-              ease: 'steps(4)',
-            })
-            .call(() => {
-              idx = (idx + 1) % WORDS.length
-              typewriter.textContent = WORDS[idx]
-            })
-            .to(typewriter, {
-              clipPath: 'inset(0 0% 0 0)',
-              duration: WORD_REVEAL_DUR,
-              ease: 'steps(5)',
-            })
-            .to({}, { duration: WORD_HOLD })
-        })
-        timelines.push(loopTl)
-      }
+      // Message cycle: erase + mask out, swap copy, mask in + type in, hold.
+      if (msgs.length < 2) return
+      let idx = 0
+      const loopTl = gsap.timeline({
+        delay: typeDelay + TYPE_DURATION + MSG_HOLD,
+        repeat: -1,
+      })
+      msgs.forEach(() => {
+        loopTl
+          .to(typewriter, {
+            clipPath: 'inset(0 100% 0 0)',
+            duration: ERASE_DUR,
+            ease: 'steps(18)',
+          })
+          .to(headingInner, {
+            yPercent: -110,
+            duration: LINE_OUT,
+            ease: 'power3.in',
+          }, '<')
+          .call(() => {
+            idx = (idx + 1) % msgs.length
+            headingInner.textContent = msgs[idx].heading
+            typewriter.textContent = msgs[idx].subheading
+          })
+          .set(headingInner, { yPercent: 110 })
+          .to(headingInner, {
+            yPercent: 0,
+            duration: LINE_DURATION,
+            ease: 'power3.out',
+          })
+          .to(typewriter, {
+            clipPath: 'inset(0 0% 0 0)',
+            duration: TYPE_DURATION,
+            ease: 'steps(30)',
+          }, `-=${TYPE_OVERLAP}`)
+          .to({}, { duration: MSG_HOLD })
+      })
+      timelines.push(loopTl)
     }
 
     const unsubscribe = onPreloaderDone(start)
@@ -141,23 +152,16 @@ export default function HeroSection({
         overflow: 'hidden',
       }}
     >
-      <h1 className="h1 amplitude dark">
-        <span className="line"><span className="line-inner">{headingLine1}</span></span>
-        <br />
-        <span className="line"><span className="line-inner">{headingLine2}</span></span>
-      </h1>
+      <div className="hero-copy">
+        <h1 className="h1-v3 dark">
+          <span className="line"><span className="line-inner">{MESSAGES[0].heading}</span></span>
+        </h1>
+        <p className="h2-serif dark">
+          {/* Inline-block so the clip-path typewriter wipe clips to the text box. */}
+          <span className="typewriter">{MESSAGES[0].subheading}</span>
+        </p>
+      </div>
       <CylinderCarousel onHoverChange={setIsHovering} slides={slides} />
-      <h2 className="h1 amplitude dark">
-        {/* The typewriter lives inside the masked line so the word flows with
-            the subheading (e.g. "…WANT TO LEAD" wraps together on mobile)
-            instead of dropping to its own line beside the inline-block. */}
-        <span className="line">
-          <span className="line-inner">
-            {subheading}&nbsp;
-            <span className="black typewriter text-highlight">{WORDS[0]}</span>
-          </span>
-        </span>
-      </h2>
     </section>
   )
 }

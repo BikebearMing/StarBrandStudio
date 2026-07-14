@@ -118,7 +118,7 @@ export default async function Home() {
   // Awards → Items) — kept independent of the awards collection behind /awards.
   const awardItems = awards?.items?.flatMap((it) => {
     const src = mediaUrl(it.image)
-    return src ? [{ src, name: it.alt || 'AWARD' }] : []
+    return src ? [{ src, name: it.name || it.alt || 'AWARD' }] : []
   })
 
   const projectItems = projects?.items?.flatMap((p) => {
@@ -170,10 +170,10 @@ export default async function Home() {
       <Header />
       <div className="pin-stack">
         <HeroSection
-          headingLine1={hero?.headingLine1 ?? undefined}
-          headingLine2={hero?.headingLine2 ?? undefined}
-          subheading={hero?.subheading ?? undefined}
-          words={hero?.typewriterWords?.map((w) => w.word)}
+          messages={hero?.messages?.map((m) => ({
+            heading: m.heading,
+            subheading: m.subheading,
+          }))}
           slides={heroSlides}
         />
         <section className="what-we-do red-section">

@@ -96,10 +96,24 @@ async function run() {
   const layout = [
     {
       blockType: 'hero',
-      headingLine1: 'A FULL SUITE OF',
-      headingLine2: 'SERVICES',
-      subheading: 'BUILT FOR BRANDS THAT WANT TO',
-      typewriterWords: ['LEAD', 'INSPIRE', 'SELL', 'GROW'].map((word) => ({ word })),
+      messages: [
+        {
+          heading: 'THE CREDIBILITY OF JOURNALISM',
+          subheading: 'LENDS YOUR BRAND THE CREDIBILITY AUDIENCES ALREADY BELIEVE.',
+        },
+        {
+          heading: 'THE EXPERTISE BEHIND THE STORIES',
+          subheading: 'POSITIONS YOUR BRAND AS AN AUTHORITATIVE VOICE.',
+        },
+        {
+          heading: 'DATA-LED AUDIENCE INTELLIGENCE',
+          subheading: 'TURNS AUDIENCE BEHAVIOUR INTO MARKETING ADVANTAGE.',
+        },
+        {
+          heading: 'AN INTEGRATED ECOSYSTEM',
+          subheading: 'DELIVERS STRATEGY TO EXECUTION AS ONE SEAMLESS SOLUTION.',
+        },
+      ],
       carousel: carouselBlocks,
     },
     {

@@ -45,6 +45,8 @@ text-transform). Always use the global type classes defined in
 
 - `.h1` — serif display heading (`.h1.amplitude` = bold Amplitude variant)
 - `.h1-v2` — oversized condensed display heading
+- `.h1-v3` — condensed display heading sized so a full-sentence line fits one row (hero headlines)
+- `.h2-serif` — serif supporting line paired with `.h1-v3` (hero subheadings)
 - `.h2` — condensed section heading
 - `.h3` — condensed sub-heading
 - `.body` — all body/UI copy (e.g. `<p className="body">`)

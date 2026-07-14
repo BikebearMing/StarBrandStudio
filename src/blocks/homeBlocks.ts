@@ -11,20 +11,18 @@ export const HeroBlock: Block = {
   slug: 'hero',
   labels: { singular: 'Hero', plural: 'Hero' },
   fields: [
-    { name: 'headingLine1', type: 'text', defaultValue: 'A FULL SUITE OF' },
-    { name: 'headingLine2', type: 'text', defaultValue: 'SERVICES' },
     {
-      name: 'subheading',
-      type: 'text',
-      defaultValue: 'BUILT FOR BRANDS THAT WANT TO',
-      admin: { description: 'Text before the animated word.' },
-    },
-    {
-      name: 'typewriterWords',
+      name: 'messages',
       type: 'array',
-      labels: { singular: 'Word', plural: 'Words' },
-      admin: { description: 'Words that cycle in the typewriter (LEAD, INSPIRE, …).' },
-      fields: [{ name: 'word', type: 'text', required: true }],
+      labels: { singular: 'Message', plural: 'Messages' },
+      admin: {
+        description:
+          'Headline + serif line pairs the hero cycles through (headline mask-reveals, serif line typewrites).',
+      },
+      fields: [
+        { name: 'heading', type: 'text', required: true },
+        { name: 'subheading', type: 'text', required: true },
+      ],
     },
     {
       name: 'carousel',
@@ -134,6 +132,11 @@ export const AwardsBlock: Block = {
       labels: { singular: 'Award', plural: 'Awards' },
       fields: [
         { name: 'image', type: 'upload', relationTo: 'media', required: true },
+        {
+          name: 'name',
+          type: 'text',
+          admin: { description: 'Award name shown when hovering the strip image.' },
+        },
         { name: 'alt', type: 'text' },
       ],
     },

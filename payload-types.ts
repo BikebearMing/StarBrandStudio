@@ -223,18 +223,13 @@ export interface Page {
   layout?:
     | (
         | {
-            headingLine1?: string | null;
-            headingLine2?: string | null;
             /**
-             * Text before the animated word.
+             * Headline + serif line pairs the hero cycles through (headline mask-reveals, serif line typewrites).
              */
-            subheading?: string | null;
-            /**
-             * Words that cycle in the typewriter (LEAD, INSPIRE, …).
-             */
-            typewriterWords?:
+            messages?:
               | {
-                  word: string;
+                  heading: string;
+                  subheading: string;
                   id?: string | null;
                 }[]
               | null;
@@ -311,6 +306,10 @@ export interface Page {
             items?:
               | {
                   image: number | Media;
+                  /**
+                   * Award name shown when hovering the strip image.
+                   */
+                  name?: string | null;
                   alt?: string | null;
                   id?: string | null;
                 }[]
@@ -929,13 +928,11 @@ export interface PagesSelect<T extends boolean = true> {
         hero?:
           | T
           | {
-              headingLine1?: T;
-              headingLine2?: T;
-              subheading?: T;
-              typewriterWords?:
+              messages?:
                 | T
                 | {
-                    word?: T;
+                    heading?: T;
+                    subheading?: T;
                     id?: T;
                   };
               carousel?:
@@ -998,6 +995,7 @@ export interface PagesSelect<T extends boolean = true> {
                 | T
                 | {
                     image?: T;
+                    name?: T;
                     alt?: T;
                     id?: T;
                   };

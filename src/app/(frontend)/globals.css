@@ -102,6 +102,32 @@ img {
     letter-spacing: -0.413vw;
 }
 
+/* Condensed display heading sized so a full-sentence line fits one row
+   (hero cycling headlines). */
+.h1-v3 {
+    font-family: var(--amplitude-condensed);
+    font-size: 5.2vw;
+    line-height: 1;
+    font-weight: 700;
+    letter-spacing: -0.15vw;
+    text-transform: uppercase;
+}
+
+
+.hero-parent .h2-serif {
+    font-size: 3.6vw;
+}
+
+/* Serif supporting line paired with .h1-v3 (hero cycling subheadings). */
+.h2-serif {
+    font-family: var(--serif);
+    font-size: 2.6vw;
+    font-weight: 400;
+    line-height: 1.15;
+    letter-spacing: 0;
+    text-transform: uppercase;
+}
+
 .h2 {
     font-family: var(--amplitude-condensed);
     font-size: 4.167vw;
@@ -425,37 +451,22 @@ button {
         z-index: 9999;
     }
 
-    & .h1 {
-        transition: opacity 0.35s ease;
-
-        :not(.typewriter) {
-            font-weight: 700;
-        }
-    }
-
-    &.is-dim .h1 {
-        opacity: 0.2;
-    }
-
-    & .h1:first-child {
+    /* Layout only — typography comes from the global .h1-v3 / .h2-serif classes. */
+    & .hero-copy {
         position: absolute;
         top: 5.764vw;
         left: 3.5vw;
+        right: 3.5vw;
         z-index: 20;
         pointer-events: none;
+        display: flex;
+        flex-direction: column;
+        /* gap: 1.2vw; */
+        transition: opacity 0.35s ease;
     }
 
-    & .h1:last-child {
-        position: absolute;
-        left: 3.5vw;
-        bottom: 2.917vw;
-        white-space: nowrap;
-        letter-spacing: -0.35vw;
-
-        & .typewriter {
-            background-color: white;
-            padding-right: 0.1em;
-        }
+    &.is-dim .hero-copy {
+        opacity: 0.2;
     }
 }
 
@@ -2614,6 +2625,16 @@ section.awards {
         letter-spacing: -0.3vw;
     }
 
+    .h1-v3 {
+        font-size: 9vw;
+        letter-spacing: -0.25vw;
+    }
+
+    .h2-serif {
+        font-size: 4.5vw;
+        line-height: 1.25;
+    }
+
     .h2 {
         font-size: 7vw;
         letter-spacing: -0.2vw;
@@ -2665,17 +2686,11 @@ section.awards {
     }
 
     /* ── Hero ────────────────────────────────────────────────────────── */
-    .hero-parent .h1:first-child {
+    .hero-parent .hero-copy {
         top: 20vw; /* clear the fixed header */
         left: var(--sidepadding-xm);
-    }
-
-    .hero-parent .h1:last-child {
-        left: var(--sidepadding-xm);
         right: var(--sidepadding-xm);
-        bottom: 8vw;
-        white-space: normal;
-        letter-spacing: -0.2vw;
+        gap: 3vw;
     }
 
     /* ── What we do ──────────────────────────────────────────────────── */
