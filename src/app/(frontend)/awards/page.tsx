@@ -64,8 +64,8 @@ async function getAwards() {
 export default async function AwardsRoute() {
   const { awards, awardsPage, footer } = await getAwards()
 
-  // Group the flat award documents into year groups, preserving `_order` (the
-  // first year seen leads, and so on) so the page reads newest-first as seeded.
+  // Group the flat award documents into year groups. Years always render
+  // newest → oldest; `_order` (drag in admin) controls the entries within a year.
   let years: AwardYear[] | undefined
   if (awards?.docs.length) {
     const byYear = new Map<string, AwardYear>()
@@ -89,6 +89,7 @@ export default async function AwardsRoute() {
         groupPhoto: resolveAwardImage(doc.groupPhoto),
       })
     }
+    groups.sort((a, b) => (parseInt(b.year, 10) || 0) - (parseInt(a.year, 10) || 0))
     years = groups
   }
 

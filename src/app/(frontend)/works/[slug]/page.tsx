@@ -15,6 +15,39 @@ function mediaUrl(m: number | Media | null | undefined): string | undefined {
   return m && typeof m === 'object' ? m.url ?? undefined : undefined
 }
 
+// "1h2m30s" | "90" → seconds, for YouTube's ?t= start parameter.
+function parseStartSeconds(t: string): number {
+  if (/^\d+$/.test(t)) return parseInt(t, 10)
+  const m = t.match(/^(?:(\d+)h)?(?:(\d+)m)?(?:(\d+)s)?$/)
+  if (!m) return 0
+  return parseInt(m[1] ?? '0', 10) * 3600 + parseInt(m[2] ?? '0', 10) * 60 + parseInt(m[3] ?? '0', 10)
+}
+
+// A native <video> can't play YouTube pages — turn any pasted YouTube link
+// (watch / youtu.be / shorts / embed) into an embed URL for an <iframe>.
+// Returns undefined for everything else (direct mp4/streamable links).
+function youTubeEmbedUrl(url: string): string | undefined {
+  try {
+    const u = new URL(url)
+    const host = u.hostname.replace(/^www\.|^m\./, '')
+    let id: string | undefined
+    if (host === 'youtu.be') id = u.pathname.slice(1).split('/')[0]
+    else if (host === 'youtube.com' || host === 'youtube-nocookie.com') {
+      if (u.pathname === '/watch') id = u.searchParams.get('v') ?? undefined
+      else if (u.pathname.startsWith('/embed/') || u.pathname.startsWith('/shorts/'))
+        id = u.pathname.split('/')[2]
+    }
+    if (!id) return undefined
+    const params = new URLSearchParams({ rel: '0' })
+    const t = u.searchParams.get('t') ?? u.searchParams.get('start')
+    const start = t ? parseStartSeconds(t) : 0
+    if (start) params.set('start', String(start))
+    return `https://www.youtube-nocookie.com/embed/${id}?${params.toString()}`
+  } catch {
+    return undefined
+  }
+}
+
 async function getWorkData(slug: string) {
   try {
     const payload = await getPayload({ config })
@@ -138,18 +171,29 @@ export default async function WorkDetailRoute({ params }: { params: Promise<{ sl
             }
             case 'video': {
               if (!block.url) return null
+              const embed = youTubeEmbedUrl(block.url)
               return (
                 <div className="work-detail__media work-detail__video" key={block.id ?? i}>
-                  <video
-                    className="work-detail__video-player"
-                    src={block.url}
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                    controls
-                    preload="metadata"
-                  />
+                  {embed ? (
+                    <iframe
+                      className="work-detail__video-player"
+                      src={embed}
+                      title={slide.title ?? 'Video'}
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      allowFullScreen
+                    />
+                  ) : (
+                    <video
+                      className="work-detail__video-player"
+                      src={block.url}
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                      controls
+                      preload="metadata"
+                    />
+                  )}
                 </div>
               )
             }

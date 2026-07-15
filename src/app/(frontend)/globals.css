@@ -1025,14 +1025,19 @@ section.services {
     margin-top: 4vw;
 }
 
-/* Inline video block — same footprint as a full-width image */
+/* Inline video block — full-viewport-height frame; player fills it.
+   Same element styles both the <video> (direct files) and the YouTube iframe. */
 .work-detail__video {
     padding: 3.6vw 4.5vw 0;
+    height: 100vh;
 }
 
 .work-detail__video-player {
     width: 100%;
+    height: 100%;
     display: block;
+    border: 0;
+    object-fit: cover;
 }
 
 .text-highlight {
