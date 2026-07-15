@@ -498,7 +498,7 @@ export interface Work {
           }
         | {
             /**
-             * Video URL (mp4 or streamable), same as the showreel — plays inline, full width. Block is skipped if empty.
+             * Video URL — a YouTube link (watch/share/shorts) or a direct mp4/streamable link. Block is skipped if empty.
              */
             url?: string | null;
             id?: string | null;

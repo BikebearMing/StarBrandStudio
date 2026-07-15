@@ -7,8 +7,17 @@ import { scrollState } from '@/lib/scroll'
 import { markAppNavigated } from '@/components/Preloader/Preloader'
 
 // ─── CONTROLS ────────────────────────────────────────────────────────────────
-const COVER_DURATION = 0.6   // red panel slides up from the bottom to cover
-const REVEAL_DURATION = 0.6  // red panel slides up off the top to reveal
+// Exit sequence: blur → scale down → red panel up → (route swap) → reveal.
+// Each step starts before the previous fully ends (the *_OVERLAP values) so the
+// whole thing reads as one continuous motion rather than three separate steps.
+const BLUR_DURATION = 0.5    // 1. outgoing page blurs
+const SCALE_DURATION = 0.7   // 2. outgoing page shrinks
+const SCALE_OVERLAP = 0.2    // …starting this long before the blur finishes
+const COVER_DURATION = 0.8   // 3. red panel slides up from the bottom to cover
+const COVER_OVERLAP = 0.3    // …starting this long before the scale finishes
+const REVEAL_DURATION = 0.8  // 4. red panel slides off the top to reveal
+const EXIT_SCALE = 0.92      // outgoing page shrinks to this while being covered
+const EXIT_BLUR = 10         // px of blur on the outgoing page
 const EASE = 'power3.inOut'
 const FAILSAFE_MS = 8000     // clear the panel if the new route never commits
 // ─────────────────────────────────────────────────────────────────────────────
@@ -24,10 +33,20 @@ const FAILSAFE_MS = 8000     // clear the panel if the new route never commits
  * up from the bottom to cover the screen, the new route is pushed behind it,
  * then the panel keeps sliding up and off the top to reveal the new page.
  *
+ * While the panel covers, the OUTGOING page blurs and scales down slightly
+ * (a transient transform/filter on <main>).
+ *
  * ── Scroll-safety (hard requirements) ──
  *   • The panel is a `position: fixed; inset: 0` element appended to <body>, so
  *     it NEVER contributes to document height — it can't cause scroll/clamp
- *     issues. The page tree is never wrapped or transformed.
+ *     issues. The page tree is never wrapped.
+ *   • The exit transform/filter on <main> exists ONLY during the cover phase and
+ *     is unconditionally cleared (cover complete, cleanup AND failsafe paths)
+ *     the moment the screen is fully red — a transform that survives navigation
+ *     breaks the sticky hero and scrolling. The fixed .site-header is pinned
+ *     to the current viewport top for those 0.6s, because a transformed <main>
+ *     would otherwise re-anchor it to the document top (off-screen when
+ *     scrolled).
  *   • Lenis is NEVER stopped (that previously left smooth-scroll permanently
  *     disabled). We only reset the scroll position with `lenis.scrollTo(0)`.
  * See [[page-transition-scroll-lock]].
@@ -42,12 +61,16 @@ export default function PageTransition({ children }: { children: React.ReactNode
   const failsafe = useRef<ReturnType<typeof setTimeout> | null>(null)
   const navigateRef = useRef<(href: string) => void>(() => {})
   const revealRef = useRef<() => void>(() => {})
+  // Undoes the outgoing page's blur/scale — MUST be callable from every exit
+  // path (cover complete, cleanup, failsafe) so no transform survives.
+  const clearExitRef = useRef<() => void>(() => {})
 
   const cleanup = () => {
     if (failsafe.current) {
       clearTimeout(failsafe.current)
       failsafe.current = null
     }
+    clearExitRef.current()
     panelRef.current?.remove()
     panelRef.current = null
     covering.current = false
@@ -80,6 +103,11 @@ export default function PageTransition({ children }: { children: React.ReactNode
     if (busy.current) return
     busy.current = true
 
+    // Blur + scale the outgoing page while the panel covers it. Transient by
+    // design: cleared the moment the screen is fully red (see clearExitRef).
+    const page = document.querySelector<HTMLElement>('main')
+    const header = page?.querySelector<HTMLElement>('.site-header')
+
     // Solid red panel parked just below the fold. `position: fixed` keeps it out
     // of document flow, so it never affects page height / scrolling.
     const panel = document.createElement('div')
@@ -96,11 +124,48 @@ export default function PageTransition({ children }: { children: React.ReactNode
     document.body.appendChild(panel)
     panelRef.current = panel
 
-    gsap.to(panel, {
+    // One timeline choreographs the exit: blur → scale (joins late in the
+    // blur) → panel up (joins late in the scale).
+    const exitTl = gsap.timeline()
+    if (page) {
+      // The fixed header would re-anchor to the transformed <main> (document
+      // top — off-screen when scrolled); pin it to the viewport for the effect.
+      if (header) {
+        header.style.position = 'absolute'
+        header.style.top = `${window.scrollY}px`
+      }
+      exitTl
+        .to(page, {
+          filter: `blur(${EXIT_BLUR}px)`,
+          duration: BLUR_DURATION,
+          ease: 'power2.inOut',
+        })
+        .to(page, {
+          scale: EXIT_SCALE,
+          // Scale about the centre of what's on screen, not the page box.
+          transformOrigin: `50% ${window.scrollY + window.innerHeight / 2}px`,
+          duration: SCALE_DURATION,
+          ease: EASE,
+        }, `-=${SCALE_OVERLAP}`)
+    }
+    clearExitRef.current = () => {
+      exitTl.kill()
+      if (page) gsap.set(page, { clearProps: 'transform,filter,transformOrigin' })
+      if (header) {
+        header.style.position = ''
+        header.style.top = ''
+      }
+      clearExitRef.current = () => {}
+    }
+
+    exitTl.to(panel, {
       y: '0%',
       duration: COVER_DURATION,
       ease: EASE,
       onComplete: () => {
+        // Screen is fully red — undo the exit effect NOW, while it's invisible,
+        // so the transform can never leak into the next page.
+        clearExitRef.current()
         // Reset to the top WITHOUT stopping Lenis — sync its internal position
         // too, otherwise Lenis would snap the window back on its next frame.
         scrollState.lenis?.scrollTo(0, { immediate: true, force: true })
@@ -111,7 +176,7 @@ export default function PageTransition({ children }: { children: React.ReactNode
           if (covering.current) revealRef.current()
         }, FAILSAFE_MS)
       },
-    })
+    }, page ? `-=${COVER_OVERLAP}` : 0)
   }
 
   // Intercept internal link clicks globally — capture phase runs before
