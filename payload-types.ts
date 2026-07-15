@@ -475,6 +475,20 @@ export interface Work {
           }
         | {
             /**
+             * Add any number of images — shown 4 per row, wrapping down.
+             */
+            images?:
+              | {
+                  image: number | Media;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'gallery';
+          }
+        | {
+            /**
              * Full-width image.
              */
             image?: (number | null) | Media;
@@ -483,6 +497,19 @@ export interface Work {
             blockType: 'oneImage';
           }
       )[]
+    | null;
+  /**
+   * Awards this campaign won — shown under an “AWARDS” subhead at the bottom of the inner page.
+   */
+  awards?:
+    | {
+        image: number | Media;
+        /**
+         * Award name shown under the image.
+         */
+        name?: string | null;
+        id?: string | null;
+      }[]
     | null;
   updatedAt: string;
   createdAt: string;
@@ -1104,6 +1131,18 @@ export interface WorksSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
+        gallery?:
+          | T
+          | {
+              images?:
+                | T
+                | {
+                    image?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
         oneImage?:
           | T
           | {
@@ -1111,6 +1150,13 @@ export interface WorksSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
+      };
+  awards?:
+    | T
+    | {
+        image?: T;
+        name?: T;
+        id?: T;
       };
   updatedAt?: T;
   createdAt?: T;

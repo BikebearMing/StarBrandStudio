@@ -443,7 +443,7 @@ async function run() {
           heading: 'The Background',
           body: `RHB Bank and Star Media Group came together to support Malaysian SMEs facing declining visibility and rising marketing costs in the post-pandemic economy. SMEs form the backbone of the economy, yet many lack the resources to compete in an increasingly digital, crowded marketplace. The initiative set out to give local businesses accessible marketing support — and to encourage Malaysians to rediscover and back their neighbourhood merchants.`,
         },
-        { blockType: 'twoImages', left: rhbMasthead, right: rhbCta },
+        { blockType: 'gallery', images: [{ image: rhbMasthead }, { image: rhbCta }] },
         {
           blockType: 'textSection',
           heading: 'The Big Idea',
@@ -479,7 +479,7 @@ async function run() {
           heading: 'The Background',
           body: `Malaysia faces a growing energy trilemma — balancing security, affordability, and sustainability — amid accelerating climate pressures. Awareness of climate change is rising, but a persistent "say–do gap" remains: stated intentions to be energy-efficient rarely translate into action, held back by comfort-first habits, scepticism over individual impact, and reluctance to invest in change. As Malaysia pursues its Net Zero 2050 ambition, behavioural adoption remains the missing link. Through the Malaysia Energy Literacy Programme (MELP), Tenaga Nasional Berhad partnered with Star Media Group to translate national sustainability goals into a youth-focused education initiative — building understanding of energy transition, renewable energy, and ESG through lived experience rather than passive learning. The premise: if energy behaviour is to change, it must begin early.`,
         },
-        { blockType: 'twoImages', left: tnb2, right: tnb3 },
+        { blockType: 'gallery', images: [{ image: tnb2 }, { image: tnb3 }] },
         {
           blockType: 'textSection',
           heading: 'The Big Idea',
@@ -512,7 +512,7 @@ async function run() {
           heading: 'The Background',
           body: `Plastic waste is one of Malaysia's most complex environmental challenges — driven by high consumption, limited recycling efficiency, and systemic leakage into natural ecosystems. The plastic manufacturing sector contributes significantly to national growth (annual sales exceeding RM61 billion, 4–5% of GDP), yet Malaysia is also among ASEAN's highest per-capita consumers of plastic packaging, generating over a million tonnes of plastic waste a year — only around 24% of which is recycled. Plastic, in other words, is not just an environmental issue but a systems problem spanning consumption behaviour, waste infrastructure, and circular-economy readiness.\n\nFor The Coca-Cola Company in Malaysia, this carried added reputational complexity. As a major user of plastic packaging, the brand sits at the centre of public scrutiny on waste — while investing in global circular-economy commitments and sustainable-packaging goals. A clear trust gap remained, particularly among Gen Z: highly eco-conscious, yet deeply sceptical of corporate sustainability messaging. In response, Coca-Cola backed a youth-led innovation platform built to move beyond awareness into hands-on circular-economy experimentation — positioning students as co-creators of solutions rather than passive recipients of messaging.`,
         },
-        { blockType: 'twoImages', left: sngei2, right: sngei3 },
+        { blockType: 'gallery', images: [{ image: sngei2 }, { image: sngei3 }] },
         {
           blockType: 'textSection',
           heading: 'The Big Idea',
@@ -566,7 +566,7 @@ async function run() {
           heading: 'The Background',
           body: `Oil palm is one of the world's most efficient oil-producing crops, needing far less land than other vegetable oils for the same yield — which, with its affordability and versatility, has made palm oil one of the most widely used ingredients in global food and consumer supply chains. It is also one of the most contested commodities. Rising demand has raised legitimate concerns around deforestation, biodiversity loss, land-use change, labour practices, and sustainability governance — concerns that have hardened into a simplified global narrative casting palm oil as inherently harmful, with little distinction between conventional and certified sustainable production. As one of the world's largest producers and exporters, Malaysia sits at the centre of this debate. Working with the Malaysia Palm Oil Council (MPOC), the challenge was to ensure sustainably sourced palm oil is understood accurately — in relation to its environmental safeguards, certification systems, and role in more efficient land use and conservation.`,
         },
-        { blockType: 'twoImages', left: mpocImg2, right: mpocImg3 },
+        { blockType: 'gallery', images: [{ image: mpocImg2 }, { image: mpocImg3 }] },
         {
           blockType: 'textSection',
           heading: 'The Big Idea',

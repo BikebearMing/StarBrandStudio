@@ -970,11 +970,54 @@ section.services {
     width: 100%;
     aspect-ratio: 1;
     display: block;
-    object-fit: cover;
+    object-fit: contain;
 }
 
 .work-detail__grid .work-detail__grid-img:last-child {
     max-height: 70%;
+}
+
+/* Wrapping image gallery — 4 per row, editors can add any number of images. */
+.work-detail__gallery {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5vw;
+    padding: 3.6vw 4.5vw 0;
+}
+
+.work-detail__gallery-img {
+    width: 100%;
+    aspect-ratio: 1;
+    display: block;
+    object-fit: contain;
+}
+
+/* Awards strip at the bottom of the inner page — image, award name underneath.
+   Typography from .body; these rules only do layout. */
+.work-detail__awards {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2vw;
+    padding: 3.6vw 4.5vw 0;
+}
+
+.work-detail__awards-list {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5vw;
+}
+
+.work-detail__award {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8vw;
+}
+
+.work-detail__award-img {
+    width: 100%;
+    aspect-ratio: 1;
+    display: block;
+    object-fit: contain;
 }
 
 /* Full-width image at the very bottom of the inner page */
@@ -3022,6 +3065,26 @@ section.awards {
 
     .work-detail__grid .work-detail__grid-img:last-child {
         max-height: none;
+    }
+
+    .work-detail__gallery {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 4vw;
+        padding: 10vw var(--sidepadding-xm) 0;
+    }
+
+    .work-detail__awards {
+        gap: 3vw;
+        padding: 10vw var(--sidepadding-xm) 0;
+    }
+
+    .work-detail__awards-list {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 4vw;
+    }
+
+    .work-detail__award {
+        gap: 2vw;
     }
 
     .work-detail__footer-media {

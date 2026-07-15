@@ -57,6 +57,20 @@ const twoImages: Block = {
   ],
 }
 
+const gallery: Block = {
+  slug: 'gallery',
+  labels: { singular: 'Gallery', plural: 'Galleries' },
+  fields: [
+    {
+      name: 'images',
+      type: 'array',
+      labels: { singular: 'Image', plural: 'Images' },
+      admin: { description: 'Add any number of images — shown 4 per row, wrapping down.' },
+      fields: [{ name: 'image', type: 'upload', relationTo: 'media', required: true }],
+    },
+  ],
+}
+
 const oneImage: Block = {
   slug: 'oneImage',
   labels: { singular: 'One Image', plural: 'One Images' },
@@ -119,19 +133,32 @@ export const Works: CollectionConfig = {
       name: 'content',
       type: 'blocks',
       label: 'Inner Page Content',
-      blocks: [textSection, twoImages, oneImage],
+      blocks: [textSection, twoImages, gallery, oneImage],
       admin: {
         description:
           'Inner page (/works/[slug]) content. Drag blocks to reorder how they appear.',
       },
-      // Requested default layout: Project Brief → 2 images → The Solution →
+      // Requested default layout: Project Brief → gallery → The Solution →
       // Impact & Results → 1 image. Editors drag to reorder per project.
       defaultValue: [
         { blockType: 'textSection', heading: 'Project Brief' },
-        { blockType: 'twoImages' },
+        { blockType: 'gallery' },
         { blockType: 'textSection', heading: 'The Solution' },
         { blockType: 'textSection', heading: 'Impact & Results' },
         { blockType: 'oneImage' },
+      ],
+    },
+    {
+      name: 'awards',
+      type: 'array',
+      labels: { singular: 'Award', plural: 'Awards' },
+      admin: {
+        description:
+          'Awards this campaign won — shown under an “AWARDS” subhead at the bottom of the inner page.',
+      },
+      fields: [
+        { name: 'image', type: 'upload', relationTo: 'media', required: true },
+        { name: 'name', type: 'text', admin: { description: 'Award name shown under the image.' } },
       ],
     },
   ],

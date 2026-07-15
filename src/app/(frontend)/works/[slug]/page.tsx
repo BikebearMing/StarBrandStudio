@@ -121,6 +121,21 @@ export default async function WorkDetailRoute({ params }: { params: Promise<{ sl
                 </div>
               )
             }
+            case 'gallery': {
+              const images =
+                block.images?.flatMap((it) => {
+                  const src = mediaUrl(it.image)
+                  return src ? [src] : []
+                }) ?? []
+              if (!images.length) return null
+              return (
+                <div className="work-detail__gallery" key={block.id ?? i}>
+                  {images.map((src, j) => (
+                    <img className="work-detail__gallery-img" src={src} alt={slide.title ?? ''} key={j} />
+                  ))}
+                </div>
+              )
+            }
             case 'oneImage': {
               const src = mediaUrl(block.image)
               if (!src) return null
@@ -134,6 +149,25 @@ export default async function WorkDetailRoute({ params }: { params: Promise<{ sl
               return null
           }
         })}
+
+        {/* Awards this campaign won — image with the award name underneath. */}
+        {(slide.awards?.length ?? 0) > 0 && (
+          <div className="work-detail__awards">
+            <p className="body work-detail__section-heading">AWARDS</p>
+            <div className="work-detail__awards-list">
+              {slide.awards!.map((award, i) => {
+                const src = mediaUrl(award.image)
+                if (!src) return null
+                return (
+                  <div className="work-detail__award" key={award.id ?? i}>
+                    <img className="work-detail__award-img" src={src} alt={award.name ?? ''} />
+                    {award.name && <p className="body dark work-detail__award-name">{award.name}</p>}
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        )}
       </section>
 
       <Footer />
