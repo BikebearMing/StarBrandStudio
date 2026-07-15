@@ -77,6 +77,21 @@ const oneImage: Block = {
   fields: [{ name: 'image', type: 'upload', relationTo: 'media', admin: { description: 'Full-width image.' } }],
 }
 
+const video: Block = {
+  slug: 'video',
+  labels: { singular: 'Video', plural: 'Videos' },
+  fields: [
+    {
+      name: 'url',
+      type: 'text',
+      admin: {
+        description:
+          'Video URL (mp4 or streamable), same as the showreel — plays inline, full width. Block is skipped if empty.',
+      },
+    },
+  ],
+}
+
 export const Works: CollectionConfig = {
   slug: 'works',
   orderable: true,
@@ -133,7 +148,7 @@ export const Works: CollectionConfig = {
       name: 'content',
       type: 'blocks',
       label: 'Inner Page Content',
-      blocks: [textSection, twoImages, gallery, oneImage],
+      blocks: [textSection, twoImages, gallery, oneImage, video],
       admin: {
         description:
           'Inner page (/works/[slug]) content. Drag blocks to reorder how they appear.',

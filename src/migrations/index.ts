@@ -5,6 +5,7 @@ import * as migration_20260714_072826_hero_messages from './20260714_072826_hero
 import * as migration_20260714_072852_drop_hero_typewriter_words from './20260714_072852_drop_hero_typewriter_words';
 import * as migration_20260714_074822_awards_item_name from './20260714_074822_awards_item_name';
 import * as migration_20260715_032623_works_gallery_awards from './20260715_032623_works_gallery_awards';
+import * as migration_20260715_062415_works_video_block from './20260715_062415_works_video_block';
 
 export const migrations = [
   {
@@ -41,5 +42,10 @@ export const migrations = [
     up: migration_20260715_032623_works_gallery_awards.up,
     down: migration_20260715_032623_works_gallery_awards.down,
     name: '20260715_032623_works_gallery_awards',
+  },
+  {
+    up: migration_20260715_062415_works_video_block.up,
+    down: migration_20260715_062415_works_video_block.down,
+    name: '20260715_062415_works_video_block'
   },
 ];

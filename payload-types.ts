@@ -496,6 +496,15 @@ export interface Work {
             blockName?: string | null;
             blockType: 'oneImage';
           }
+        | {
+            /**
+             * Video URL (mp4 or streamable), same as the showreel — plays inline, full width. Block is skipped if empty.
+             */
+            url?: string | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'video';
+          }
       )[]
     | null;
   /**
@@ -1147,6 +1156,13 @@ export interface WorksSelect<T extends boolean = true> {
           | T
           | {
               image?: T;
+              id?: T;
+              blockName?: T;
+            };
+        video?:
+          | T
+          | {
+              url?: T;
               id?: T;
               blockName?: T;
             };

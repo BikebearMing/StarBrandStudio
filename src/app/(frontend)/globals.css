@@ -1025,6 +1025,16 @@ section.services {
     margin-top: 4vw;
 }
 
+/* Inline video block — same footprint as a full-width image */
+.work-detail__video {
+    padding: 3.6vw 4.5vw 0;
+}
+
+.work-detail__video-player {
+    width: 100%;
+    display: block;
+}
+
 .text-highlight {
     font-family: var(--serif);
     display: inline-block;

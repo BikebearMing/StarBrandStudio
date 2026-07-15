@@ -136,6 +136,23 @@ export default async function WorkDetailRoute({ params }: { params: Promise<{ sl
                 </div>
               )
             }
+            case 'video': {
+              if (!block.url) return null
+              return (
+                <div className="work-detail__media work-detail__video" key={block.id ?? i}>
+                  <video
+                    className="work-detail__video-player"
+                    src={block.url}
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    controls
+                    preload="metadata"
+                  />
+                </div>
+              )
+            }
             case 'oneImage': {
               const src = mediaUrl(block.image)
               if (!src) return null
