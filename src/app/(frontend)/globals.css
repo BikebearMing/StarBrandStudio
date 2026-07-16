@@ -839,6 +839,12 @@ section.services {
         width: 100%;
     }
 
+    /* Client uploads images of arbitrary dimensions — letterbox them against
+       the dark backdrop rather than cropping. */
+    .works-slider__img {
+        object-fit: contain;
+    }
+
     .works-showcase__title {
         order: 2;
         margin: 0;
