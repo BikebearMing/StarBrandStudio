@@ -6,6 +6,7 @@ import * as migration_20260714_072852_drop_hero_typewriter_words from './2026071
 import * as migration_20260714_074822_awards_item_name from './20260714_074822_awards_item_name';
 import * as migration_20260715_032623_works_gallery_awards from './20260715_032623_works_gallery_awards';
 import * as migration_20260715_062415_works_video_block from './20260715_062415_works_video_block';
+import * as migration_20260721_050000_works_text_body_rich from './20260721_050000_works_text_body_rich';
 
 export const migrations = [
   {
@@ -47,5 +48,10 @@ export const migrations = [
     up: migration_20260715_062415_works_video_block.up,
     down: migration_20260715_062415_works_video_block.down,
     name: '20260715_062415_works_video_block'
+  },
+  {
+    up: migration_20260721_050000_works_text_body_rich.up,
+    down: migration_20260721_050000_works_text_body_rich.down,
+    name: '20260721_050000_works_text_body_rich',
   },
 ];

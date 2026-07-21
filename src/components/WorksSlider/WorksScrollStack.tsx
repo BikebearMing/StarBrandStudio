@@ -5,6 +5,7 @@ import Link from 'next/link'
 import gsap from 'gsap'
 import { scrollState } from '@/lib/scroll'
 import type { WorksSlide } from './WorksSlider'
+import WorksMasonryBg from './WorksMasonryBg'
 
 // Scroll distance (in viewport heights) the page travels per slide. Higher =
 // slower/lazier scrub; lower = each slide flicks past in less scrolling.
@@ -115,6 +116,7 @@ export default function WorksScrollStack({ slides }: { slides: WorksSlide[] }) {
   return (
     <div className="works-scroll" ref={scrollRef}>
       <section className="works-page works-page--pinned">
+        <WorksMasonryBg images={slides.map((s) => s.image)} />
         <nav className="body breadcrumb works-breadcrumb" aria-label="Breadcrumb">
           <Link href="/">HOME</Link> / <span>WORKS</span>
         </nav>

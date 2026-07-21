@@ -453,8 +453,23 @@ export interface Work {
              */
             heading?: string | null;
             /**
-             * Section paragraph. Block is skipped if empty.
+             * Section paragraph — supports bold, italic, links, lists. Block is skipped if empty.
              */
+            bodyRich?: {
+              root: {
+                type: string;
+                children: {
+                  type: any;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
             body?: string | null;
             id?: string | null;
             blockName?: string | null;
@@ -1128,6 +1143,7 @@ export interface WorksSelect<T extends boolean = true> {
           | T
           | {
               heading?: T;
+              bodyRich?: T;
               body?: T;
               id?: T;
               blockName?: T;

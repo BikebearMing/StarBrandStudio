@@ -41,9 +41,21 @@ const textSection: Block = {
       admin: { description: 'Section heading, e.g. “Project Brief”.' },
     },
     {
+      name: 'bodyRich',
+      label: 'Body',
+      type: 'richText',
+      admin: {
+        description:
+          'Section paragraph — supports bold, italic, links, lists. Block is skipped if empty.',
+      },
+    },
+    {
+      // Legacy plain-text body, superseded by `bodyRich` (WYSIWYG). Kept (hidden)
+      // so pre-migration content survives; the 20260721 migration copies it into
+      // bodyRich, and the detail page still falls back to it when bodyRich is empty.
       name: 'body',
       type: 'textarea',
-      admin: { description: 'Section paragraph. Block is skipped if empty.' },
+      admin: { hidden: true },
     },
   ],
 }

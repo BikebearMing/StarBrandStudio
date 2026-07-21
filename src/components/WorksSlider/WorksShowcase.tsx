@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import WorksSlider, { type WorksSlide } from './WorksSlider'
 import WorksScrollStack from './WorksScrollStack'
+import WorksMasonryBg from './WorksMasonryBg'
 
 type Props = {
   slides?: WorksSlide[]
@@ -53,6 +54,7 @@ function MobileWorks({ slides }: { slides: WorksSlide[] }) {
 
   return (
     <section className="works-page">
+      <WorksMasonryBg images={slides.map((s) => s.image)} />
       <nav className="body breadcrumb works-breadcrumb" aria-label="Breadcrumb">
         <Link href="/">HOME</Link> / <span>WORKS</span>
       </nav>

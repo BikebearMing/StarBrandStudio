@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 
 export type AwardEntry = {
@@ -101,8 +101,19 @@ const DEFAULT_RECOGNITIONS = '& RECOGNITIONS'
 
 export default function AwardsPage({ eyebrow, recognitions, years }: Props) {
   const GROUPS = years?.length ? years : DEFAULT_GROUPS
-  // Active hovered row, scoped per group so each year shows its own image.
+  // Active row, scoped per group so each year shows its own image. Desktop:
+  // set on hover (image in the shared media box). Touch: toggled by tap
+  // (image expands accordion-style inside the row — see the mobile CSS).
   const [active, setActive] = useState<{ g: number; r: number } | null>(null)
+  const [hoverable, setHoverable] = useState(true)
+
+  useEffect(() => {
+    const mq = window.matchMedia('(hover: hover)')
+    const apply = () => setHoverable(mq.matches)
+    apply()
+    mq.addEventListener('change', apply)
+    return () => mq.removeEventListener('change', apply)
+  }, [])
 
   const title = eyebrow ?? DEFAULT_EYEBROW
 
@@ -149,8 +160,12 @@ export default function AwardsPage({ eyebrow, recognitions, years }: Props) {
                     className={`awards-page__row${
                       active?.g === g && active?.r === r ? ' is-active' : ''
                     }`}
-                    onMouseEnter={() => setActive({ g, r })}
-                    onMouseLeave={() => setActive(null)}
+                    onMouseEnter={() => hoverable && setActive({ g, r })}
+                    onMouseLeave={() => hoverable && setActive(null)}
+                    onClick={() =>
+                      !hoverable &&
+                      setActive(active?.g === g && active?.r === r ? null : { g, r })
+                    }
                   >
                     <div
                       className="body awards-page__middle"
@@ -160,6 +175,11 @@ export default function AwardsPage({ eyebrow, recognitions, years }: Props) {
                       className="body awards-page__right"
                       dangerouslySetInnerHTML={{ __html: entry.rightHtml ?? '' }}
                     />
+                    {entry.groupPhoto && (
+                      <div className="awards-page__row-media" aria-hidden="true">
+                        <img src={entry.groupPhoto} alt="" />
+                      </div>
+                    )}
                   </li>
                 ))}
               </ul>

@@ -3,6 +3,8 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { getPayload } from 'payload'
 import config from '@payload-config'
+import { convertLexicalToHTML } from '@payloadcms/richtext-lexical/html'
+import type { SerializedEditorState } from '@payloadcms/richtext-lexical/lexical'
 import type { Media } from '@payload-types'
 
 import Header from '@/components/Header/Header'
@@ -118,28 +120,41 @@ export default async function WorkDetailRoute({ params }: { params: Promise<{ sl
         {slide.content?.map((block, i) => {
           switch (block.blockType) {
             case 'textSection': {
-              if (!block.body) return null
+              // WYSIWYG body takes priority; a state with no actual text (an
+              // opened-then-emptied editor serializes to empty paragraphs)
+              // falls back to the legacy plain-text body.
+              let html = block.bodyRich
+                ? convertLexicalToHTML({
+                    data: block.bodyRich as SerializedEditorState,
+                    disableContainer: true,
+                  })
+                : undefined
+              if (html && !html.replace(/<[^>]*>/g, '').trim()) html = undefined
+              if (!html && !block.body) return null
               const isColumns = /big idea/i.test(block.heading ?? '')
+              const bodyClass = `body work-detail__section-body${
+                isColumns ? ' work-detail__section-body--columns' : ''
+              }`
               return (
                 <div className="work-detail__section" key={block.id ?? i}>
                   {block.heading && (
                     <p className="body work-detail__section-heading">{block.heading}</p>
                   )}
-                  <p
-                    className={`body work-detail__section-body${
-                      isColumns ? ' work-detail__section-body--columns' : ''
-                    }`}
-                  >
-                    {/* Render newlines from the textarea as real <br> — SplitText
-                        (MaskUpHeadings) keeps them as line breaks; plain "\n" gets
-                        torn out when the paragraph is re-split into animated lines. */}
-                    {block.body.split('\n').map((line, j, arr) => (
-                      <Fragment key={j}>
-                        {line}
-                        {j < arr.length - 1 && <br />}
-                      </Fragment>
-                    ))}
-                  </p>
+                  {html ? (
+                    <div className={bodyClass} dangerouslySetInnerHTML={{ __html: html }} />
+                  ) : (
+                    <p className={bodyClass}>
+                      {/* Render newlines from the textarea as real <br> — SplitText
+                          (MaskUpHeadings) keeps them as line breaks; plain "\n" gets
+                          torn out when the paragraph is re-split into animated lines. */}
+                      {block.body!.split('\n').map((line, j, arr) => (
+                        <Fragment key={j}>
+                          {line}
+                          {j < arr.length - 1 && <br />}
+                        </Fragment>
+                      ))}
+                    </p>
+                  )}
                 </div>
               )
             }

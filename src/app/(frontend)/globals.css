@@ -92,14 +92,14 @@ img {
     letter-spacing: -0.486vw;
 }
 
-/* .h1-v2 at 85% scale — for displays where the full size overwhelms
+/* .h1-v2 at ~72% scale — for displays where the full size overwhelms
    (e.g. the Impact CTA "LET'S CONNECT" heading). */
 .h1-v2-sm {
     font-family: var(--amplitude-condensed);
-    font-size: 10.625vw;
+    font-size: 9.03vw;
     line-height: 1;
     font-weight: 700;
-    letter-spacing: -0.413vw;
+    letter-spacing: -0.351vw;
 }
 
 /* Condensed display heading sized so a full-sentence line fits one row
@@ -116,6 +116,15 @@ img {
 
 .hero-parent .h2-serif {
     font-size: 3.6vw;
+}
+
+/* SplitText mask wrappers (MaskUpHeadings) clip at their padding edge, and the
+   condensed headings' negative letter-spacing ends the measured line box before
+   the last glyph's ink does — pad the mask (offset by margin so layout doesn't
+   shift) so the final letter isn't shaved on the right. */
+.amp-mask-line-mask {
+    padding-right: 0.06em;
+    margin-right: -0.06em;
 }
 
 /* Serif supporting line paired with .h1-v3 (hero cycling subheadings). */
@@ -621,7 +630,7 @@ section.services {
    Fixed-position children (slider/title/breadcrumb) float over it. */
 .works-page {
     position: relative;
-    background: #000000 url("/works-bg.png") center / cover no-repeat;
+    background: #000000;
     color: #ffffff;
     min-height: 100vh;
     overflow: hidden;
@@ -631,6 +640,121 @@ section.services {
     grid-template-columns: 160fr 517fr 420fr;
     align-items: center;
     gap: 1.25vw;
+}
+
+/* Masonry backdrop — the works' images tiled B&W at low opacity, under the
+   same black radial vignette as the homepage projects background. Sits at
+   z-index -1 inside the isolated .works-page, above its black background. */
+.works-bg {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+}
+
+.works-bg__grid {
+    display: flex;
+    /* Columns must keep their natural (content) height — the drift translates
+       by -50% of the column itself, which only equals one tile-copy when the
+       column isn't stretched to the viewport. */
+    align-items: flex-start;
+    gap: 0.8vw;
+    padding-inline: 0.8vw;
+}
+
+/* Each column drifts on its own slow loop; tile spacing comes from the img
+   margin (not flex gap) so translating by -50% lands exactly on the second
+   copy of the tiles and the wrap is invisible. */
+.works-bg__col {
+    flex: 1;
+    will-change: transform;
+    animation: works-bg-drift 200s linear infinite;
+}
+
+.works-bg__col:nth-child(2n) {
+    animation-direction: reverse;
+}
+
+.works-bg__col:nth-child(2) {
+    animation-duration: 260s;
+}
+
+.works-bg__col:nth-child(3) {
+    animation-duration: 175s;
+}
+
+.works-bg__col:nth-child(4) {
+    animation-duration: 230s;
+}
+
+@keyframes works-bg-drift {
+    from {
+        transform: translateY(0);
+    }
+    to {
+        transform: translateY(-50%);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .works-bg__col {
+        animation: none;
+    }
+}
+
+.works-bg__img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    margin-bottom: 0.8vw;
+    filter: grayscale(1) brightness(0.85) contrast(0.85);
+    opacity: 0.45;
+}
+
+/* Tile height variants (assigned in WorksMasonryBg) for the masonry stagger. */
+.works-bg__img--landscape {
+    aspect-ratio: 4 / 3;
+}
+
+.works-bg__img--square {
+    aspect-ratio: 1 / 1;
+}
+
+.works-bg__img--portrait {
+    aspect-ratio: 3 / 4;
+}
+
+.works-bg__img--wide {
+    aspect-ratio: 16 / 9;
+}
+
+.works-bg::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(
+        43.59% 45.04% at 50% 50%,
+        rgba(0, 0, 0, 0) 0%,
+        #000 100%
+    );
+}
+
+@media (max-width: 768px) {
+    .works-bg__grid {
+        gap: 2vw;
+        padding-inline: 2vw;
+    }
+
+    /* Two columns on mobile — the hidden ones' flex share goes to the rest. */
+    .works-bg__col:nth-child(n + 3) {
+        display: none;
+    }
+
+    .works-bg__img {
+        margin-bottom: 2vw;
+    }
 }
 
 .works-slider .splide__track {
@@ -730,7 +854,7 @@ section.services {
 .works-stack-viewport {
     position: relative;
     height: 100vh;
-    overflow: hidden;
+    overflow: visible;
 }
 
 .works-stack {
@@ -743,6 +867,11 @@ section.services {
     gap: 2.2vw;
     will-change: transform;
 }
+
+
+/* .impact-cta__top .amp-mask-line-mask {
+    padding: 0.1em;
+} */
 
 .works-stack__slide {
     position: relative;
@@ -764,7 +893,7 @@ section.services {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 96%;
+    width: 100%;
     aspect-ratio: 2 / 1;
     pointer-events: none;
     z-index: 2;
@@ -839,17 +968,19 @@ section.services {
         width: 100%;
     }
 
-    /* Client uploads images of arbitrary dimensions — letterbox them against
-       the dark backdrop rather than cropping. */
-    .works-slider__img {
+    /* .works-slider__img {
         object-fit: contain;
-    }
+    } */
 
     .works-showcase__title {
         order: 2;
         margin: 0;
         text-align: center;
         padding-inline: 6vw;
+    }
+
+    .work-detail__grid-img {
+        aspect-ratio: unset;
     }
 
     .works-showcase__detail {
@@ -905,9 +1036,9 @@ section.services {
 }
 
 .work-detail__title {
-    font-size: 6.9vw;
-    line-height: 0.9;
-    letter-spacing: -5px;
+    font-size: 4.5vw;
+    line-height: .9;
+    letter-spacing: -0.208vw;
     text-transform: uppercase;
 }
 
@@ -955,7 +1086,35 @@ section.services {
 
 .work-detail__section-body {
     max-width: 58vw;
+    letter-spacing: 0.035vw;
+    line-height: 1.4;
 }
+
+/* WYSIWYG (richText) bodies — restore the structure the global reset strips.
+   Layout/color only; type still comes from .body on the wrapper. */
+.work-detail__section-body p + p {
+    margin-top: 1em;
+}
+
+.work-detail__section-body ul,
+.work-detail__section-body ol {
+    margin: 0.5em 0;
+    padding-left: 1.4em;
+}
+
+.work-detail__section-body ul {
+    list-style: disc;
+}
+
+.work-detail__section-body ol {
+    list-style: decimal;
+}
+
+.work-detail__section-body a {
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+}
+
 
 /* The Solution copy flows across two columns */
 .work-detail__section-body--columns {
@@ -967,13 +1126,14 @@ section.services {
 .work-detail__grid {
     display: grid;
     grid-template-columns: 692fr 413fr;
-    gap: 11.5vw;
-    padding: 3.6vw 4.5vw 0;
+    gap: 3.5vw;
+    padding: 3.6vw 3.5vw 0;
     align-items: end;
 }
 
 .work-detail__grid-img {
     width: 100%;
+    height: 100%;
     aspect-ratio: 1;
     display: block;
     object-fit: contain;
@@ -1011,6 +1171,19 @@ section.services {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 1.5vw;
+}
+
+/* Column count follows the award count: 4 by design, but a 5th or 6th award
+   joins the same row instead of wrapping; only past 6 does a second row start.
+   Desktop-only — mobile keeps its 2-column grid. */
+@media (min-width: 769px) {
+    .work-detail__awards-list:has(> :nth-child(5)) {
+        grid-template-columns: repeat(5, 1fr);
+    }
+
+    .work-detail__awards-list:has(> :nth-child(6)) {
+        grid-template-columns: repeat(6, 1fr);
+    }
 }
 
 .work-detail__award {
@@ -1594,21 +1767,35 @@ section.pillars-section .wrapper {
         margin-top: 7vw;
     }
 
+    /* More air between the copy and the angled strip; the space below it is
+       balanced by the reduced .our-difference top padding. */
+    .our-story__marquee {
+        margin-top: 24vw;
+    }
+
     .our-story__slide {
         width: 72vw;
         height: 42vw;
     }
 
+    span.our-difference__title-inner {
+    font-size: 8.333445vw;
+}
+
     .our-story__track {
         gap: 4vw;
     }
 
+    
+
     /* Section 2 — single-column cards, content-height. */
     .our-difference {
-        padding: 30vw 9vw 10vw 9vw;
+        padding: 18vw 9vw 10vw 9vw;
     }
 
+    /* Sized so the one-line title spans roughly the red cards' full width. */
     .our-difference__title {
+        font-size: 8vw;
         margin-bottom: 8vw;
     }
 
@@ -2011,6 +2198,8 @@ section.awards {
 .awards__heading-bottom {
     display: flex;
     align-items: flex-end;
+    /* Same overlap guard as .awards-page__banner-bottom. */
+    flex-wrap: wrap;
     gap: 2.5vw;
 }
 
@@ -2024,8 +2213,10 @@ section.awards {
 
 .awards__rec {
     flex: 1;
+    min-width: 0;
     line-height: 1;
-    white-space: nowrap;
+    /* nowrap can overflow leftward over the caption — wrap when needed. */
+    white-space: normal;
     font-weight: 700;
     font-size: 8.333vw;
     text-align: right;
@@ -2057,8 +2248,8 @@ section.awards {
 .impact-cta {
     position: relative;
     color: white;
-    padding-inline: 6.736vw;
-    padding-block: 7vw 4.7vw;
+    padding-inline: 5.726vw;
+    padding-block: 5.95vw 3.995vw;
     overflow: hidden;
     isolation: isolate;
     cursor: none;
@@ -2439,7 +2630,7 @@ section.awards {
     display: flex;
     flex-direction: column;
     gap: 1.5vw;
-    padding-inline: 19vw;
+    padding-inline: 15vw;
 }
 
 .awards-page__title {
@@ -2453,6 +2644,9 @@ section.awards {
 .awards-page__banner-bottom {
     display: flex;
     align-items: flex-end;
+    /* If the caption + line ever can't share the row (long CMS copy), wrap
+       instead of overlapping. */
+    flex-wrap: wrap;
     gap: 2.5vw;
 }
 
@@ -2466,10 +2660,13 @@ section.awards {
 
 .awards-page__rec {
     flex: 1;
+    min-width: 0;
     line-height: 1;
     font-weight: 700;
     font-size: 8.333vw;
-    white-space: nowrap;
+    /* nowrap made the line overflow leftward over the caption on narrower
+       desktops — let it wrap instead when it genuinely doesn't fit. */
+    white-space: normal;
     text-align: right;
 }
 
@@ -2518,7 +2715,7 @@ section.awards {
 .awards-page__media-img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
     display: block;
     animation: awards-img-in 0.35s ease;
 }
@@ -2580,6 +2777,11 @@ section.awards {
     color: rgba(0, 0, 0, 0.55);
 }
 
+/* Per-row accordion image — mobile only (desktop shows the shared media box). */
+.awards-page__row-media {
+    display: none;
+}
+
 @media (max-width: 768px) {
     .awards-page {
         padding-inline: 6.4vw;
@@ -2592,31 +2794,41 @@ section.awards {
         margin-bottom: 4vw;
     }
 
+    /* Mirror the homepage awards heading: AWARDS + & RECOGNITIONS share the
+       first row (wrap as fallback), caption on its own row below. */
+    .awards-page__banner {
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: baseline;
+        column-gap: 3vw;
+        row-gap: 6vw;
+        padding-inline: 0;
+        padding-top: 10vw;
+    }
+
+    .awards-page__banner-bottom {
+        display: contents;
+    }
+
     .awards-page__title {
-        font-size: 9vw;
+        order: 1;
+        font-size: 13vw;
+    }
+
+    .awards-page__title .text-highlight {
+        padding: 0 0.3em;
     }
 
     .awards-page__rec {
+        order: 2;
         flex: none;
-        font-size: 16vw;
-        white-space: normal;
+        font-size: 6.3vw;
         text-align: left;
     }
 
-    .awards-page__banner {
-        gap: 6vw;
-        padding-inline: 0;
-    }
-
-    /* Stack the caption above the big "& RECOGNITIONS" line on phones —
-       same as the home awards__heading-bottom. */
-    .awards-page__banner-bottom {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 3vw;
-    }
-
     .awards-page__caption {
+        order: 3;
+        flex-basis: 100%;
         width: auto;
         text-align: left;
         margin-bottom: 0;
@@ -2638,23 +2850,23 @@ section.awards {
         font-size: 3.6vw;
     }
 
+    /* The shared top image is replaced by the per-row accordion image, so a
+       tapped award reveals its photo right under the row instead of at the
+       top of a long year group. */
     .awards-page__media {
-        position: static;
-        grid-column: 1;
-        width: 60vw;
-        max-width: 280px;
-        height: auto; /* override the desktop fixed 14vw box */
-    }
-
-    .awards-page__media:empty {
         display: none;
     }
 
-    /* Give the photo a real height on mobile (desktop uses height:100% of the
-       fixed media box, which collapses once the box height is auto). */
-    .awards-page__media-img {
-        height: 40vw;
-        max-height: 187px;
+    .awards-page__row.is-active .awards-page__row-media {
+        display: block;
+    }
+
+    .awards-page__row-media img {
+        width: 100%;
+        max-height: 60vw;
+        object-fit: contain;
+        margin-top: 2vw;
+        animation: awards-img-in 0.35s ease;
     }
 
     .awards-page__rows {
@@ -2671,6 +2883,13 @@ section.awards {
     .awards-page__middle,
     .awards-page__right {
         font-size: 3.4vw;
+    }
+
+    /* The desktop 1.1vw list indent collapses to ~4px on phones, leaving the
+       disc markers hanging past the row's left edge — restore a real indent. */
+    .awards-page__middle ul {
+        margin-top: 1.5vw;
+        padding-left: 4.5vw;
     }
 }
 
@@ -2755,6 +2974,19 @@ section.awards {
         left: var(--sidepadding-xm);
         right: var(--sidepadding-xm);
         gap: 3vw;
+    }
+
+    /* The desktop .hero-parent .h2-serif (3.6vw) out-specifies the mobile
+       type scale above, leaving the subtitle unreadably small — re-bump it.
+       Headline scaled up alongside (12vw / 6vw pairing). */
+    .hero-parent .h1-v3 {
+        font-size: 12vw;
+        letter-spacing: -0.33vw;
+    }
+
+    .hero-parent .h2-serif {
+        font-size: 6vw;
+        line-height: 1.25;
     }
 
     /* ── What we do ──────────────────────────────────────────────────── */
@@ -2855,6 +3087,10 @@ section.awards {
         padding-top: 18vw;
     }
 
+    .story-hero__media img {
+        object-position: unset;
+    }
+
     .logo-carousel .carousel-header .logo-carousel__h4 {
         font-size: 5vw;
         line-height: 1.2;
@@ -2892,7 +3128,11 @@ section.awards {
     }
 
     section.projects .wrapper .project-grid .project .project-image {
-        height: 60vw;
+        height: 45vw;
+
+        & img {
+            object-fit: contain;
+        }
     }
 
     /* hover-only chrome has no place on touch */
@@ -2916,32 +3156,45 @@ section.awards {
 
     .awards__heading {
         padding-inline: 0;
-        gap: 6vw;
-        align-items: flex-start;
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: baseline;
+        column-gap: 3vw;
+        row-gap: 6vw;
     }
 
-    /* Flatten the two heading rows into one column so all four items can be
-       reordered: title → & recognitions → caption → button. */
+    /* Flatten the two heading rows so all four items can be reordered:
+       AWARDS + & RECOGNITIONS share the first row (wrap is the fallback if
+       they don't fit), then caption, then button. */
     .awards__heading-top,
     .awards__heading-bottom {
         display: contents;
     }
 
-    .awards__title { order: 1; }
+    .awards__title {
+        order: 1;
+        font-size: 13vw;
+    }
+
+    .awards__heading-top .text-highlight {
+        padding: 0 0.3em;
+    }
+
     .awards__rec { order: 2; }
     .awards__caption { order: 3; }
     .awards__button { order: 4; }
 
     .awards__caption {
+        flex-basis: 100%;
         text-align: left;
         white-space: normal;
         margin-bottom: 0;
     }
 
     .awards__rec {
-        font-size: 16vw;
+        flex: unset;
+        font-size: 7vw;
         text-align: left;
-        white-space: normal;
     }
 
     /* ── Impact CTA — restore the cursor, stack the rows ─────────────── */
@@ -2951,31 +3204,43 @@ section.awards {
         padding-inline: var(--sidepadding-xm);
     }
 
+    /* Wrapping row so LET'S + CONNECT share the first line; the copy takes a
+       full row below them. */
     .impact-cta__inner {
-        align-items: flex-start;
-        gap: 6vw;
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: baseline;
+        column-gap: 3vw;
+        row-gap: 6vw;
     }
 
-    .impact-cta__top {
-        flex-direction: column-reverse;
-        align-items: flex-start;
-        gap: 6vw;
-        margin-right: unset;
+    /* Bigger heading pair, sized so "LET'S CONNECT" still fits one line. */
+    .impact-cta .h1-v2-sm {
+        font-size: 10vw;
+        letter-spacing: -0.39vw;
     }
 
-    .impact-cta__top .custom-button {
-        align-self: flex-start;
-        margin-bottom: 0;
+    .impact-cta__impact {
+        padding: 0.5vw 2vw 1vw;
     }
 
+    /* Flatten both rows so the pieces stack as: LET'S → CONNECT → copy
+       (client wants the full heading before the supporting line). */
+    .impact-cta__top,
     .impact-cta__bottom {
-        flex-direction: column-reverse;
-        align-items: flex-start;
-        gap: 4vw;
-        margin-right: unset;
+        display: contents;
+    }
+
+    .impact-cta__heading { order: 1; }
+    .impact-cta__impact { order: 2; }
+
+    .impact-cta__top .body {
+        order: 3;
+        flex-basis: 100%;
     }
 
     .impact-cta__bottom .body {
+        order: 3;
         margin-top: 0;
     }
 
@@ -3080,8 +3345,12 @@ section.awards {
 
     .work-detail__grid {
         grid-template-columns: 1fr;
-        gap: 6vw;
+        gap: 4vw;
         padding: 10vw var(--sidepadding-xm) 0;
+    }
+
+    .work-detail__video {
+        height: 40vh;
     }
 
     .work-detail__grid .work-detail__grid-img:last-child {
