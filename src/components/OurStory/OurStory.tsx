@@ -107,7 +107,7 @@ export default function OurStory({ title, copy, images }: OurStoryProps = {}) {
   return (
     <section className="our-story">
       <div className="our-story__intro">
-        <h2 className="h3 our-story__title">{TITLE}</h2>
+        <h2 className="h3 amp-mask our-story__title">{TITLE}</h2>
         <div className="our-story__copy">
           <p className="body">{COPY[0]}</p>
           <p className="body">{COPY[1]}</p>

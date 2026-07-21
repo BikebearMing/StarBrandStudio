@@ -1,6 +1,7 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import gsap from 'gsap'
 
 export type ContactField = {
   name: string
@@ -47,6 +48,12 @@ const DEFAULT_FIELDS: ContactField[] = [
 
 const DEFAULT_CONFIRMATION = "THANKS — WE'VE GOT YOUR ENQUIRY. WE'LL BE IN TOUCH SHORTLY."
 
+// Scroll-in reveal of the field grid (fields rise + fade in, staggered).
+const REVEAL_DURATION = 0.8
+const REVEAL_STAGGER = 0.1
+const REVEAL_EASE = 'power3.out'
+const REVEAL_Y = 30 // px each field rises from
+
 export default function ContactForm({
   formId,
   fields,
@@ -54,9 +61,45 @@ export default function ContactForm({
   confirmationMessage = DEFAULT_CONFIRMATION,
 }: Props) {
   const FIELDS = fields?.length ? fields : DEFAULT_FIELDS
+  const gridRef = useRef<HTMLDivElement>(null)
   const [values, setValues] = useState<Record<string, string>>({})
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle')
   const [error, setError] = useState<string>('')
+
+  // Reveal the fields as the grid scrolls into view. Hidden state is applied
+  // from JS (not CSS) so the form still renders normally without it, and
+  // clearProps removes every transient style once the reveal finishes.
+  useEffect(() => {
+    const grid = gridRef.current
+    if (!grid) return
+    const fieldEls = Array.from(grid.querySelectorAll<HTMLElement>('.contact-form__field'))
+    if (!fieldEls.length) return
+
+    gsap.set(fieldEls, { autoAlpha: 0, y: REVEAL_Y })
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (!entries.some((entry) => entry.isIntersecting)) return
+        observer.disconnect()
+        gsap.to(fieldEls, {
+          autoAlpha: 1,
+          y: 0,
+          duration: REVEAL_DURATION,
+          stagger: REVEAL_STAGGER,
+          ease: REVEAL_EASE,
+          clearProps: 'all',
+        })
+      },
+      { threshold: 0.15 },
+    )
+    observer.observe(grid)
+
+    return () => {
+      observer.disconnect()
+      gsap.killTweensOf(fieldEls)
+      gsap.set(fieldEls, { clearProps: 'all' })
+    }
+  }, [])
 
   function setValue(name: string, value: string) {
     setValues((prev) => ({ ...prev, [name]: value }))
@@ -100,7 +143,7 @@ export default function ContactForm({
 
   return (
     <form className="contact-form" onSubmit={handleSubmit} noValidate>
-      <div className="contact-form__grid">
+      <div className="contact-form__grid" ref={gridRef}>
         {FIELDS.map((field) => {
           const half = field.width === 50
           const placeholder = (field.label ?? field.name).toUpperCase()

@@ -1,7 +1,9 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
+import gsap from 'gsap'
+import { isWipeInFlight, onWipeReveal } from '@/components/PageTransition/PageTransition'
 
 export type AwardEntry = {
   /** Admin-only label; not rendered on the site. */
@@ -99,6 +101,17 @@ const DEFAULT_GROUPS: AwardYear[] = [
 const DEFAULT_EYEBROW = 'AWARDS'
 const DEFAULT_RECOGNITIONS = '& RECOGNITIONS'
 
+// Scroll-in reveal of the award rows. The row cells are rich HTML (<p>/<ul>),
+// which SplitText line-masking can't split — so the cells fade + rise as
+// whole blocks instead (MaskUpHeadings excludes them).
+const ROW_DURATION = 0.8
+const ROW_STAGGER = 0.08 // between the two cells of a row
+const ROW_EASE = 'power3.out'
+const ROW_Y = 26 // px each cell rises from
+// Matches MaskUpHeadings: after a wipe navigation, hold the reveal until the
+// red panel starts lifting, plus this beat.
+const WIPE_TEXT_DELAY_MS = 600
+
 export default function AwardsPage({ eyebrow, recognitions, years }: Props) {
   const GROUPS = years?.length ? years : DEFAULT_GROUPS
   // Active row, scoped per group so each year shows its own image. Desktop:
@@ -106,6 +119,70 @@ export default function AwardsPage({ eyebrow, recognitions, years }: Props) {
   // (image expands accordion-style inside the row — see the mobile CSS).
   const [active, setActive] = useState<{ g: number; r: number } | null>(null)
   const [hoverable, setHoverable] = useState(true)
+  const listRef = useRef<HTMLDivElement>(null)
+
+  // Reveal each row's text cells as the row scrolls into view. Cells are
+  // hidden from JS (not CSS) so the page renders normally without it, and
+  // clearProps removes every transient style once a row has revealed.
+  useEffect(() => {
+    const list = listRef.current
+    if (!list) return
+    const rows = Array.from(list.querySelectorAll<HTMLElement>('.awards-page__row'))
+    if (!rows.length) return
+    const cellsOf = (row: HTMLElement) =>
+      row.querySelectorAll<HTMLElement>('.awards-page__middle, .awards-page__right')
+
+    rows.forEach((row) => gsap.set(cellsOf(row), { autoAlpha: 0, y: ROW_Y }))
+
+    let cancelled = false
+    let unsubWipe: (() => void) | null = null
+    let wipeTimer: ReturnType<typeof setTimeout> | null = null
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return
+          gsap.to(cellsOf(entry.target as HTMLElement), {
+            autoAlpha: 1,
+            y: 0,
+            duration: ROW_DURATION,
+            stagger: ROW_STAGGER,
+            ease: ROW_EASE,
+            clearProps: 'all',
+          })
+          observer.unobserve(entry.target)
+        })
+      },
+      { threshold: 0.15 },
+    )
+
+    const arm = () => {
+      if (cancelled) return
+      rows.forEach((row) => observer.observe(row))
+    }
+
+    if (isWipeInFlight()) {
+      // Mounted behind the red wipe panel — hold the reveal until the panel
+      // starts lifting, plus a beat, so it happens where the user can see it.
+      unsubWipe = onWipeReveal(() => {
+        wipeTimer = setTimeout(arm, WIPE_TEXT_DELAY_MS)
+      })
+    } else {
+      arm()
+    }
+
+    return () => {
+      cancelled = true
+      unsubWipe?.()
+      if (wipeTimer) clearTimeout(wipeTimer)
+      observer.disconnect()
+      rows.forEach((row) => {
+        const cells = cellsOf(row)
+        gsap.killTweensOf(cells)
+        gsap.set(cells, { clearProps: 'all' })
+      })
+    }
+  }, [])
 
   useEffect(() => {
     const mq = window.matchMedia('(hover: hover)')
@@ -140,7 +217,7 @@ export default function AwardsPage({ eyebrow, recognitions, years }: Props) {
         </div>
       </div>
 
-      <div className="awards-page__list">
+      <div className="awards-page__list" ref={listRef}>
         {GROUPS.map((group, g) => {
           const activeEntry = active?.g === g ? group.entries[active.r] : undefined
           return (

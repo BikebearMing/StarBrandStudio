@@ -22,6 +22,37 @@ const EASE = 'power3.inOut'
 const FAILSAFE_MS = 8000     // clear the panel if the new route never commits
 // ─────────────────────────────────────────────────────────────────────────────
 
+// ── Wipe signal (mirrors Preloader's onPreloaderDone pattern) ──
+// The new page mounts while the red panel still covers the screen, so entrance
+// animations (MaskUpHeadings) would otherwise play invisibly behind it. These
+// module-level helpers let them wait for the moment the panel starts sliding
+// off. Flushed from every exit path (reveal start, cleanup, failsafe) so a
+// subscriber can never be left waiting forever.
+let wipeInFlight = false
+const wipeRevealCallbacks = new Set<() => void>()
+
+/** True between a wipe navigation starting and its panel beginning to reveal. */
+export function isWipeInFlight() {
+  return wipeInFlight
+}
+
+/** Run `cb` when the wipe panel starts revealing (immediately if no wipe is up). */
+export function onWipeReveal(cb: () => void): () => void {
+  if (!wipeInFlight) {
+    cb()
+    return () => {}
+  }
+  wipeRevealCallbacks.add(cb)
+  return () => wipeRevealCallbacks.delete(cb)
+}
+
+function flushWipeReveal() {
+  wipeInFlight = false
+  const cbs = Array.from(wipeRevealCallbacks)
+  wipeRevealCallbacks.clear()
+  cbs.forEach((cb) => cb())
+}
+
 /**
  * Red "wipe" page transition.
  *
@@ -75,6 +106,7 @@ export default function PageTransition({ children }: { children: React.ReactNode
     panelRef.current = null
     covering.current = false
     busy.current = false
+    flushWipeReveal() // backstop — no-op when the reveal already flushed
   }
 
   // Slide the panel up and off the top, then tear everything down.
@@ -93,6 +125,7 @@ export default function PageTransition({ children }: { children: React.ReactNode
           y: '-100%',
           duration: REVEAL_DURATION,
           ease: EASE,
+          onStart: flushWipeReveal, // panel is lifting — release held animations
           onComplete: cleanup,
         })
       }),
@@ -102,6 +135,7 @@ export default function PageTransition({ children }: { children: React.ReactNode
   navigateRef.current = (href: string) => {
     if (busy.current) return
     busy.current = true
+    wipeInFlight = true
 
     // Blur + scale the outgoing page while the panel covers it. Transient by
     // design: cleared the moment the screen is fully red (see clearExitRef).

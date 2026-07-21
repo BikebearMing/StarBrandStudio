@@ -209,7 +209,7 @@ export default async function Home() {
         </section>
 
         <section className="pillars-section">
-          <h3 className="h3">
+          <h3 className="h3 amp-mask">
             {pillars?.heading
               ? pillars.heading.split('\n').map((line, i, arr) => (
                   <Fragment key={i}>
