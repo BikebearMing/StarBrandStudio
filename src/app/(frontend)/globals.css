@@ -1116,10 +1116,19 @@ section.services {
 }
 
 
-/* The Solution copy flows across two columns */
+/* "Big Idea" copy auto-flows across two columns — legacy fallback, used only
+   when the section has no manual right column. */
 .work-detail__section-body--columns {
     column-count: 2;
     column-gap: 2.9vw;
+}
+
+/* Manual two-column text section: the CMS "Body — Right Column" field decides
+   exactly which lines sit in each column (line-count balancing by the editor). */
+.work-detail__section-cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2.9vw;
 }
 
 /* Fixed two-image grid (each cell optional) */
@@ -1447,7 +1456,10 @@ section.pillars-section .wrapper {
 
 .pillar {
     display: flex;
-    align-items: center;
+    /* Anchor the line + copy to the FIRST line of the label (not the vertical
+       centre of the row) — with a two-line label (last pillar) centring drifts
+       everything down to the middle of both lines. */
+    align-items: flex-start;
     gap: 2.083vw;
     opacity: 0.35;
     transition: opacity 0.35s ease;
@@ -1463,6 +1475,8 @@ section.pillars-section .wrapper {
     flex: 1;
     height: 1px;
     background: currentColor;
+    /* Centre the rule on the first label line (.h1 = 6.944vw, line-height 1). */
+    margin-top: 3.472vw;
     transform: scaleX(0);
     transform-origin: left center;
     transition: transform 0.65s cubic-bezier(0.6, 0, 0.3, 1);
@@ -1472,6 +1486,11 @@ section.pillars-section .wrapper {
     width: 29.75vw;
     flex-shrink: 0;
     text-transform: uppercase;
+    /* Span exactly one label line and centre the copy inside it, whatever its
+       line count — keeps the copy on-centre with the first label line. */
+    min-height: 6.944vw;
+    display: flex;
+    align-items: center;
 }
 
 .pillar .pillar__copy-inner {
@@ -3076,6 +3095,9 @@ section.awards {
 
     .pillar .pillar__copy {
         width: 100%;
+        /* Stacked layout — no label line to centre against. */
+        min-height: 0;
+        display: block;
     }
 
     /* ── Logo carousel — fewer, larger circles ───────────────────────── */
@@ -3337,6 +3359,12 @@ section.awards {
 
     .work-detail__section-body--columns {
         column-count: 1;
+    }
+
+    /* Manual columns stack on phones — reading order: left column then right. */
+    .work-detail__section-cols {
+        grid-template-columns: 1fr;
+        gap: 3vw;
     }
 
     .work-detail__grid {

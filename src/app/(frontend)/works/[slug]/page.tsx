@@ -123,37 +123,55 @@ export default async function WorkDetailRoute({ params }: { params: Promise<{ sl
               // WYSIWYG body takes priority; a state with no actual text (an
               // opened-then-emptied editor serializes to empty paragraphs)
               // falls back to the legacy plain-text body.
-              let html = block.bodyRich
-                ? convertLexicalToHTML({
-                    data: block.bodyRich as SerializedEditorState,
-                    disableContainer: true,
-                  })
-                : undefined
-              if (html && !html.replace(/<[^>]*>/g, '').trim()) html = undefined
-              if (!html && !block.body) return null
-              const isColumns = /big idea/i.test(block.heading ?? '')
+              const toHtml = (data: unknown) => {
+                if (!data) return undefined
+                const out = convertLexicalToHTML({
+                  data: data as SerializedEditorState,
+                  disableContainer: true,
+                })
+                return out.replace(/<[^>]*>/g, '').trim() ? out : undefined
+              }
+              const html = toHtml(block.bodyRich)
+              // Filled right column = manual two-column layout: the editor
+              // controls exactly which lines sit in each column.
+              const htmlRight = toHtml(block.bodyRichRight)
+              if (!html && !htmlRight && !block.body) return null
+              // Auto-flowing CSS columns stay as the fallback for existing
+              // "Big Idea" content that has no manual right column.
+              const isColumns = !htmlRight && /big idea/i.test(block.heading ?? '')
               const bodyClass = `body work-detail__section-body${
                 isColumns ? ' work-detail__section-body--columns' : ''
               }`
+              const left = html ? (
+                <div className={bodyClass} dangerouslySetInnerHTML={{ __html: html }} />
+              ) : block.body ? (
+                <p className={bodyClass}>
+                  {/* Render newlines from the textarea as real <br> — SplitText
+                      (MaskUpHeadings) keeps them as line breaks; plain "\n" gets
+                      torn out when the paragraph is re-split into animated lines. */}
+                  {block.body.split('\n').map((line, j, arr) => (
+                    <Fragment key={j}>
+                      {line}
+                      {j < arr.length - 1 && <br />}
+                    </Fragment>
+                  ))}
+                </p>
+              ) : null
               return (
                 <div className="work-detail__section" key={block.id ?? i}>
                   {block.heading && (
                     <p className="body work-detail__section-heading">{block.heading}</p>
                   )}
-                  {html ? (
-                    <div className={bodyClass} dangerouslySetInnerHTML={{ __html: html }} />
+                  {htmlRight ? (
+                    <div className="work-detail__section-cols">
+                      {left}
+                      <div
+                        className="body work-detail__section-body"
+                        dangerouslySetInnerHTML={{ __html: htmlRight }}
+                      />
+                    </div>
                   ) : (
-                    <p className={bodyClass}>
-                      {/* Render newlines from the textarea as real <br> — SplitText
-                          (MaskUpHeadings) keeps them as line breaks; plain "\n" gets
-                          torn out when the paragraph is re-split into animated lines. */}
-                      {block.body!.split('\n').map((line, j, arr) => (
-                        <Fragment key={j}>
-                          {line}
-                          {j < arr.length - 1 && <br />}
-                        </Fragment>
-                      ))}
-                    </p>
+                    left
                   )}
                 </div>
               )

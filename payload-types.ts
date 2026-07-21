@@ -470,6 +470,24 @@ export interface Work {
               };
               [k: string]: unknown;
             } | null;
+            /**
+             * Optional. When filled, the section becomes two manual columns: Body on the left, this on the right — you control exactly which lines sit in each. When empty, a “Big Idea” section auto-flows into two columns as before.
+             */
+            bodyRichRight?: {
+              root: {
+                type: string;
+                children: {
+                  type: any;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
             body?: string | null;
             id?: string | null;
             blockName?: string | null;
@@ -1144,6 +1162,7 @@ export interface WorksSelect<T extends boolean = true> {
           | {
               heading?: T;
               bodyRich?: T;
+              bodyRichRight?: T;
               body?: T;
               id?: T;
               blockName?: T;

@@ -50,6 +50,15 @@ const textSection: Block = {
       },
     },
     {
+      name: 'bodyRichRight',
+      label: 'Body — Right Column',
+      type: 'richText',
+      admin: {
+        description:
+          'Optional. When filled, the section becomes two manual columns: Body on the left, this on the right — you control exactly which lines sit in each. When empty, a “Big Idea” section auto-flows into two columns as before.',
+      },
+    },
+    {
       // Legacy plain-text body, superseded by `bodyRich` (WYSIWYG). Kept (hidden)
       // so pre-migration content survives; the 20260721 migration copies it into
       // bodyRich, and the detail page still falls back to it when bodyRich is empty.
