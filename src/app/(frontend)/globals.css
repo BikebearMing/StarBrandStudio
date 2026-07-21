@@ -980,7 +980,7 @@ section.services {
     }
 
     .work-detail__grid-img {
-        aspect-ratio: unset;
+        aspect-ratio: unset !important;
     }
 
     .works-showcase__detail {
