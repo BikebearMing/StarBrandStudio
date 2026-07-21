@@ -2198,8 +2198,9 @@ section.awards {
 .awards__heading-bottom {
     display: flex;
     align-items: flex-end;
-    /* Same overlap guard as .awards-page__banner-bottom. */
-    flex-wrap: wrap;
+    /* No flex-wrap: the heading box has 19.375vw side padding and the
+       "& RECOGNITIONS" line is MEANT to overflow it to the right — wrapping
+       here shoves the phrase (or just the "&") onto its own row. */
     gap: 2.5vw;
 }
 
@@ -2213,10 +2214,9 @@ section.awards {
 
 .awards__rec {
     flex: 1;
-    min-width: 0;
     line-height: 1;
-    /* nowrap can overflow leftward over the caption — wrap when needed. */
-    white-space: normal;
+    /* One unbreakable line — overflowing the padded heading box is the design. */
+    white-space: nowrap;
     font-weight: 700;
     font-size: 8.333vw;
     text-align: right;
@@ -2644,9 +2644,7 @@ section.awards {
 .awards-page__banner-bottom {
     display: flex;
     align-items: flex-end;
-    /* If the caption + line ever can't share the row (long CMS copy), wrap
-       instead of overlapping. */
-    flex-wrap: wrap;
+    /* No flex-wrap — same intended right-overflow as .awards__heading-bottom. */
     gap: 2.5vw;
 }
 
@@ -2660,13 +2658,11 @@ section.awards {
 
 .awards-page__rec {
     flex: 1;
-    min-width: 0;
     line-height: 1;
     font-weight: 700;
     font-size: 8.333vw;
-    /* nowrap made the line overflow leftward over the caption on narrower
-       desktops — let it wrap instead when it genuinely doesn't fit. */
-    white-space: normal;
+    /* One unbreakable line — overflowing the padded banner box is the design. */
+    white-space: nowrap;
     text-align: right;
 }
 
