@@ -828,6 +828,18 @@ section.services {
     display: block;
 }
 
+/* TEMP: content-specific zoom for the Carey Island slide artwork (the
+   "Screenshot 2026-06-23 at 11.05.58" upload doesn't fill its frame).
+   Targeted by src so it also hits Splide's loop clones and survives
+   reordering — remove once the artwork is re-exported properly cropped. */
+.works-slider__slide {
+    overflow: hidden;
+}
+
+.works-slider__img[src*="11.05.58"] {
+    transform: scale(1.1);
+}
+
 /* ── Desktop: scroll-driven vertical works stack (WorksScrollStack) ────────
    A tall `.works-scroll` track (height set inline from JS) holds a sticky
    100vh section. The `.works-stack` is translated by scroll progress so one
