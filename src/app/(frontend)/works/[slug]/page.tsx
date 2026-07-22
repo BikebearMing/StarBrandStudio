@@ -17,6 +17,29 @@ function mediaUrl(m: number | Media | null | undefined): string | undefined {
   return m && typeof m === 'object' ? m.url ?? undefined : undefined
 }
 
+// Editors paste bare URLs as plain text (no link node gets saved), so wrap
+// them in real anchors at render time. Walks tag/text segments so it never
+// touches tag attributes and never nests inside an editor-made <a>.
+function linkifyHtml(html: string): string {
+  let insideAnchor = false
+  return html
+    .split(/(<[^>]+>)/g)
+    .map((seg) => {
+      if (seg.startsWith('<')) {
+        if (/^<a[\s>]/i.test(seg)) insideAnchor = true
+        else if (/^<\/a>/i.test(seg)) insideAnchor = false
+        return seg
+      }
+      if (insideAnchor || !seg) return seg
+      // Trailing punctuation stays outside the link ("…future." → link + ".").
+      return seg.replace(
+        /https?:\/\/[^\s<]*[^\s<.,)\]!?;:]/g,
+        (url) => `<a href="${url}" target="_blank" rel="noopener noreferrer">${url}</a>`,
+      )
+    })
+    .join('')
+}
+
 // "1h2m30s" | "90" → seconds, for YouTube's ?t= start parameter.
 function parseStartSeconds(t: string): number {
   if (/^\d+$/.test(t)) return parseInt(t, 10)
@@ -129,7 +152,7 @@ export default async function WorkDetailRoute({ params }: { params: Promise<{ sl
                   data: data as SerializedEditorState,
                   disableContainer: true,
                 })
-                return out.replace(/<[^>]*>/g, '').trim() ? out : undefined
+                return out.replace(/<[^>]*>/g, '').trim() ? linkifyHtml(out) : undefined
               }
               const html = toHtml(block.bodyRich)
               // Filled right column = manual two-column layout: the editor
