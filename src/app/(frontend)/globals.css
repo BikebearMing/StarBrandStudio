@@ -3131,9 +3131,11 @@ section.awards {
     section.pillars-section {
         padding-block: 16vw;
 
+        /* As big as the heading can go while both CMS lines ("…INSIGHTS AND" /
+           "CREDIBLE JOURNALISM, WE DELIVER :") still fit the ~88vw content
+           width on one row each — 8vw forced an extra soft-wrap. */
         & .h3 {
-            font-size: 8vw;
-
+            font-size: 6.5vw;
         }
     }
 
