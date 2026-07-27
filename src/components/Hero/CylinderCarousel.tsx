@@ -297,7 +297,11 @@ export default function CylinderCarousel({
   }, [])
 
   return (
-    <div ref={wrapperRef} style={{ position: 'relative', width: '100%', height: '100vh', zIndex: 10 }}>
+    <div
+      ref={wrapperRef}
+      className="cylinder-stage"
+      style={{ position: 'relative', width: '100%', height: '100vh', zIndex: 10 }}
+    >
       <Canvas
         camera={{ position: [CAMERA_X, CAMERA_Y, CAMERA_Z], fov: CAMERA_FOV }}
         style={{ background: 'transparent' }}
