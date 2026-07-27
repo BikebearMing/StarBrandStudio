@@ -249,8 +249,8 @@ canvas {
     z-index: 3;
     flex-direction: column;
     justify-content: space-between;
-    width: 9vw;
-    height: 7vw;
+    width: 7.5vw;
+    height: 5.8vw;
     padding: 0;
     background: transparent;
     border: none;
@@ -260,16 +260,17 @@ canvas {
 .site-header__burger-line {
     display: block;
     width: 100%;
-    height: 0.6vw;
+    height: 0.5vw;
     background: #fff;
     transition:
         transform 0.35s cubic-bezier(0.6, 0, 0.3, 1),
         opacity 0.2s ease;
 }
 
-/* Open state → morph the three bars into an X (translate = bar-to-bar gap). */
+/* Open state → morph the three bars into an X (translate = bar-to-bar gap,
+   (height − line) / 2). */
 .site-header.is-menu-open .site-header__burger-line:nth-child(1) {
-    transform: translateY(3.2vw) rotate(45deg);
+    transform: translateY(2.65vw) rotate(45deg);
 }
 
 .site-header.is-menu-open .site-header__burger-line:nth-child(2) {
@@ -277,7 +278,7 @@ canvas {
 }
 
 .site-header.is-menu-open .site-header__burger-line:nth-child(3) {
-    transform: translateY(-3.2vw) rotate(-45deg);
+    transform: translateY(-2.65vw) rotate(-45deg);
 }
 
 /* Full-screen scrim behind the drawer; click to close. */
@@ -615,6 +616,16 @@ section.services {
     @media (max-width: 768px) {
         bottom: unset;
         top: 26vw;
+
+        /* Client-requested arrangement: "The Works" share one line (kill the
+           desktop line break) with "WE'RE PROUD OF" staggered right below. */
+        & h2 br {
+            display: none;
+        }
+
+        /* & > .body {
+            margin-left: 12vw;
+        } */
     }
 }
 
@@ -1652,11 +1663,11 @@ section.pillars-section .wrapper {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
-    gap: 3vw;
+    gap: 7vw;
 }
 
 .our-story__title {
-    max-width: 45%;
+    max-width: 37vw;
 }
 
 .our-story__copy {
@@ -1761,6 +1772,14 @@ section.pillars-section .wrapper {
 
     .story-hero .typewriter {
         clip-path: none;
+    }
+
+    /* The heading + breadcrumb carry an extra desktop indent
+       (--sidepadding-xm) that doesn't match section 1's caption below the
+       image — drop it so all the left edges line up at the 9vw padding. */
+    .story-hero > .h1,
+    .story-hero .breadcrumb {
+        padding-left: 0;
     }
 
     .story-hero__title {
@@ -2919,6 +2938,17 @@ section.awards {
         margin-top: 1.5vw;
         padding-left: 4.5vw;
     }
+
+    /* A group's last row ended with its own divider right above the next
+       group's border-top — two stacked lines above every year. Drop the row's
+       line so a single rule separates the years, and close the list with one. */
+    .awards-page__row:last-child {
+        border-bottom: none;
+    }
+
+    .awards-page__group:last-child {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+    }
 }
 
 /* ══════════════════════════════════════════════════════════════════════
@@ -2983,7 +3013,7 @@ section.awards {
     }
 
     .site-header__logo img {
-        width: 30vw;
+        width: 26vw;
         max-width: 200px;
     }
 
@@ -2999,6 +3029,10 @@ section.awards {
     /* ── Hero ────────────────────────────────────────────────────────── */
     .hero-parent .hero-copy {
         top: 20vw; /* clear the fixed header */
+        /* Stretch to the bottom of the hero so the serif line can sit below
+           the carousel imagery (it overlapped the images when it hugged the
+           headline). */
+        bottom: 8vw;
         left: var(--sidepadding-xm);
         right: var(--sidepadding-xm);
         gap: 3vw;
@@ -3015,6 +3049,8 @@ section.awards {
     .hero-parent .h2-serif {
         font-size: 6vw;
         line-height: 1.25;
+        /* Push to the bottom of the stretched hero-copy, under the images. */
+        margin-top: auto;
     }
 
     /* ── What we do ──────────────────────────────────────────────────── */
@@ -3093,6 +3129,11 @@ section.awards {
     /* ── Pillars — label over copy, drop the connector line ──────────── */
     section.pillars-section {
         padding-block: 16vw;
+
+        & .h3 {
+            font-size: 8vw;
+
+        }
     }
 
     .pillar {
@@ -3175,6 +3216,19 @@ section.awards {
         display: none;
     }
 
+    /* Mobile replaces the stacked grid with the works-page horizontal peek
+       slider (see MobileProjects in Project.tsx). Same flex layout as the
+       mobile .works-page so the reused works-showcase__* / .works-slider
+       classes order themselves identically: slider, title, tags, CTA. */
+    .projects-mobile {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 7vw;
+        width: 100%;
+    }
+
     /* ── Awards (home) ───────────────────────────────────────────────── */
     section.awards {
         padding-top: 16vw;
@@ -3194,9 +3248,9 @@ section.awards {
         row-gap: 6vw;
     }
 
-    /* Flatten the two heading rows so all four items can be reordered:
-       AWARDS + & RECOGNITIONS share the first row (wrap is the fallback if
-       they don't fit), then caption, then button. */
+    /* Flatten the two heading rows so all four items can be reordered and
+       staggered: AWARDS on its own row, & RECOGNITIONS on the next row nudged
+       right, then the caption full-width, then the button. */
     .awards__heading-top,
     .awards__heading-bottom {
         display: contents;
@@ -3204,7 +3258,11 @@ section.awards {
 
     .awards__title {
         order: 1;
+        flex-basis: 100%;
         font-size: 13vw;
+        /* Nudged right toward centre so the AWARDS box sits staggered
+           against & RECOGNITIONS below. */
+        padding-left: 8vw;
     }
 
     .awards__heading-top .text-highlight {
@@ -3224,8 +3282,11 @@ section.awards {
 
     .awards__rec {
         flex: unset;
-        font-size: 7vw;
+        flex-basis: 100%;
+        font-size: 9vw;
         text-align: left;
+        /* The stagger — shifted right of AWARDS, per the client mock. */
+        padding-left: 18vw;
     }
 
     /* ── Impact CTA — restore the cursor, stack the rows ─────────────── */
@@ -3236,11 +3297,12 @@ section.awards {
     }
 
     /* Wrapping row so LET'S + CONNECT share the first line; the copy takes a
-       full row below them. */
+       full row below them. Everything centred per the client mock. */
     .impact-cta__inner {
         flex-direction: row;
         flex-wrap: wrap;
         align-items: baseline;
+        justify-content: center;
         column-gap: 3vw;
         row-gap: 6vw;
     }
@@ -3268,6 +3330,8 @@ section.awards {
     .impact-cta__top .body {
         order: 3;
         flex-basis: 100%;
+        /* !important needed to out-rank the desktop `text-align: left !important`. */
+        text-align: center !important;
     }
 
     .impact-cta__bottom .body {
@@ -3315,12 +3379,29 @@ section.awards {
         gap: 4vw;
     }
 
+    /* The brand-logo img is a desktop spacer (opacity 0) — on mobile it only
+       adds phantom height above the copyright line. */
+    .custom-footer .footer-bottom-top img {
+        display: none;
+    }
+
+    /* Smaller copyright line, left-aligned with the email below. */
+    .custom-footer .footer-bottom-top p {
+        font-size: 3vw;
+    }
+
+    /* Left-align the email so its S lines up with COPYRIGHTS' C (no indent). */
+    .custom-footer .footer-bottom-bottom {
+        justify-content: flex-start;
+    }
+
     /* Shrink to fit the full email on one line (it's white-space: nowrap and
        the parent clips overflow). 6.2vw matches the desktop size that fits the
        same ~88vw content width. */
     .custom-footer .footer-bottom-bottom p {
         font-size: 6.2vw;
         line-height: 1.2;
+        text-align: left;
     }
 
     /* ── Work detail (/works/[slug]) ─────────────────────────────────── */

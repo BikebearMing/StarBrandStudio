@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react"
 import TargetCursor from "@/components/TargetCursor/TargetCursor"
+import WorksSlider, { type WorksSlide } from "@/components/WorksSlider/WorksSlider"
 import { useScrollJoin } from "@/lib/useScrollJoin"
 
 export type ProjectItem = {
@@ -83,6 +84,18 @@ export default function Projects({
     const byKey: Record<string, ProjectItem> = Object.fromEntries(projects.map((p) => [p.key, p]))
     const sectionRef = useRef<HTMLElement>(null)
     const { headingRef, beforeRef, afterRef } = useScrollJoin<HTMLHeadingElement, HTMLSpanElement>()
+
+    // Mobile swaps the hover grid for the works-page horizontal peek slider.
+    // 'pre' (SSR / first paint) keeps the grid so desktop never flashes the
+    // mobile slider — same matchMedia pattern as WorksShowcase.
+    const [mode, setMode] = useState<'pre' | 'desktop' | 'mobile'>('pre')
+    useEffect(() => {
+        const mq = window.matchMedia('(min-width: 769px)')
+        const apply = () => setMode(mq.matches ? 'desktop' : 'mobile')
+        apply()
+        mq.addEventListener('change', apply)
+        return () => mq.removeEventListener('change', apply)
+    }, [])
 
     const [hoveredId, setHoveredId] = useState<string | null>(null)
     const [cursorActive, setCursorActive] = useState(false)
@@ -208,7 +221,7 @@ export default function Projects({
                 hideAll()
             }}
         >
-            {cursorActive && (
+            {cursorActive && mode === 'desktop' && (
                 <TargetCursor
                     spinDuration={5}
                     hideDefaultCursor
@@ -222,6 +235,9 @@ export default function Projects({
                 <span ref={beforeRef} className="projects-heading__word">{headingBefore}</span>{' '}
                 <span ref={afterRef} className="projects-heading__word text-highlight">{headingHighlight}</span>
             </h2>
+            {mode === 'mobile' ? (
+                <MobileProjects projects={projects} />
+            ) : (
             <div className="wrapper">
                 <div className="video-bg">
                     <div className="video-wrapper">
@@ -303,6 +319,58 @@ export default function Projects({
                     </div>
                 </div>
             </div>
+            )}
         </section>
+    )
+}
+
+/** Mobile layout: the works-page horizontal peek slider, centered slide
+ *  driving the title + tags below it — same markup/classes as MobileWorks
+ *  in WorksShowcase so the two sections stay visually identical. */
+function MobileProjects({ projects }: { projects: ProjectItem[] }) {
+    const [active, setActive] = useState(0)
+    const current = projects[active] ?? projects[0]
+
+    const slides: WorksSlide[] = projects.map((p) => ({
+        image: p.thumbnail,
+        title: p.title,
+        year: p.year,
+        description: p.copy,
+        tags: p.tags,
+        href: p.link ?? '/works',
+    }))
+
+    return (
+        <div className="projects-mobile">
+            <p className="body dark works-showcase__title">{current.title}</p>
+            <WorksSlider slides={slides} onActiveChange={setActive} />
+            <div className="works-showcase__detail">
+                <p className="body dark works-showcase__year">{current.year}</p>
+                <div className="works-showcase__detail-body">
+                    <div className="works-showcase__detail-text">
+                        <h4 className="dark works-showcase__campaign">{current.title}</h4>
+                        <p className="body dark works-showcase__description">{current.copy}</p>
+                    </div>
+                    <div className="works-showcase__tags">
+                        {current.tags.map((tag) => (
+                            <p className="body dark works-showcase__tag" key={tag}>
+                                {tag}
+                            </p>
+                        ))}
+                    </div>
+                </div>
+            </div>
+
+            {/* The per-slide overlay button is hidden on touch (globals.css);
+                this CTA sits below the carousel and follows the centered work. */}
+            <a className="custom-button works-showcase__cta" href={current.link ?? '/works'}>
+                <svg className="custom-button-icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <circle className="ring ring--outer" cx="12" cy="12" r="11" />
+                    <circle className="ring ring--middle" cx="12" cy="12" r="7" />
+                    <circle className="ring ring--inner" cx="12" cy="12" r="3" />
+                </svg>
+                <span>VIEW PROJECT</span>
+            </a>
+        </div>
     )
 }

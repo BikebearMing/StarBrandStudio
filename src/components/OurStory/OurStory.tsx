@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { Fragment, useEffect, useRef } from 'react'
 import { scrollState } from '@/lib/scroll'
 
 /**
@@ -107,7 +107,18 @@ export default function OurStory({ title, copy, images }: OurStoryProps = {}) {
   return (
     <section className="our-story">
       <div className="our-story__intro">
-        <h2 className="h3 amp-mask our-story__title">{TITLE}</h2>
+        <h2 className="h3 amp-mask our-story__title">
+          {/* Editors break lines with Enter in the textarea, or a typed <br> —
+              normalize both to real <br> elements (text renders literally). */}
+          {TITLE.replace(/<br\s*\/?>/gi, '\n')
+            .split('\n')
+            .map((line, i, arr) => (
+              <Fragment key={i}>
+                {line.trim()}
+                {i < arr.length - 1 && <br />}
+              </Fragment>
+            ))}
+        </h2>
         <div className="our-story__copy">
           <p className="body">{COPY[0]}</p>
           <p className="body">{COPY[1]}</p>
