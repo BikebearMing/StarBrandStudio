@@ -99,6 +99,7 @@ export default async function AwardsRoute() {
         phones: footer.phones?.map((p) => p.number),
         directory: footer.directory?.map((d) => ({ label: d.label, href: d.href })),
         updatesLabel: footer.updatesLabel ?? undefined,
+        showSocials: footer.showSocials ?? true,
         socials: footer.socials?.map((s) => ({
           label: s.label,
           href: s.href,

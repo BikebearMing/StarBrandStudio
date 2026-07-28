@@ -76,16 +76,19 @@ function youTubeEmbedUrl(url: string): string | undefined {
 async function getWorkData(slug: string) {
   try {
     const payload = await getPayload({ config })
-    const works = await payload.find({
-      collection: 'works',
-      where: { slug: { equals: slug } },
-      depth: 1,
-      limit: 1,
-    })
-    return { work: works.docs[0] }
+    const [works, footer] = await Promise.all([
+      payload.find({
+        collection: 'works',
+        where: { slug: { equals: slug } },
+        depth: 1,
+        limit: 1,
+      }),
+      payload.findGlobal({ slug: 'footer', depth: 1 }),
+    ])
+    return { work: works.docs[0], footer }
   } catch {
     // If Payload/DB is unavailable there's nothing to show for this work.
-    return { work: undefined }
+    return { work: undefined, footer: undefined }
   }
 }
 
@@ -101,9 +104,27 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function WorkDetailRoute({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
-  const { work: slide } = await getWorkData(slug)
+  const { work: slide, footer } = await getWorkData(slug)
 
   if (!slide) notFound()
+
+  const footerProps = footer
+    ? {
+        address: footer.address ?? undefined,
+        phones: footer.phones?.map((p) => p.number),
+        directory: footer.directory?.map((d) => ({ label: d.label, href: d.href })),
+        updatesLabel: footer.updatesLabel ?? undefined,
+        showSocials: footer.showSocials ?? true,
+        socials: footer.socials?.map((s) => ({
+          label: s.label,
+          href: s.href,
+          icon: mediaUrl(s.icon),
+        })),
+        brandLogo: mediaUrl(footer.brandLogo),
+        copyright: footer.copyright ?? undefined,
+        email: footer.email ?? undefined,
+      }
+    : {}
 
   const image = mediaUrl(slide.image)
   const tags = slide.tags?.map((t) => t.label).filter((l): l is string => Boolean(l)) ?? []
@@ -287,7 +308,7 @@ export default async function WorkDetailRoute({ params }: { params: Promise<{ sl
         )}
       </section>
 
-      <Footer />
+      <Footer {...footerProps} />
     </main>
   )
 }

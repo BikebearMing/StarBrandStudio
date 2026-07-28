@@ -27,6 +27,15 @@ export const Footer: GlobalConfig = {
     },
     { name: 'updatesLabel', type: 'text', defaultValue: 'GET THE LATEST UPDATES' },
     {
+      name: 'showSocials',
+      type: 'checkbox',
+      defaultValue: true,
+      admin: {
+        description:
+          'Show the social-media block ("GET THE LATEST UPDATES" + icons) in the footer. Untick to hide it site-wide.',
+      },
+    },
+    {
       name: 'socials',
       type: 'array',
       labels: { singular: 'Social', plural: 'Socials' },

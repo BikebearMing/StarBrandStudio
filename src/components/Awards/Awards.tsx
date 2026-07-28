@@ -57,10 +57,13 @@ export default function Awards({
           </div>
           <div className="awards__heading-bottom">
             <p className="body awards__caption">
+              {/* The space before each <br> is invisible on desktop but keeps
+                  the words apart on mobile, where the breaks are display:none
+                  so the caption flows across the whole row. */}
               {captionLines.map((line, i) => (
                 <Fragment key={i}>
                   {line}
-                  {i < captionLines.length - 1 && <br />}
+                  {i < captionLines.length - 1 && <> <br /></>}
                 </Fragment>
               ))}
             </p>

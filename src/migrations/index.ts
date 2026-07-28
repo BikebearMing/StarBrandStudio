@@ -8,6 +8,7 @@ import * as migration_20260715_032623_works_gallery_awards from './20260715_0326
 import * as migration_20260715_062415_works_video_block from './20260715_062415_works_video_block';
 import * as migration_20260721_050000_works_text_body_rich from './20260721_050000_works_text_body_rich';
 import * as migration_20260721_082720_works_text_body_right from './20260721_082720_works_text_body_right';
+import * as migration_20260728_033158_footer_show_socials from './20260728_033158_footer_show_socials';
 
 export const migrations = [
   {
@@ -58,6 +59,11 @@ export const migrations = [
   {
     up: migration_20260721_082720_works_text_body_right.up,
     down: migration_20260721_082720_works_text_body_right.down,
-    name: '20260721_082720_works_text_body_right'
+    name: '20260721_082720_works_text_body_right',
+  },
+  {
+    up: migration_20260728_033158_footer_show_socials.up,
+    down: migration_20260728_033158_footer_show_socials.down,
+    name: '20260728_033158_footer_show_socials'
   },
 ];

@@ -3287,13 +3287,19 @@ section.awards {
         margin-bottom: 0;
     }
 
+    /* The CMS caption's manual line breaks make short ragged lines on a
+       phone — ignore them so the copy flows across the whole row. */
+    .awards__caption br {
+        display: none;
+    }
+
     .awards__rec {
         flex: unset;
         flex-basis: 100%;
         font-size: 9vw;
         text-align: left;
         /* The stagger — shifted right of AWARDS, per the client mock. */
-        padding-left: 18vw;
+        padding-left: 22vw;
     }
 
     /* ── Impact CTA — restore the cursor, stack the rows ─────────────── */
@@ -3337,8 +3343,9 @@ section.awards {
     .impact-cta__top .body {
         order: 3;
         flex-basis: 100%;
-        /* !important needed to out-rank the desktop `text-align: left !important`. */
-        text-align: center !important;
+        /* Heading pair stays centred; the subtext reads from the left edge.
+           !important needed to out-rank the desktop rule of the same weight. */
+        text-align: left !important;
     }
 
     .impact-cta__bottom .body {
@@ -3394,7 +3401,7 @@ section.awards {
 
     /* Smaller copyright line, left-aligned with the email below. */
     .custom-footer .footer-bottom-top p {
-        font-size: 3vw;
+        font-size: 2.6vw;
     }
 
     /* Left-align the email so its S lines up with COPYRIGHTS' C (no indent). */

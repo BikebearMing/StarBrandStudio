@@ -67,6 +67,7 @@ export default async function OurStoryRoute() {
         phones: footer.phones?.map((p) => p.number),
         directory,
         updatesLabel: footer.updatesLabel ?? undefined,
+        showSocials: footer.showSocials ?? true,
         socials: footer.socials?.map((s) => ({
           label: s.label,
           href: s.href,

@@ -1438,6 +1438,10 @@ export interface Footer {
       }[]
     | null;
   updatesLabel?: string | null;
+  /**
+   * Show the social-media block ("GET THE LATEST UPDATES" + icons) in the footer. Untick to hide it site-wide.
+   */
+  showSocials?: boolean | null;
   socials?:
     | {
         label: string;
@@ -1541,6 +1545,7 @@ export interface FooterSelect<T extends boolean = true> {
         id?: T;
       };
   updatesLabel?: T;
+  showSocials?: T;
   socials?:
     | T
     | {

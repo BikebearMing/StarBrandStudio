@@ -6,6 +6,8 @@ export type FooterProps = {
   phones?: string[]
   directory?: FooterLink[]
   updatesLabel?: string
+  /** CMS toggle — when false the whole socmed column is display:none. */
+  showSocials?: boolean
   socials?: FooterSocial[]
   brandLogo?: string
   copyright?: string
@@ -31,6 +33,7 @@ export default function Footer({
   phones,
   directory,
   updatesLabel = 'GET THE LATEST UPDATES',
+  showSocials = true,
   socials,
   brandLogo = '/footer/smg-brand-studio.png',
   copyright = 'Copyrights © of Star Media Group 2026',
@@ -62,7 +65,10 @@ export default function Footer({
           </div>
         </div>
 
-        <div className="footer-column-right">
+        <div
+          className="footer-column-right"
+          style={showSocials ? undefined : { display: 'none' }}
+        >
           <div className="footer-socmed-excerpt">
             <p className="body">{updatesLabel}</p>
           </div>
