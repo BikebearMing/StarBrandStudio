@@ -3307,7 +3307,7 @@ section.awards {
     .impact-cta {
         cursor: auto;
         padding-block: 18vw 0;
-        padding-inline: var(--sidepadding-xm);
+        padding-inline: 16vw;
     }
 
     /* Wrapping row so LET'S + CONNECT share the first line; the copy takes a
@@ -3323,7 +3323,7 @@ section.awards {
 
     /* Bigger heading pair, sized so "LET'S CONNECT" still fits one line. */
     .impact-cta .h1-v2-sm {
-        font-size: 16vw;
+        font-size: 12vw;
         letter-spacing: -0.5vw;
     }
 
