@@ -36,7 +36,13 @@ export default function MaskUpHeadings() {
 
     const init = () => {
       if (cancelled) return
-      const elements = Array.from(document.querySelectorAll<HTMLElement>(SELECTOR))
+      // Mobile ignores the awards caption's manual <br>s so it flows across
+      // the row (.awards__caption br { display: none }). SplitText would bake
+      // those breaks back in as block-level line wrappers, so skip it there.
+      const isMobile = window.matchMedia('(max-width: 768px)').matches
+      const elements = Array.from(document.querySelectorAll<HTMLElement>(SELECTOR)).filter(
+        (el) => !(isMobile && el.classList.contains('awards__caption')),
+      )
       const elLines = new WeakMap<Element, Element[]>()
 
       elements.forEach((el) => {

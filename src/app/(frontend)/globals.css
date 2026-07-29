@@ -3285,6 +3285,7 @@ section.awards {
         text-align: left;
         white-space: normal;
         margin-bottom: 0;
+        padding-left: 5vw;
     }
 
     /* The CMS caption's manual line breaks make short ragged lines on a
@@ -3310,20 +3311,20 @@ section.awards {
     }
 
     /* Wrapping row so LET'S + CONNECT share the first line; the copy takes a
-       full row below them. Everything centred per the client mock. */
+       full row below them. space-between pins LET'S to the left padding edge
+       (same indent as the copy below) and CONNECT to the right. */
     .impact-cta__inner {
         flex-direction: row;
         flex-wrap: wrap;
         align-items: baseline;
-        justify-content: center;
         column-gap: 3vw;
         row-gap: 6vw;
     }
 
     /* Bigger heading pair, sized so "LET'S CONNECT" still fits one line. */
     .impact-cta .h1-v2-sm {
-        font-size: 10vw;
-        letter-spacing: -0.39vw;
+        font-size: 16vw;
+        letter-spacing: -0.5vw;
     }
 
     .impact-cta__impact {
