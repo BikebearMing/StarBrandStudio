@@ -60,7 +60,36 @@ export default function Pillars({ items }: { items?: PillarItem[] } = {}) {
     }
   }, [])
 
+  // Mobile: hover/tap discovery doesn't work — reveal each pillar (label
+  // opacity + copy mask-up) once it scrolls into view, like the Our Story
+  // page's enter-viewport reveals. Desktop keeps the hover behaviour.
   useEffect(() => {
+    if (!window.matchMedia('(max-width: 768px)').matches) return
+    const list = listRef.current
+    if (!list) return
+    const items = Array.from(list.querySelectorAll<HTMLElement>('.pillar'))
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return
+          entry.target.classList.add('is-revealed')
+          const inners = innersRef.current[items.indexOf(entry.target as HTMLElement)]
+          if (inners?.length) {
+            gsap.to(inners, { yPercent: 0, duration: DURATION, stagger: STAGGER, ease: EASE })
+          }
+          observer.unobserve(entry.target)
+        })
+      },
+      { threshold: 0.35 }
+    )
+    items.forEach((el) => observer.observe(el))
+    return () => observer.disconnect()
+  }, [])
+
+  useEffect(() => {
+    // Mobile reveals are scroll-driven (above); the tap-follows-active swap
+    // would re-hide already-revealed pillars.
+    if (window.matchMedia('(max-width: 768px)').matches) return
     innersRef.current.forEach((inners, i) => {
       gsap.to(inners, {
         yPercent: i === active ? 0 : 110,

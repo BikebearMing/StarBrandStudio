@@ -615,7 +615,12 @@ section.services {
 
     @media (max-width: 768px) {
         bottom: unset;
-        top: 26vw;
+        top: 37vw;
+        /* Centred like the other pages' titles (client feedback). */
+        left: 0;
+        right: 0;
+        align-items: center;
+        text-align: center;
 
         /* Client-requested arrangement: "The Works" share one line (kill the
            desktop line break) with "WE'RE PROUD OF" staggered right below. */
@@ -623,9 +628,10 @@ section.services {
             display: none;
         }
 
-        /* & > .body {
-            margin-left: 12vw;
-        } */
+        /* Standard mobile title size (matches homepage headers / other pages). */
+        & h2 {
+            font-size: 9.5vw;
+        }
     }
 }
 
@@ -1779,6 +1785,31 @@ section.pillars-section .wrapper {
         clip-path: none;
     }
 
+    /* Client-requested arrangement: the heading flows as one sentence
+       ("WE TELL STORIES FOR A LIVING. THIS ONE'S OURS.") wrapping naturally,
+       highlight inline — instead of the desktop's three stacked mask lines.
+       Safe because the mask/typewriter animations are disabled on mobile. */
+    /* h1-qualified so it out-specifies the master mobile .h1 rule, which
+       comes later in the file and would otherwise win at 9vw. */
+    h1.story-hero__title {
+        font-size: 9.5vw; /* standard mobile title size */
+    }
+
+    .story-hero__title-inner {
+        display: inline;
+    }
+
+    .story-hero__title .line,
+    .story-hero__title .line-inner,
+    .story-hero__title .typewriter {
+        display: inline;
+    }
+
+    /* JSX strips the whitespace between the line spans — restore it. */
+    .story-hero__title .line::after {
+        content: " ";
+    }
+
     /* The heading + breadcrumb carry an extra desktop indent
        (--sidepadding-xm) that doesn't match section 1's caption below the
        image — drop it so all the left edges line up at the 9vw padding. */
@@ -1808,6 +1839,7 @@ section.pillars-section .wrapper {
 
     .our-story__intro {
         flex-direction: column;
+        gap: unset;
     }
 
     .our-story__title {
@@ -2848,12 +2880,14 @@ section.awards {
 
     /* Mirror the homepage awards heading: AWARDS + & RECOGNITIONS share the
        first row (wrap as fallback), caption on its own row below. */
+    /* Mirrors the homepage awards lockup (.awards__title / .awards__rec):
+       same sizes, same staggered stack, same 3vw row gap. */
     .awards-page__banner {
         flex-direction: row;
         flex-wrap: wrap;
         align-items: baseline;
         column-gap: 3vw;
-        row-gap: 6vw;
+        row-gap: 3vw;
         padding-inline: 0;
         padding-top: 10vw;
     }
@@ -2862,9 +2896,15 @@ section.awards {
         display: contents;
     }
 
-    .awards-page__title {
+    /* h1-qualified so the font-size out-specifies the master mobile .h1 rule,
+       which comes later in the file and would otherwise win at 9vw. */
+    h1.awards-page__title {
         order: 1;
-        font-size: 13vw;
+        flex-basis: 100%;
+        font-size: 9.5vw;
+        /* Nudged right toward centre so the AWARDS box sits staggered
+           against & RECOGNITIONS below — same as the homepage. */
+        padding-left: 8vw;
     }
 
     .awards-page__title .text-highlight {
@@ -2874,8 +2914,11 @@ section.awards {
     .awards-page__rec {
         order: 2;
         flex: none;
-        font-size: 6.3vw;
+        flex-basis: 100%;
+        font-size: 9vw;
         text-align: left;
+        /* The stagger — shifted right of AWARDS, per the client mock. */
+        padding-left: 22vw;
     }
 
     .awards-page__caption {
@@ -3096,6 +3139,9 @@ section.awards {
     /* ── Services — stack index/title/toggle, copy drops full-width ──── */
     section.services {
         padding-block: 16vw;
+        /* Trade the wide desktop gutters (12.222vw) for the standard mobile
+           side padding so FULL-FLEDGED SERVICES fits on one line at 9.5vw. */
+        padding-inline: var(--sidepadding-xm);
     }
 
     .service__row {
@@ -3161,6 +3207,12 @@ section.awards {
         display: block;
     }
 
+    /* Scroll-in reveal (set by Pillars.tsx) — no tap needed to discover the
+       copy; the existing opacity transition does the fade. */
+    .pillar.is-revealed {
+        opacity: 1;
+    }
+
     /* ── Logo carousel — fewer, larger circles ───────────────────────── */
     .logo-carousel {
         padding-top: 18vw;
@@ -3192,6 +3244,15 @@ section.awards {
 
     section.projects .h1 {
         margin-bottom: 8vw;
+    }
+
+    /* Standard homepage-header size — same as .awards__title and the
+       .impact-cta headings, so all four section headers match on mobile.
+       Sized so FULL-FLEDGED SERVICES (the longest header) fits one line.
+       (Later than the mobile .h1 rule on purpose: same specificity, this wins.) */
+    .projects-heading,
+    .services-heading__title {
+        font-size: 9.5vw;
     }
 
     section.projects .wrapper {
@@ -3252,7 +3313,8 @@ section.awards {
         flex-wrap: wrap;
         align-items: baseline;
         column-gap: 3vw;
-        row-gap: 6vw;
+        row-gap: 3vw;
+        justify-content: center;
     }
 
     /* Flatten the two heading rows so all four items can be reordered and
@@ -3266,7 +3328,8 @@ section.awards {
     .awards__title {
         order: 1;
         flex-basis: 100%;
-        font-size: 13vw;
+        /* Standard homepage-header size on mobile (matches projects/services/CTA). */
+        font-size: 9.5vw;
         /* Nudged right toward centre so the AWARDS box sits staggered
            against & RECOGNITIONS below. */
         padding-left: 8vw;
@@ -3321,9 +3384,9 @@ section.awards {
         row-gap: 6vw;
     }
 
-    /* Bigger heading pair, sized so "LET'S CONNECT" still fits one line. */
+    /* Standard homepage-header size on mobile ("LET'S CONNECT" still fits). */
     .impact-cta .h1-v2-sm {
-        font-size: 12vw;
+        font-size: 9.5vw;
         letter-spacing: -0.5vw;
     }
 
@@ -3436,7 +3499,9 @@ section.awards {
     }
 
     .work-detail__title {
-        font-size: 13vw;
+        /* Standard mobile title size — long campaign names were eating half
+           the viewport at 13vw (client feedback). */
+        font-size: 9.5vw;
         letter-spacing: -1px;
     }
 
