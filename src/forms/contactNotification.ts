@@ -13,7 +13,11 @@ import type { CollectionAfterChangeHook, Field } from 'payload'
  * falls back to a console mock, so local dev never breaks.
  */
 
-const FROM = process.env.EMAIL_FROM || 'Star Brand Studio <onboarding@resend.dev>'
+const FROM =
+  process.env.EMAIL_FROM ||
+  (process.env.SMTP_USER
+    ? `Star Brand Studio <${process.env.SMTP_USER}>`
+    : 'Star Brand Studio <onboarding@resend.dev>')
 
 // Brand palette (kept here because emails need inline styles, not CSS classes).
 const BRAND_RED = '#D8232A'

@@ -160,9 +160,13 @@ export default function Services({ items }: { items?: ServiceItem[] } = {}) {
                   </div>
                 </div>
                 <span className="service__toggle" aria-hidden="true">
-                  <svg className="service__toggle-icon" viewBox="0 0 24 24" fill="none">
-                    <path className="service__toggle-line service__toggle-line--1" stroke="currentColor" strokeWidth="2" strokeLinecap="square" />
-                    <path className="service__toggle-line service__toggle-line--2" stroke="currentColor" strokeWidth="2" strokeLinecap="square" />
+                  <svg className="service__toggle-icon service__toggle-icon--plus" viewBox="0 0 24 24" fill="none">
+                    <path d="M 12 5 L 12 19" stroke="currentColor" strokeWidth="2" strokeLinecap="square" />
+                    <path d="M 5 12 L 19 12" stroke="currentColor" strokeWidth="2" strokeLinecap="square" />
+                  </svg>
+                  <svg className="service__toggle-icon service__toggle-icon--arrow" viewBox="0 0 24 24" fill="none">
+                    <path d="M 17 7 L 7 17" stroke="currentColor" strokeWidth="2" strokeLinecap="square" />
+                    <path d="M 9 7 L 17 7 L 17 15" stroke="currentColor" strokeWidth="2" strokeLinecap="square" />
                   </svg>
                 </span>
               </button>

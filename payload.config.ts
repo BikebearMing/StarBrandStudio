@@ -4,6 +4,7 @@ import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { formBuilderPlugin } from '@payloadcms/plugin-form-builder'
 import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
 import { resendAdapter } from '@payloadcms/email-resend'
+import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
 import { notificationEmailsField, sendContactNotification } from './src/forms/contactNotification'
 import { Users } from './src/collections/Users'
 import { Media } from './src/collections/Media'
@@ -42,18 +43,37 @@ export default buildConfig({
     migrationDir: path.resolve(dirname, 'src/migrations'),
   }),
   secret: process.env.PAYLOAD_SECRET || 'star-brand-studio-local-secret',
-  // Email delivery via Resend — only active when RESEND_API_KEY is set.
-  // Without it, Payload falls back to a console mock so local dev still works.
-  ...(process.env.RESEND_API_KEY
+  // Email delivery — Gmail SMTP when SMTP_USER/SMTP_PASS are set, else Resend
+  // when RESEND_API_KEY is set. Without either, Payload falls back to a console
+  // mock so local dev still works.
+  ...(process.env.SMTP_USER && process.env.SMTP_PASS
     ? {
-        email: resendAdapter({
+        email: nodemailerAdapter({
           defaultFromName: 'Star Brand Studio',
-          defaultFromAddress:
-            process.env.EMAIL_FROM || 'onboarding@resend.dev',
-          apiKey: process.env.RESEND_API_KEY,
+          // Gmail only honors a From matching the authenticated account (or a
+          // configured "Send mail as" alias) — anything else gets rewritten.
+          defaultFromAddress: process.env.EMAIL_FROM || process.env.SMTP_USER,
+          transportOptions: {
+            host: process.env.SMTP_HOST || 'smtp.gmail.com',
+            port: Number(process.env.SMTP_PORT || 465),
+            secure: Number(process.env.SMTP_PORT || 465) === 465,
+            auth: {
+              user: process.env.SMTP_USER,
+              pass: process.env.SMTP_PASS,
+            },
+          },
         }),
       }
-    : {}),
+    : process.env.RESEND_API_KEY
+      ? {
+          email: resendAdapter({
+            defaultFromName: 'Star Brand Studio',
+            defaultFromAddress:
+              process.env.EMAIL_FROM || 'onboarding@resend.dev',
+            apiKey: process.env.RESEND_API_KEY,
+          }),
+        }
+      : {}),
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
