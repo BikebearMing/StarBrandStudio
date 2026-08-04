@@ -615,7 +615,7 @@ section.services {
 
     @media (max-width: 768px) {
         bottom: unset;
-        top: 37vw;
+        top: 25vw;
         /* Centred like the other pages' titles (client feedback). */
         left: 0;
         right: 0;
