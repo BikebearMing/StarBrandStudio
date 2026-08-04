@@ -1,13 +1,13 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
-import gsap from 'gsap'
+import { useScrollJoin } from '@/lib/useScrollJoin'
 
 /**
  * Our Story — section 2: "What makes us different".
- * Title (.h2) reveals with a typewriter wipe (clipPath + steps easing, mirroring
- * the Hero) when the section scrolls into view. Below it, four red cards each
- * with a .h3 title and a .body paragraph.
+ * Title (.h2) matches the homepage section headings (Services/Projects): the two
+ * halves slide together on scroll (useScrollJoin) and the highlight word sits in
+ * the global .text-highlight serif box. Below it, four red cards each with a
+ * .h3 title and a .body paragraph.
  *
  * Content is hardcoded (DEFAULT_* pattern). Copy was transcribed from the design
  * screenshot — confirm exact wording.
@@ -47,60 +47,13 @@ export default function OurDifference({
   titleHighlight = 'DIFFERENT',
 }: OurDifferenceProps = {}) {
   const CARDS = cards?.length ? cards : DEFAULT_CARDS
-  const titleRef = useRef<HTMLSpanElement>(null)
-
-  useEffect(() => {
-    const title = titleRef.current
-    if (!title) return
-
-    // Hidden until the section scrolls into view, then a left-to-right typewriter
-    // wipe (steps easing reads as typing).
-    gsap.set(title, { clipPath: 'inset(0 100% 0 0)' })
-    let tween: gsap.core.Tween | null = null
-    let done = false
-
-    const reveal = () => {
-      if (done) return
-      done = true
-      // One step per character → reads as character-by-character typing, like
-      // the homepage hero typewriter (clip-path reveal eased with steps()).
-      const chars = (title.textContent ?? '').trim().length || 20
-      tween = gsap.to(title, {
-        clipPath: 'inset(0 0% 0 0)',
-        duration: Math.max(0.8, chars * 0.05),
-        ease: `steps(${chars})`,
-      })
-    }
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries.some((e) => e.isIntersecting)) {
-          reveal()
-          observer.disconnect()
-        }
-      },
-      { threshold: 0, rootMargin: '0px 0px -15% 0px' },
-    )
-    observer.observe(title)
-
-    // Fallback: if it's already on screen at mount, reveal right away (the
-    // observer won't always fire for elements already in view under smooth scroll).
-    const rect = title.getBoundingClientRect()
-    if (rect.top < window.innerHeight && rect.bottom > 0) reveal()
-
-    return () => {
-      observer.disconnect()
-      tween?.kill()
-    }
-  }, [])
+  const { headingRef, beforeRef, afterRef } = useScrollJoin<HTMLHeadingElement, HTMLSpanElement>()
 
   return (
     <section className="our-difference">
-      <h2 className="h2 our-difference__title">
-        <span className="our-difference__title-inner" ref={titleRef}>
-          {titlePre}{' '}
-          <span className="our-difference__highlight">{titleHighlight}</span>
-        </span>
+      <h2 ref={headingRef} className="h2 our-difference__title">
+        <span ref={beforeRef} className="our-difference__word">{titlePre}</span>{' '}
+        <span ref={afterRef} className="our-difference__word text-highlight">{titleHighlight}</span>
       </h2>
 
       <div className="our-difference__cards">

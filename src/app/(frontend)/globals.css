@@ -1736,19 +1736,16 @@ section.pillars-section .wrapper {
 
 .our-difference__title {
     margin-bottom: 3.5vw;
+    /* Centred like the homepage section headings; the scroll-join spread stays
+       symmetric around the centre. */
+    text-align: center;
 }
 
-/* inline-block so the clip-path typewriter wipe clips to the text box. */
-.our-difference__title-inner {
+/* Each word translates on scroll (see useScrollJoin), same as the homepage
+   section headings; inline-block so the transform takes. */
+.our-difference__word {
     display: inline-block;
-    will-change: clip-path;
-}
-
-/* Inverted highlight box. Sets only color/state — inherits the .h2 font. */
-.our-difference__highlight {
-    background: #ffffff;
-    color: #000000;
-    padding: 0 0.12em;
+    will-change: transform;
 }
 
 .our-difference__cards {
@@ -1872,10 +1869,6 @@ section.pillars-section .wrapper {
         height: 42vw;
     }
 
-    span.our-difference__title-inner {
-    font-size: 8.333445vw;
-}
-
     .our-story__track {
         gap: 4vw;
     }
@@ -1889,7 +1882,7 @@ section.pillars-section .wrapper {
 
     /* Sized so the one-line title spans roughly the red cards' full width. */
     .our-difference__title {
-        font-size: 8vw;
+        font-size: 8.333445vw;
         margin-bottom: 8vw;
     }
 
@@ -2447,7 +2440,7 @@ section.awards {
     justify-content: center;
     gap: 2.5vw;
     flex-wrap: wrap;
-    margin-right: 15.5vw;
+    margin-right: 27.5vw;
 
     & .body {
         text-align: start !important;
@@ -3415,9 +3408,10 @@ section.awards {
     .impact-cta__top .body {
         order: 3;
         flex-basis: 100%;
-        /* Heading pair stays centred; the subtext reads from the left edge.
-           !important needed to out-rank the desktop rule of the same weight. */
+        /* Centred under the heading pair; !important needed to out-rank the
+           desktop left-align rule of the same weight. */
         text-align: left !important;
+                padding-left: 13px;
     }
 
     .impact-cta__bottom .body {
