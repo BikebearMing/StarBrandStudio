@@ -1793,6 +1793,9 @@ section.pillars-section .wrapper {
        comes later in the file and would otherwise win at 9vw. */
     h1.story-hero__title {
         font-size: 9.5vw; /* standard mobile title size */
+        /* Breathing room between the wrapped lines (the heading flows as one
+           sentence on mobile, so line-height is what spaces the rows). */
+        line-height: 1.35;
     }
 
     .story-hero__title-inner {
@@ -2654,7 +2657,7 @@ section.awards {
 @media (max-width: 768px) {
     .contact-section {
         padding-inline: var(--sidepadding-xm);
-        padding-block: 14vw;
+        padding-block: 10vw 14vw;
     }
 
     .contact-form {
@@ -3379,9 +3382,10 @@ section.awards {
     .impact-cta__inner {
         flex-direction: row;
         flex-wrap: wrap;
+        justify-content: center;
         align-items: baseline;
         column-gap: 3vw;
-        row-gap: 6vw;
+        row-gap: 5vw;
     }
 
     /* Standard homepage-header size on mobile ("LET'S CONNECT" still fits). */
