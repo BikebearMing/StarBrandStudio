@@ -31,10 +31,14 @@ COPY --from=build /app/payload-types.ts ./payload-types.ts
 COPY --from=build /app/next.config.ts ./next.config.ts
 COPY --from=build /app/tsconfig.json ./tsconfig.json
 COPY --from=build /app/src ./src
-# Media binaries are committed to the repo and baked in here, so they survive
-# redeploys and host migrations without a persistent volume. (Self-hosted
-# Coolify/Docker deploy — no Vercel Blob.) mkdir is a no-op safety net.
-COPY --from=build /app/media ./media
-RUN mkdir -p /app/media
+# Committed media binaries ship in /app/media-seed, NOT /app/media. A persistent
+# volume is mounted at /app/media (Coolify > Storages), and a volume shadows
+# whatever the image put at its mount point — baking straight into /app/media
+# would hide every file behind the empty volume. The entrypoint copies the seed
+# into the volume on boot instead, so committed files and admin uploads coexist.
+COPY --from=build /app/media ./media-seed
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh && mkdir -p /app/media
 EXPOSE 3000
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 CMD ["npm", "run", "start"]
